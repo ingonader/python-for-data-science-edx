@@ -1,0 +1,28 @@
+<Your Project Title>
+<Your Name>
+No need to request edit permission. Make a copy and edit the copy. To make a copy for your presentation, use “File->Download”.
+
+Dataset(s)
+Which dataset did you use of the following:
+Soccer Dataset
+IMDB Movie Dataset
+World Development Indicators Dataset
+
+
+Motivation
+Describe the problem you want to solve with the data.  It may relate closely with your research question, but your goal here is to make your audience care about the project/problem you are trying to solve.  You need to articulate the problem you are exploring and why (and for whom) insight would be valuable.
+
+Research Question(s)
+What is your research question you aim to answer using the dataset?  Be sure the research question is well defined (see project description for details).
+
+Findings
+<Feel free to replicate this slide to show multiple findings>
+Present your findings.  Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience.
+You need not come to a definitive conclusion, but you need to say how your findings relate back to your research question.
+
+Acknowledgements
+Did you use other informal analysis to inform your work?  Did you get feedback on your work by friends or colleagues? Etc.  
+If you had no one give you feedback, it’s okay to say that.
+
+References
+If applicable, report any references you used in your work.  For example, you may have used a research paper from X to help guide your analysis.  You should cite that work here. If you did all the work on your own, please state this.
