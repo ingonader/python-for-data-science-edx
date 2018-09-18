@@ -13,6 +13,7 @@ import io
 import zipfile
 import os
 import urllib.parse
+import numpy as np
 import pandas as pd
 
 ## ========================================================================= ##
@@ -83,6 +84,8 @@ dat_tags.info()
 ## possible research questions:
 ## * what is the relationship of movie complexity 
 ##   (as measured by number of genres) and average rating? u-shaped?
+## * what is the relationship of genres and average rating? 
+##   have different genres different ratings, on average?
 
 ## aggregate ratings data:
 ## https://stackoverflow.com/questions/38935541/dplyr-summarize-equivalent-in-pandas
@@ -120,4 +123,24 @@ dat_raw = pd.merge(
     on = 'movieId')
 
 dat_raw.head(2)
+
+## add measurement for movie complexity:
+dat_raw['complexity'] = dat_raw['genres'] \
+    .str.split('|') \
+    .apply(lambda x: len(x))
+
+
+## exclude movies that have no genres listed:
+## '(no genres listed)' --> None
+#dat_raw['complexity'] = None if (dat_raw['genres'] == '(no genres listed)') else dat_raw['complexity']
+dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
+                                 None,
+                                dat_raw['complexity'])
+
+## inspect correctness:
+dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
+dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
+## Note:
+## 'None' values are just omitted by groupby?
+
 
