@@ -26,18 +26,18 @@ filename = 'ml-20m.zip'
 url = urllib.parse.urljoin(url_base, filename)
 path_dat = './data'
 
-## download:
-r = requests.get(url, allow_redirects=True)
-open(filename, 'wb').write(r.content)
-
-## check download:
-os.getcwd()
-os.listdir()
-
-## unzip:
-zip_ref = zipfile.ZipFile(filename, 'r')
-zip_ref.extractall(path_dat)
-zip_ref.close()
+# ## download (commented out in order not to repeat it every time):
+# r = requests.get(url, allow_redirects=True)
+# open(filename, 'wb').write(r.content)
+#
+# ## check download:
+# os.getcwd()
+# os.listdir()
+# 
+# ## unzip:
+# zip_ref = zipfile.ZipFile(filename, 'r')
+# zip_ref.extractall(path_dat)
+# zip_ref.close()
 
 ## ========================================================================= ##
 ## Load data files
