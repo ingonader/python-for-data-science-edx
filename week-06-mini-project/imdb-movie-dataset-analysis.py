@@ -15,6 +15,9 @@ import os
 import urllib.parse
 import numpy as np
 import pandas as pd
+from plotnine import *
+import matplotlib.pyplot as plt
+
 
 ## ========================================================================= ##
 ## download and extract zip
@@ -143,4 +146,48 @@ dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by
 ## Note:
 ## 'None' values are just omitted by groupby?
 
+## ========================================================================= ##
+## Data exploration
+## ========================================================================= ##
 
+# dat_raw.info()
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## univariate data checks
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## mean ratings:
+
+## check mean ratings (histogram):
+ggplot(dat_raw, aes(x = 'rating_mean')) + \
+  geom_histogram(bins = 40, color = 'blue', fill = 'blue')
+
+## same plot (histogram) using matplotlib, simple variant:
+## (doesn't work with missing values in the data)
+# %matplotlib inline
+plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')
+plt.grid(True)
+plt.show()
+
+## [[?]] how to get matplotlib plots working, without showing all intermediate steps?
+
+## same plot (histogram) using matplotlib, complex variant:
+# fig, ax = plt.subplots()
+# plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+
+## complexity:
+
+ggplot(dat_raw, aes(x = 'complexity')) + \
+  geom_bar(color = 'blue', fill = 'blue')
+
+
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## multivariate checks
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## plot complexity vs. average rating, using ggplot/plotnine:
+ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
+  geom_jitter(alpha = 0.2)
+
+## similar plot using matplotlib:
