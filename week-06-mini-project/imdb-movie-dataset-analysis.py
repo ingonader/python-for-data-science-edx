@@ -224,10 +224,11 @@ for i in genre_counter.keys():
     this_ind_name = 'is_' + re.sub('[-\(\) ]', '', i).lower()
     genre_inds.append(this_ind_name)
     #print(this_ind_name)
-    dat_raw[this_ind_name] = dat_raw['genres'].str.contains(i)
+    dat_raw[this_ind_name] = dat_raw['genres'].str.contains(i).astype(int)
 
 #dat_raw.info()
 #genre_inds
+#dat_raw.head(2)
 
 ## ========================================================================= ##
 ## Data exploration
@@ -274,8 +275,12 @@ ggplot(dat_raw, aes(x = 'complexity')) + \
 
 ## plot complexity vs. average rating, using ggplot/plotnine:
 ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
-  geom_jitter(alpha = 0.2)
+  geom_jitter(alpha = 0.1, na_rm = True)# + \
+#  geom_smooth(dat_raw.loc[dat_raw['complexity'] != None], color = 'blue', na_rm = True)
 
+
+
+geom_smooth?
 ## similar plot using matplotlib:
 ## [[todo]]
 
@@ -284,7 +289,7 @@ ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
 for i in genre_inds:
     dat_this = dat_raw[dat_raw[i] == True]
     print(ggplot(dat_this, aes(y = 'rating_mean', x = 'complexity', )) + \
-      geom_jitter(alpha = 0.2) + \
+      geom_jitter(alpha = 0.1, na_rm = True) + \
       ggtitle(title = i))
 
 ## similar plot using matplotlib:
@@ -304,8 +309,13 @@ dat_nona = dat_raw.dropna()
 ## AttributeError: 'float' object has no attribute 'shape'
 ## The error is reproducible if the array is of dtype=object
 
-## correlation over all movies:
+## correlation over all movies (using numpy):
 np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'].astype(float))
+
+## correlation over all movies (using pandas):
+## (can handle missings, somehow)
+dat_nona[['rating_mean', 'complexity']].corr()
+dat_raw[['rating_mean', 'complexity']].corr()
 
 ## correlation within each movie category:
 dat_cor = pd.DataFrame([])
@@ -327,6 +337,7 @@ dat_cor.sort_values(by = 'cor', ascending = False)
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 ## define target and features:
 target = 'rating_mean'
@@ -357,28 +368,44 @@ features = [
 
 
 ## Split the data into training/testing sets:
-dat_x_train, dat_x_test, dat_y_train, dat_y_test = train_test_split(
-    dat_nona[features], dat_nona[target], test_size=0.33, random_state=42)
+dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+    dat_nona[features], dat_nona[target], test_size = 0.33, random_state = 142)
 
-# dat_x_train.shape
-# dat_x_test.shape
-# dat_y_train.shape
+# dat_train_x.shape
+# dat_test_x.shape
+# dat_train_y.shape
 
 ## Create linear regression object
 mod_01 = linear_model.LinearRegression()
 
 ## Train the model using the training sets
-mod_01.fit(dat_x_train, dat_y_train)
+mod_01.fit(dat_train_x, dat_train_y)
 
 ## Make predictions using the testing set
-dat_y_pred = mod_01.predict(dat_x_test)
-dat_y_pred_train = mod_01.predict(dat_x_train)
+dat_y_pred = mod_01.predict(dat_test_x)
+dat_y_pred_train = mod_01.predict(dat_train_x)
 
 ## Inspect model:
-mean_squared_error(dat_y_train, dat_y_pred_train)  # MSE in training set
-mean_squared_error(dat_y_test, dat_y_pred)         # MSE in test set
-r2_score(dat_y_train, dat_y_pred_train)            # R^2 (r squared) in test set
-r2_score(dat_y_test, dat_y_pred)                  # R^2 (r squared) in test set
+mean_squared_error(dat_train_y, dat_y_pred_train)  # MSE in training set
+mean_squared_error(dat_test_y, dat_y_pred)         # MSE in test set
+r2_score(dat_train_y, dat_y_pred_train)            # R^2 (r squared) in test set
+r2_score(dat_test_y, dat_y_pred)                  # R^2 (r squared) in test set
+
+## VIF:
+## For each X, calculate VIF and save in dataframe
+vif = pd.DataFrame()
+vif["VIF Factor"] = [
+    variance_inflation_factor(dat_train_x.values, i) \
+    for i in range(dat_train_x.shape[1])]
+vif["features"] = dat_train_x.columns
+vif
+
+## vif is Inf when complexity is in the model. This is despite
+## the fact that the correlations aren't too high.
+## [[todo]] should try with R for comparison.
+
+## correlation between features:
+dat_train_x.corr()
 
 ## inspect coefficients:
 ## [[?]] something's wrong here
@@ -387,13 +414,13 @@ mod_01.coef_[0]
 
 
 ## calculate residuals:
-dat_y_resid = dat_y_train - mod_01.predict(dat_x_train)
+dat_y_resid = dat_train_y - mod_01.predict(dat_train_x)
 dat_y_resid.describe()
 
 ## fortify training data:
 dat_train_fortify = pd.DataFrame({
-    'y':     dat_y_train,
-    'pred' : mod_01.predict(dat_x_train),
+    'y':     dat_train_y,
+    'pred' : mod_01.predict(dat_train_x),
     'resid': dat_y_resid
 })
 
@@ -412,7 +439,15 @@ ggplot(
 # ## http://www.scikit-yb.org/en/latest/api/regressor/residuals.html
 # from yellowbrick.regressor import ResidualsPlot
 # visualizer = ResidualsPlot(mod_01)
-# visualizer.fit(dat_x_train, dat_y_train)
-# visualizer.score(dat_x_test, dat_y_test)
+# visualizer.fit(dat_train_x, dat_train_y)
+# visualizer.score(dat_test_x, dat_test_y)
 # visualizer.poof()
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## ridge regression
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+from sklearn.linear_model import Ridge
+
+mod_ridge = Ridge(alpha=1.0)
+mod_ridge.fit(dat_train_x, dat_train_y)
