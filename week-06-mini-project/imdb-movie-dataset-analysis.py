@@ -72,11 +72,16 @@ dir(dat_movies)                      ## list all methods?
 list(filter(lambda x:'values' in x, dir(dat_movies)))  ## filter returns an iterable, hence need 'list'
 list(filter(lambda x: re.search(r'unstack', x), dir(dat_movies)))
 
-cond = df['A'].str.contains('a')
+#cond = df['A'].str.contains('a')
 
 dat_movies.__dict__                  ## lengthy, equivalent to vars(<>)
 vars(dat_movies)                     ## lengthy, equivalent to <>.__dict__
 
+## get column names:
+list(dat_movies.columns.values)      
+list(dat_movies)                     ## same
+
+## summary of data frame
 dat_movies.describe()                ## similar to R's summary()
 
 dat_ratings = pd.read_csv(
@@ -316,6 +321,98 @@ dat_cor.sort_values(by = 'cor', ascending = False)
 ## regression
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
+## mostly from 
+## http://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html
+
+from sklearn import datasets, linear_model
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
+
+## define target and features:
+target = 'rating_mean'
+features = [
+ 'complexity',
+ 'is_adventure',
+ 'is_animation',
+ 'is_children',
+ 'is_comedy',
+ 'is_fantasy',
+ 'is_romance',
+ 'is_drama',
+ 'is_action',
+ 'is_crime',
+ 'is_thriller',
+ 'is_horror',
+ 'is_mystery',
+ 'is_scifi',
+ 'is_imax',
+ 'is_documentary',
+ 'is_war',
+ 'is_musical',
+ 'is_western',
+ 'is_filmnoir',
+ 'is_nogenreslisted'
+]
+# list(dat_raw)
 
 
+## Split the data into training/testing sets:
+dat_x_train, dat_x_test, dat_y_train, dat_y_test = train_test_split(
+    dat_nona[features], dat_nona[target], test_size=0.33, random_state=42)
+
+# dat_x_train.shape
+# dat_x_test.shape
+# dat_y_train.shape
+
+## Create linear regression object
+mod_01 = linear_model.LinearRegression()
+
+## Train the model using the training sets
+mod_01.fit(dat_x_train, dat_y_train)
+
+## Make predictions using the testing set
+dat_y_pred = mod_01.predict(dat_x_test)
+dat_y_pred_train = mod_01.predict(dat_x_train)
+
+## Inspect model:
+mean_squared_error(dat_y_train, dat_y_pred_train)  # MSE in training set
+mean_squared_error(dat_y_test, dat_y_pred)         # MSE in test set
+r2_score(dat_y_train, dat_y_pred_train)            # R^2 (r squared) in test set
+r2_score(dat_y_test, dat_y_pred)                  # R^2 (r squared) in test set
+
+## inspect coefficients:
+## [[?]] something's wrong here
+mod_01.coef_                                # coefficients
+mod_01.coef_[0]
+
+
+## calculate residuals:
+dat_y_resid = dat_y_train - mod_01.predict(dat_x_train)
+dat_y_resid.describe()
+
+## fortify training data:
+dat_train_fortify = pd.DataFrame({
+    'y':     dat_y_train,
+    'pred' : mod_01.predict(dat_x_train),
+    'resid': dat_y_resid
+})
+
+## normality of residuals (training data):
+ggplot(
+    dat_train_fortify, aes(x = 'resid')) + \
+    geom_histogram(bins = 40, fill = 'blue')
+
+## plot residuals vs. predicted values (training data):
+ggplot(
+    dat_train_fortify, aes(x = 'pred', y = 'resid')) + \
+    geom_point(alpha = .1) + \
+    geom_smooth(color = 'blue')
+
+# ## Residual Plot using yellowbrick (doesn't quite work):
+# ## http://www.scikit-yb.org/en/latest/api/regressor/residuals.html
+# from yellowbrick.regressor import ResidualsPlot
+# visualizer = ResidualsPlot(mod_01)
+# visualizer.fit(dat_x_train, dat_y_train)
+# visualizer.score(dat_x_test, dat_y_test)
+# visualizer.poof()
 
