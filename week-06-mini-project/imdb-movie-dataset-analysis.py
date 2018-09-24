@@ -164,12 +164,16 @@ ggplot(dat_raw, aes(x = 'rating_mean')) + \
 
 ## same plot (histogram) using matplotlib, simple variant:
 ## (doesn't work with missing values in the data)
+## (preliminary) conclusion: does not work with jupyterlab, only with 
+## ipython notebooks. No idea why. 
+## [[?]] how to get matplotlib plots working, without showing all intermediate steps?
+
 # %matplotlib inline
+# %matplotlib ipympl
+# %matplotlib widget
 plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')
 plt.grid(True)
 plt.show()
-
-## [[?]] how to get matplotlib plots working, without showing all intermediate steps?
 
 ## same plot (histogram) using matplotlib, complex variant:
 # fig, ax = plt.subplots()
@@ -181,7 +185,6 @@ ggplot(dat_raw, aes(x = 'complexity')) + \
   geom_bar(color = 'blue', fill = 'blue')
 
 
-
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## multivariate checks
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
@@ -191,3 +194,38 @@ ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
   geom_jitter(alpha = 0.2)
 
 ## similar plot using matplotlib:
+## [[todo]]
+
+
+# ## plot complexity vs. average rating and genre, using ggplot/plotnine:
+# ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity', color = )) + \
+#   geom_jitter(alpha = 0.2)
+# 
+# ## similar plot using matplotlib:
+# ## [[todo]]
+
+
+## ========================================================================= ##
+## Analysis
+## ========================================================================= ##
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## correlation
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+dat_nona = dat_raw.dropna()
+
+## np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'])
+## AttributeError: 'float' object has no attribute 'shape'
+## The error is reproducible if the array is of dtype=object
+
+np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'].astype(float))
+
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## regression
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+
+
