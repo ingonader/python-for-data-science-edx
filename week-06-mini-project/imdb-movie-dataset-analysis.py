@@ -13,6 +13,9 @@ import io
 import zipfile
 import os
 import urllib.parse
+import re   ## for regular expressions
+from itertools import chain  ## for chain, similar to R's unlist
+import collections   ## for Counters (used in frequency tables, for example)
 import numpy as np
 import pandas as pd
 from plotnine import *
@@ -53,6 +56,29 @@ dat_movies = pd.read_csv(
 dat_movies.head(2)
 dat_movies.info()
 
+#dat_movies.dtype                    ## 'DataFrame' object has no attribute 'dtype'
+dat_movies['movieId'].dtype
+dat_movies['title'].dtype   
+
+type(dat_movies)                     ## also for DataFrame: pandas.core.frame.DataFrame
+type(dat_movies['movieId'])          ## pandas.core.series.Series
+type(dat_movies['movieId'].values)   ## numpy.ndarray
+type(dat_movies['movieId'][1])       ## numpy.int64
+
+dir(dat_movies)                      ## list all methods?
+
+## find strings in this list:
+# dir(dat_movies).str.contains('unstack')  ... str.-methods only work on pandas df, not lists
+list(filter(lambda x:'values' in x, dir(dat_movies)))  ## filter returns an iterable, hence need 'list'
+list(filter(lambda x: re.search(r'unstack', x), dir(dat_movies)))
+
+cond = df['A'].str.contains('a')
+
+dat_movies.__dict__                  ## lengthy, equivalent to vars(<>)
+vars(dat_movies)                     ## lengthy, equivalent to <>.__dict__
+
+dat_movies.describe()                ## similar to R's summary()
+
 dat_ratings = pd.read_csv(
     os.path.join(path_dat, 'ml-20m/ratings.csv'), 
     sep = ',')
@@ -90,6 +116,11 @@ dat_tags.info()
 ## * what is the relationship of genres and average rating? 
 ##   have different genres different ratings, on average?
 
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## aggregate ratings data
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
 ## aggregate ratings data:
 ## https://stackoverflow.com/questions/38935541/dplyr-summarize-equivalent-in-pandas
 dat_ratings_agg = dat_ratings \
@@ -117,6 +148,9 @@ dat_ratings_agg['parsed_time_mean'] = pd.to_datetime(
     dat_ratings_agg['timestamp_mean'], unit='s')
 dat_ratings_agg.head(2)
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## merge data files into one wide file
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 ## merge data files into one wide file for analysis by movie:
 dat_raw = pd.merge(
@@ -126,6 +160,11 @@ dat_raw = pd.merge(
     on = 'movieId')
 
 dat_raw.head(2)
+
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## add measurement for movie complexity
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 ## add measurement for movie complexity:
 dat_raw['complexity'] = dat_raw['genres'] \
@@ -145,6 +184,43 @@ dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
 dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
 ## Note:
 ## 'None' values are just omitted by groupby?
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## add isGenre attributes for most common genres
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## get list of different genres:
+tmp = dat_raw['genres'] \
+    .str.split('|')
+
+## similar to unlist, I suppose:
+#from itertools import chain
+list(chain.from_iterable(tmp))
+
+genres_nonunique = list(chain.from_iterable(tmp))
+len(genres_nonunique)
+
+## make frequency table:
+# import collections
+counter = collections.Counter(genres_nonunique)
+print(counter)
+print(counter.values())
+print(counter.keys())
+print(counter.most_common(3))
+
+## make frequency table:
+# {x:genres_nonunique.count(x) for x in genres_nonunique}
+## (horribly slow, but works)
+
+## create indicator column for each genre:
+for i in counter.keys():
+    #print('creating indicator for key', i, ':')
+    this_ind_name = 'is_' + re.sub('[-\(\) ]', '', i).lower()
+    #print(this_ind_name)
+    dat_raw[this_ind_name] = dat_raw['genres'].str.contains(i)
+
+dat_raw.info()
+
 
 ## ========================================================================= ##
 ## Data exploration
