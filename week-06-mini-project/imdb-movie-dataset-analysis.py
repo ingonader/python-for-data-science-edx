@@ -202,25 +202,27 @@ len(genres_nonunique)
 
 ## make frequency table:
 # import collections
-counter = collections.Counter(genres_nonunique)
-print(counter)
-print(counter.values())
-print(counter.keys())
-print(counter.most_common(3))
+genre_counter = collections.Counter(genres_nonunique)
+print(genre_counter)
+print(genre_counter.values())
+print(genre_counter.keys())
+print(genre_counter.most_common(3))
 
 ## make frequency table:
 # {x:genres_nonunique.count(x) for x in genres_nonunique}
 ## (horribly slow, but works)
 
 ## create indicator column for each genre:
-for i in counter.keys():
+genre_inds = []
+for i in genre_counter.keys():
     #print('creating indicator for key', i, ':')
     this_ind_name = 'is_' + re.sub('[-\(\) ]', '', i).lower()
+    genre_inds.append(this_ind_name)
     #print(this_ind_name)
     dat_raw[this_ind_name] = dat_raw['genres'].str.contains(i)
 
-dat_raw.info()
-
+#dat_raw.info()
+#genre_inds
 
 ## ========================================================================= ##
 ## Data exploration
@@ -273,13 +275,15 @@ ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
 ## [[todo]]
 
 
-# ## plot complexity vs. average rating and genre, using ggplot/plotnine:
-# ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity', color = )) + \
-#   geom_jitter(alpha = 0.2)
-# 
-# ## similar plot using matplotlib:
-# ## [[todo]]
+# ## plot complexity vs. average rating, within genre; using ggplot/plotnine:
+for i in genre_inds:
+    dat_this = dat_raw[dat_raw[i] == True]
+    print(ggplot(dat_this, aes(y = 'rating_mean', x = 'complexity', )) + \
+      geom_jitter(alpha = 0.2) + \
+      ggtitle(title = i))
 
+## similar plot using matplotlib:
+## [[todo]]
 
 ## ========================================================================= ##
 ## Analysis
@@ -295,8 +299,18 @@ dat_nona = dat_raw.dropna()
 ## AttributeError: 'float' object has no attribute 'shape'
 ## The error is reproducible if the array is of dtype=object
 
+## correlation over all movies:
 np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'].astype(float))
 
+## correlation within each movie category:
+dat_cor = pd.DataFrame([])
+for i in genre_inds:
+    dat_this = dat_nona[dat_nona[i] == True]
+    cor_this = np.corrcoef(dat_this['rating_mean'], dat_this['complexity'].astype(float))[0, 1]
+    dat_cor = dat_cor.append(pd.DataFrame(
+        {'variable': i, 'cor': cor_this}, index = [0]))
+    
+dat_cor.sort_values(by = 'cor', ascending = False)
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## regression
