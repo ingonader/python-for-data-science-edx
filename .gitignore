@@ -2,6 +2,11 @@
 *.csv
 *.zip
 
+## no files in 'old':
+
+old/*
+*/old/*
+
 # Created by https://www.gitignore.io/api/jupyternotebook
 
 ### JupyterNotebook ###
