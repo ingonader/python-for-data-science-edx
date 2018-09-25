@@ -233,6 +233,10 @@ for i in genre_counter.keys():
     #print(this_ind_name)
     dat_raw[this_ind_name] = dat_raw['genres'].str.contains(i).astype(int)
 
+## make dictionary of genre_inds: genre_names:
+genre_dict = dict(zip(genre_inds, genre_counter.keys()))
+genre_dict
+
 #dat_raw.info()
 #genre_inds
 #dat_raw.head(2)
@@ -281,25 +285,62 @@ ggplot(dat_raw, aes(x = 'complexity')) + \
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 ## plot complexity vs. average rating, using ggplot/plotnine:
-ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
-  geom_jitter(alpha = 0.1, na_rm = True) + \
-  geom_smooth(color = 'blue', na_rm = True)
+cor_this = dat_raw[['rating_mean', 'complexity']].corr().iloc[0, 1]
+p = ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
+  geom_jitter(height = 0.1, width = 0.4, alpha = .1, na_rm = True) + \
+  geom_smooth(method = 'glm', color = 'red', na_rm = True) + \
+  coord_cartesian(xlim = [1, 10],
+                 ylim = [0, dat_raw['rating_mean'].max()]) + \
+  scale_x_continuous(breaks = range(1, 11)) + \
+  labs(
+    title = 'Complexity and mean rating in all movies',
+    x = 'Movie complexity (number of genres associated with movie)',
+    y = 'Average rating of movie (over all users)'
+  ) + \
+  annotate(
+    geom = 'label', x = 9, y = .5,
+    label = 'r = {0:1.2f}'.format(cor_this)
+  )
+print(p)
 
+ggsave(plot = p, filename = 'plot-scatter-all.jpg', 
+       height = 6, width = 6, unit = 'in', dpi = 300)
 
 ## similar plot using matplotlib:
 ## [[todo]]
-
 
 # ## plot complexity vs. average rating, within genre; using ggplot/plotnine:
-for i in genre_inds:
+genre_inds_plot = list(set(genre_inds) - set(['is_nogenreslisted']))
+for i in genre_inds_plot:
     dat_this = dat_raw[dat_raw[i] == True]
-    print(ggplot(dat_this, aes(y = 'rating_mean', x = 'complexity', )) + \
-      geom_jitter(alpha = 0.1, na_rm = True) + \
-      geom_smooth(color = 'blue', na_rm = True) + \
-      ggtitle(title = i))
-
+    cor_this = dat_this[['rating_mean', 'complexity']].corr().iloc[0, 1]
+    p = ggplot(dat_this, aes(y = 'rating_mean', x = 'complexity', )) + \
+      geom_jitter(height = 0.1, width = 0.4, alpha = 0.1, na_rm = True) + \
+      geom_smooth(method = 'glm', color = 'red', na_rm = True) + \
+      coord_cartesian(xlim = [1, 10],
+                     ylim = [0, dat_raw['rating_mean'].max()]) + \
+      scale_x_continuous(breaks = range(1, 11)) + \
+      labs(
+        title = 'Complexity and mean rating in genre: {0}'.format(genre_dict[i]),
+        x = 'Movie complexity (number of genres associated with movie)',
+        y = 'Average rating of movie (over all users)'
+      ) + \
+      annotate(
+        geom = 'label', x = 9, y = .5,
+        label = 'r = {0:1.2f}'.format(cor_this)
+      )
+    print(p)
+    ggsave(plot = p, filename = 'plot-scatter-genre-{0}.jpg'.format(i), 
+           height = 6, width = 6, unit = 'in', dpi = 300)
+    
+    
 ## similar plot using matplotlib:
 ## [[todo]]
+
+## [[here]][[todo]]
+## * correlation in plots do not correspond to correlation in table?!?
+##   WHY?!?
+
 
 ## ========================================================================= ##
 ## Analysis
@@ -329,9 +370,13 @@ for i in genre_inds:
     dat_this = dat_nona[dat_nona[i] == True]
     cor_this = np.corrcoef(dat_this['rating_mean'], dat_this['complexity'].astype(float))[0, 1]
     dat_cor = dat_cor.append(pd.DataFrame(
-        {'variable': i, 'cor': cor_this}, index = [0]))
+        {'Variable': i,
+         'Genre'   : genre_dict[i],
+         'n'       : dat_this.shape[0],
+         'r'       : cor_this.round(3)}, 
+        index = [0]))
     
-dat_cor.sort_values(by = 'cor', ascending = False)
+dat_cor.sort_values(by = 'r', ascending = False)
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## regression
@@ -345,6 +390,10 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import patsy ## for design matrices like R
+
+## ------------------------------------------------------------------------- ##
+## define features and formula
+## ------------------------------------------------------------------------- ##
 
 ## define target and features:
 target = 'rating_mean'
@@ -368,21 +417,21 @@ features = [
  'is_war',
  'is_musical',
  'is_western',
- 'is_filmnoir',
- 'is_nogenreslisted'
+ 'is_filmnoir'
+ ## 'is_nogenreslisted'  ## excluded, since complexity is always 1 here
 ]
 # list(dat_raw)
 
 dat_raw.info()
 
-## create model formula as text for patsy:
+# ## formula as text for patsy: without interactions
+# formula_txt = target + ' ~ ' + ' + '.join(features)
+
+## formula as text for patsy: with interactions
 formula_txt = target + ' ~ ' + \
     ' + '.join(features) + ' + ' + \
     ' + complexity:'.join(list(set(features) - set(['complexity'])))
 formula_txt
-
-## [[here]]
-## [[?]] how to prevent dummy coding of 'complexity' attribute?
 
 ## create design matrices using patsy (could directly be used for modeling):
 #patsy.dmatrix?
@@ -391,6 +440,10 @@ dat_y, dat_x = patsy.dmatrices(formula_txt, dat_raw,
                                return_type = 'dataframe')
 #dat_x.design_info
 #dat_x
+
+## ------------------------------------------------------------------------- ##
+## train / test split
+## ------------------------------------------------------------------------- ##
 
 # ## Split the data into training/testing sets:
 # dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
@@ -417,6 +470,9 @@ dat_test_y = dat_test_y[target]
 ## [[?]] [[todo]]
 ## normalize input for scikit-learn regression?
 
+## ------------------------------------------------------------------------- ##
+## estimate model and evaluate fit and model assumptions
+## ------------------------------------------------------------------------- ##
 
 ## Create linear regression object
 mod_01 = linear_model.LinearRegression()
@@ -448,9 +504,15 @@ vif
 ## [[todo]] should try with R for comparison.
 
 ## correlation between features:
-dat_train_x.corr()
+cormat = dat_train_x.corr()
+cormat.round(2)
 
-## inspect coefficients:
+## how many correlations bigger than...:
+np.sum(cormat > .90)
+cormat.loc[cormat.loc['is_imax'] > .90, 'is_imax']
+cormat.loc[cormat.loc['is_adventure'] > .90, 'is_adventure']
+
+## inspect model coefficients:
 ## [[?]] something's wrong here
 mod_01.coef_                                # coefficients
 mod_01.coef_[0]
