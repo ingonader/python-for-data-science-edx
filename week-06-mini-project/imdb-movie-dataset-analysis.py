@@ -14,7 +14,7 @@ import zipfile
 import os
 import urllib.parse
 import re   ## for regular expressions
-from itertools import chain  ## for chain, similar to R's unlist
+from itertools import chain  ## for chain, similar to R's unlist (flatten lists)
 import collections   ## for Counters (used in frequency tables, for example)
 import numpy as np
 import pandas as pd
@@ -174,7 +174,11 @@ dat_raw.head(2)
 ## add measurement for movie complexity:
 dat_raw['complexity'] = dat_raw['genres'] \
     .str.split('|') \
-    .apply(lambda x: len(x))
+    .apply(lambda x: len(x)) \
+    .astype(float)
+
+# dat_raw['complexity']  ## of type object [[!]] when used w/o astype(float)
+dat_raw.info()
 
 
 ## exclude movies that have no genres listed:
@@ -183,6 +187,9 @@ dat_raw['complexity'] = dat_raw['genres'] \
 dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
                                  None,
                                 dat_raw['complexity'])
+
+## turns 'complexity' into type 'object' again...
+dat_raw['complexity'] = dat_raw['complexity'].astype(float)
 
 ## inspect correctness:
 dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
@@ -275,12 +282,10 @@ ggplot(dat_raw, aes(x = 'complexity')) + \
 
 ## plot complexity vs. average rating, using ggplot/plotnine:
 ggplot(dat_raw, aes(y = 'rating_mean', x = 'complexity')) + \
-  geom_jitter(alpha = 0.1, na_rm = True)# + \
-#  geom_smooth(dat_raw.loc[dat_raw['complexity'] != None], color = 'blue', na_rm = True)
+  geom_jitter(alpha = 0.1, na_rm = True) + \
+  geom_smooth(color = 'blue', na_rm = True)
 
 
-
-geom_smooth?
 ## similar plot using matplotlib:
 ## [[todo]]
 
@@ -290,6 +295,7 @@ for i in genre_inds:
     dat_this = dat_raw[dat_raw[i] == True]
     print(ggplot(dat_this, aes(y = 'rating_mean', x = 'complexity', )) + \
       geom_jitter(alpha = 0.1, na_rm = True) + \
+      geom_smooth(color = 'blue', na_rm = True) + \
       ggtitle(title = i))
 
 ## similar plot using matplotlib:
@@ -338,6 +344,7 @@ from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+import patsy ## for design matrices like R
 
 ## define target and features:
 target = 'rating_mean'
@@ -366,14 +373,50 @@ features = [
 ]
 # list(dat_raw)
 
+dat_raw.info()
 
-## Split the data into training/testing sets:
+## create model formula as text for patsy:
+formula_txt = target + ' ~ ' + \
+    ' + '.join(features) + ' + ' + \
+    ' + complexity:'.join(list(set(features) - set(['complexity'])))
+formula_txt
+
+## [[here]]
+## [[?]] how to prevent dummy coding of 'complexity' attribute?
+
+## create design matrices using patsy (could directly be used for modeling):
+#patsy.dmatrix?
+dat_y, dat_x = patsy.dmatrices(formula_txt, dat_raw, 
+                               NA_action = 'drop',
+                               return_type = 'dataframe')
+#dat_x.design_info
+#dat_x
+
+# ## Split the data into training/testing sets:
+# dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+#    dat_nona[features], dat_nona[target], test_size = 0.33, random_state = 142)
+
+# ## shapes w/o using patsy/dmatrices:
+# dat_train_x.shape  # (15231, 21)
+# dat_test_x.shape   # (7503, 21)
+# dat_train_y.shape  # (15231,)      # type: pandas.core.series.Series
+
+## Split the data into training/testing sets (using patsy/dmatrices):
 dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
-    dat_nona[features], dat_nona[target], test_size = 0.33, random_state = 142)
+    dat_x, dat_y, test_size = 0.33, random_state = 142)
 
-# dat_train_x.shape
-# dat_test_x.shape
-# dat_train_y.shape
+# ## shapes wwith using patsy/dmatrices:
+# dat_train_x.shape  # (17756, 41)
+# dat_test_x.shape   # (8746, 41)
+# dat_train_y.shape  # (17756, 1)    # type: pandas.core.frame.DataFrame
+
+## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+dat_train_y = dat_train_y[target]
+dat_test_y = dat_test_y[target]
+
+## [[?]] [[todo]]
+## normalize input for scikit-learn regression?
+
 
 ## Create linear regression object
 mod_01 = linear_model.LinearRegression()
@@ -382,14 +425,14 @@ mod_01 = linear_model.LinearRegression()
 mod_01.fit(dat_train_x, dat_train_y)
 
 ## Make predictions using the testing set
-dat_y_pred = mod_01.predict(dat_test_x)
-dat_y_pred_train = mod_01.predict(dat_train_x)
+dat_test_pred = mod_01.predict(dat_test_x)
+dat_train_pred = mod_01.predict(dat_train_x)
 
 ## Inspect model:
-mean_squared_error(dat_train_y, dat_y_pred_train)  # MSE in training set
-mean_squared_error(dat_test_y, dat_y_pred)         # MSE in test set
-r2_score(dat_train_y, dat_y_pred_train)            # R^2 (r squared) in test set
-r2_score(dat_test_y, dat_y_pred)                  # R^2 (r squared) in test set
+mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
 
 ## VIF:
 ## For each X, calculate VIF and save in dataframe
@@ -411,18 +454,26 @@ dat_train_x.corr()
 ## [[?]] something's wrong here
 mod_01.coef_                                # coefficients
 mod_01.coef_[0]
+coefs = pd.DataFrame({
+    'coef' : dat_train_x.columns,
+    'value': mod_01.coef_[0]       ## without the [0] when not using patsy
+})
+coefs
 
 
 ## calculate residuals:
-dat_y_resid = dat_train_y - mod_01.predict(dat_train_x)
-dat_y_resid.describe()
+dat_train_resid = dat_train_y - mod_01.predict(dat_train_x)
+dat_train_resid.describe()
 
-## fortify training data:
+## fortify training data (when using target variables of type Series):
 dat_train_fortify = pd.DataFrame({
-    'y':     dat_train_y,
-    'pred' : mod_01.predict(dat_train_x),
-    'resid': dat_y_resid
+    'y':     dat_train_y,                 # Length: 15231, dtype: float64
+    'pred' : mod_01.predict(dat_train_x), # array([3.27736039, 3.27302689, 3.27302689, ..., ])
+    'resid': dat_train_resid              # Length: 15231, dtype: float64
 })
+type(dat_train_y)                  # pandas.core.series.Series
+type(mod_01.predict(dat_train_x))  # numpy.ndarray
+type(dat_train_resid)              # pandas.core.series.Series
 
 ## normality of residuals (training data):
 ggplot(
@@ -443,11 +494,3 @@ ggplot(
 # visualizer.score(dat_test_x, dat_test_y)
 # visualizer.poof()
 
-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-## ridge regression
-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-
-from sklearn.linear_model import Ridge
-
-mod_ridge = Ridge(alpha=1.0)
-mod_ridge.fit(dat_train_x, dat_train_y)
