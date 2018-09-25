@@ -2,6 +2,9 @@
 *.csv
 *.zip
 
+## no plots in mini-project:
+/week-06-mini-project/*.jpg
+
 ## no files in 'old':
 
 old/*
