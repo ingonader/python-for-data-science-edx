@@ -495,6 +495,23 @@ ggplot(
 # visualizer.poof()
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## linear regression using statsmodels
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+import statsmodels.api as sm
+
+mod_linreg_sm = sm.OLS(dat_train_y, dat_train_x)
+mod_linreg_sm = mod_linreg_sm.fit()
+
+mod_linreg_sm.summary()
+
+## a lot of stuff can be extracted:
+dir(mod_linreg_sm)
+
+print('Parameters: ', mod_linreg_sm.params)
+print('R2: ', mod_linreg_sm.rsquared)
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## ridge regression
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
@@ -559,6 +576,7 @@ ggplot(
 
 ## [[todo]]
 ## * normalize data for both linear and ridge regression
+## * add matplotlib plots
 ## * prettify plots for presentation
 ## * make presentation
 
