@@ -494,3 +494,71 @@ ggplot(
 # visualizer.score(dat_test_x, dat_test_y)
 # visualizer.poof()
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## ridge regression
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+from sklearn.linear_model import Ridge
+# from sklearn.preprocessing import PolynomialFeatures
+
+# ## add interaction terms:
+# ## (not as cool; better use patsy)
+# poly = PolynomialFeatures(interaction_only = True,include_bias = False)
+# poly.fit_transform(dat_train_x).shape
+
+## fit model:
+mod_ridge = Ridge(alpha=1.0)
+mod_ridge.fit(dat_train_x, dat_train_y)
+
+## [[?]] What about intercept? Is that regularized? (shouldn't be)
+
+## Make predictions using the testing set
+dat_test_pred = mod_ridge.predict(dat_test_x)
+dat_train_pred = mod_ridge.predict(dat_train_x)
+
+## Inspect model:
+mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+
+## inspect coefficients:
+mod_ridge.coef_                                # coefficients
+mod_ridge.coef_[0]
+coefs = pd.DataFrame({
+    'coef' : dat_train_x.columns,
+    'value': mod_ridge.coef_ 
+})
+coefs
+
+## plot coefficients:
+ggplot(coefs, aes(x = 'coef', y = 'value')) + geom_bar(stat = 'identity') + coord_flip()
+
+## calculate residuals:
+dat_train_resid = dat_train_y - mod_ridge.predict(dat_train_x)
+dat_train_resid.describe()
+
+## fortify training data:
+dat_train_fortify = pd.DataFrame({
+    'y':     dat_train_y,
+    'pred' : mod_ridge.predict(dat_train_x),
+    'resid': dat_train_resid
+})
+
+## normality of residuals (training data):
+ggplot(
+    dat_train_fortify, aes(x = 'resid')) + \
+    geom_histogram(bins = 40, fill = 'blue')
+
+## plot residuals vs. predicted values (training data):
+ggplot(
+    dat_train_fortify, aes(x = 'pred', y = 'resid')) + \
+    geom_point(alpha = .1) + \
+    geom_smooth(color = 'blue')
+
+
+## [[todo]]
+## * normalize data for both linear and ridge regression
+## * prettify plots for presentation
+## * make presentation
+
