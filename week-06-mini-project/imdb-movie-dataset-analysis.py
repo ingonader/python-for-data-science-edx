@@ -198,7 +198,7 @@ dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by
 ## 'None' values are just omitted by groupby?
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-## add isGenre attributes for most common genres
+## add is_genre attributes for most common genres
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 ## get list of different genres:
