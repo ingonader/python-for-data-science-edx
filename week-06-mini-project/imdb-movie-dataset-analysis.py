@@ -367,8 +367,8 @@ dat_raw[['rating_mean', 'complexity']].corr()
 ## correlation within each movie category:
 dat_cor = pd.DataFrame([])
 for i in genre_inds:
-    dat_this = dat_nona[dat_nona[i] == True]
-    cor_this = np.corrcoef(dat_this['rating_mean'], dat_this['complexity'].astype(float))[0, 1]
+    dat_this = dat_raw[dat_raw[i] == True]
+    cor_this = dat_this[['rating_mean', 'complexity']].corr().iloc[0, 1]
     dat_cor = dat_cor.append(pd.DataFrame(
         {'Variable': i,
          'Genre'   : genre_dict[i],
