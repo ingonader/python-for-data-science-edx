@@ -471,6 +471,40 @@ dat_test_y = dat_test_y[target]
 ## normalize input for scikit-learn regression?
 
 ## ------------------------------------------------------------------------- ##
+## normalize data
+## ------------------------------------------------------------------------- ##
+
+# ## variables to normalize (e.g., ignore intercept):
+# varnames_normalize_x = list(set(dat_train_x.columns) - set(['Intercept']))
+# 
+# ## get mean and sd from training data:
+# ztrans_mean_x = dat_train_x[varnames_normalize_x].apply(np.mean)
+# ztrans_sd_x = dat_train_x[varnames_normalize_x].apply(np.std)
+# ztrans_mean_y = np.mean(dat_train_y)
+# ztrans_sd_y = np.std(dat_train_y)
+# 
+# ## replace sd's that are NaN with 1 (just don't transform):
+# ## [[todo]]
+# 
+# ## z-standardize data (train):
+# dat_train_x[varnames_normalize_x] = (dat_train_x[varnames_normalize_x] - ztrans_mean_x) / ztrans_sd_x
+# dat_train_y = (dat_train_y - ztrans_mean_y) / ztrans_sd_y
+# 
+# ## z-standardize data (test):
+# dat_test_x[varnames_normalize_x] = (dat_test_x[varnames_normalize_x] - ztrans_mean_x) / ztrans_sd_x
+# dat_test_y = (dat_test_y - ztrans_mean_y) / ztrans_sd_y
+
+## produces warning:
+## /Users/ingonader/anaconda3/lib/python3.6/site-packages/pandas/core/frame.py:3137: SettingWithCopyWarning: 
+## A value is trying to be set on a copy of a slice from a DataFrame.
+## Try using .loc[row_indexer,col_indexer] = value instead
+## 
+## See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable## /indexing.html#indexing-view-versus-copy
+##   self[k1] = value[k2]
+
+## [[?]] ask what to do as best practice!
+
+## ------------------------------------------------------------------------- ##
 ## estimate model and evaluate fit and model assumptions
 ## ------------------------------------------------------------------------- ##
 
