@@ -251,6 +251,13 @@ genre_dict
 # dat_raw.info()
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## generic data exploration
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## [[?]] ask guenther: how to properly use matplotlib in jupyter lab?
+dat_raw.hist(bins = 20, size = (10, 10))
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## univariate data checks
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
@@ -388,6 +395,7 @@ dat_cor.sort_values(by = 'r', ascending = False)
 ## mostly from 
 ## http://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html
 
+from sklearn.preprocessing import StandardScaler
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
@@ -477,6 +485,10 @@ dat_test_y = dat_test_y[target]
 ## normalize data
 ## ------------------------------------------------------------------------- ##
 
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+## by hand
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+
 # ## variables to normalize (e.g., ignore intercept):
 # varnames_normalize_x = list(set(dat_train_x.columns) - set(['Intercept']))
 # 
@@ -506,6 +518,31 @@ dat_test_y = dat_test_y[target]
 ##   self[k1] = value[k2]
 
 ## [[?]] ask what to do as best practice!
+
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+## using StandardScaler
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+
+# ## variables to normalize (e.g., ignore intercept):
+# #varnames_normalize_x = list(set(dat_train_x.columns) - set(['Intercept']))
+# 
+# ## Standardize features by removing the mean and scaling to unit variance:
+# scaler = StandardScaler()
+# scaler.fit(dat_train_x)
+# #scaler.fit(dat_train_x[varnames_normalize_x])
+# 
+# print(scaler)
+# vars(scaler)
+# 
+# print(scaler.mean_)
+# print(scaler.var_)
+# 
+# dat_train_x = scaler.transform(dat_train_x)
+# type(dat_train_x)                  ## numpy.ndarray
+# pd.DataFrame(dat_train_x).head()   ## varnames are lost... 
+
+## [[?]] ask guenther: is there a good way to scale variables with pre-built function?
 
 ## ------------------------------------------------------------------------- ##
 ## estimate model and evaluate fit and model assumptions
