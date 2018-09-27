@@ -1,6 +1,7 @@
 ## no data files or archives:
 *.csv
 *.zip
+*.gz
 
 ## no plots in mini-project:
 /week-06-mini-project/*.jpg
