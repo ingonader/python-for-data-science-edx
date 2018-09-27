@@ -61,9 +61,12 @@ dat_movies['movieId'].dtype
 dat_movies['title'].dtype   
 
 type(dat_movies)                     ## also for DataFrame: pandas.core.frame.DataFrame
+type(dat_movies[['movieId']])        ## pandas.core.frame.DataFrame
 type(dat_movies['movieId'])          ## pandas.core.series.Series
 type(dat_movies['movieId'].values)   ## numpy.ndarray
 type(dat_movies['movieId'][1])       ## numpy.int64
+
+
 
 dir(dat_movies)                      ## list all methods?
 
