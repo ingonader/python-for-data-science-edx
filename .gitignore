@@ -2,6 +2,7 @@
 *.csv
 *.zip
 *.gz
+*.sqlite
 
 ## no plots in mini-project:
 /week-06-mini-project/*.jpg
