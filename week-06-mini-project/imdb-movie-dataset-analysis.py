@@ -34,14 +34,14 @@ path_dat = './data'
 
 # ## download (commented out in order not to repeat it every time):
 # r = requests.get(url, allow_redirects=True)
-# open(filename, 'wb').write(r.content)
+# open(os.path.join(path_dat, filename), 'wb').write(r.content)
 #
 # ## check download:
 # os.getcwd()
-# os.listdir()
+# os.listdir(path_dat)
 # 
 # ## unzip:
-# zip_ref = zipfile.ZipFile(filename, 'r')
+# zip_ref = zipfile.ZipFile(os.path.join(filename), 'r')
 # zip_ref.extractall(path_dat)
 # zip_ref.close()
 
@@ -255,7 +255,7 @@ genre_dict
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 ## [[?]] ask guenther: how to properly use matplotlib in jupyter lab?
-dat_raw.hist(bins = 20, size = (10, 10))
+# dat_raw.hist(bins = 20, size = (10, 10))
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## univariate data checks
@@ -276,13 +276,14 @@ ggplot(dat_raw, aes(x = 'rating_mean')) + \
 # %matplotlib inline
 # %matplotlib ipympl
 # %matplotlib widget
+%matplotlib osx
 plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')
 plt.grid(True)
 plt.show()
 
 ## same plot (histogram) using matplotlib, complex variant:
-# fig, ax = plt.subplots()
-# plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+fig, ax = plt.subplots()
+plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
 
 ## complexity:
 
