@@ -4,13 +4,16 @@
 *.gz
 *.sqlite
 
+## no data directories:
+*/data/*
+
 ## no plots in mini-project:
 /week-06-mini-project/*.jpg
 
 ## no files in 'old':
-
 old/*
 */old/*
+
 
 # Created by https://www.gitignore.io/api/jupyternotebook
 
