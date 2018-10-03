@@ -41,7 +41,7 @@ path_dat = './data'
 # os.listdir(path_dat)
 # 
 # ## unzip:
-# zip_ref = zipfile.ZipFile(os.path.join(filename), 'r')
+# zip_ref = zipfile.ZipFile(os.path.join(path_dat, filename), 'r')
 # zip_ref.extractall(path_dat)
 # zip_ref.close()
 
@@ -55,6 +55,7 @@ dat_movies = pd.read_csv(
 
 dat_movies.head(2)
 dat_movies.info()
+dat_movies.dtypes                 	 ##GD you can use DataFrame.dtypes
 
 #dat_movies.dtype                    ## 'DataFrame' object has no attribute 'dtype'
 dat_movies['movieId'].dtype
@@ -142,6 +143,11 @@ dat_ratings_agg.columns = ['_'.join(col) \
                            for col in dat_ratings_agg.columns]
 #dat_ratings_agg.head(2)
 
+##GD this does not only rename columns, but replaces the multiindex with a flat one - try
+##GD mi = dat_ratings_agg.columns
+##GD mi.get_values()
+
+
 ## add correct timestamp column (after aggregation, 
 ## as they cannot be aggregated like numerical values):
 dat_tags['parsed_time'] = pd.to_datetime(
@@ -194,11 +200,22 @@ dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)',
 ## turns 'complexity' into type 'object' again...
 dat_raw['complexity'] = dat_raw['complexity'].astype(float)
 
+##GD try
+##GD dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
+##GD                                 np.nan,
+##GD                                dat_raw['complexity'])
+
+## [[?]] is there also a np.None?
+## [[?]] is there a similar distinction between nan and None as in R?
+
 ## inspect correctness:
 dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
 dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
 ## Note:
 ## 'None' values are just omitted by groupby?
+
+##GD take care, None is not equivalent to np.nan (.astype(float) above converts None to np.nan)
+##GD silently omitting nan in groupby seems to be a long-running issue: https://github.com/pandas-dev/pandas/issues/3729
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## add is_genre attributes for most common genres
@@ -284,6 +301,10 @@ plt.show()
 ## same plot (histogram) using matplotlib, complex variant:
 fig, ax = plt.subplots()
 plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+
+##GD i'd recommend using the axis method instead of the module 
+##GD to properly use maptlotlib's OO API 
+##GD ax.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
 
 ## complexity:
 
@@ -374,6 +395,12 @@ np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'].astype(float))
 ## (can handle missings, somehow)
 dat_nona[['rating_mean', 'complexity']].corr()
 dat_raw[['rating_mean', 'complexity']].corr()
+
+##GD see docstring: dat_nona.corr? -> Compute pairwise correlation of columns, 
+##GD excluding NA/null values
+##GD inconsistency because you also drop rows that have nans in other columns above
+##GD try dat_nona = dat_raw[['rating_mean', 'complexity']].dropna()
+##GD or dat_nona = dat_raw.dropna(subset=['rating_mean', 'complexity'])
 
 ## correlation within each movie category:
 dat_cor = pd.DataFrame([])
