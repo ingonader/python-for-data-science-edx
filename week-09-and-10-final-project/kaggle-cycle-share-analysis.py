@@ -292,6 +292,10 @@ folium_map.save("map-of-bike-and-possible-weather-stations.html")
 ## exploratory analysis of trips
 ## ========================================================================= ##
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## most common starting stations
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
 ## most common starting stations:
 start_station_counter = collections.Counter(dat_trip_raw['start_station_code'])
 start_station_counter.most_common(10)
@@ -319,20 +323,125 @@ ggplot(dat_start_station_freq, aes(x = 'start_station_code_cat', y = 'frequency'
     geom_bar(stat = 'identity') + \
     coord_flip()
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## total number of trips
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
 ## total number of trips:
 dat_trip_raw.shape[0]  #  14 598 961 (14 Mio)
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## data prep (to be moved)
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
 ## [[here]]
+## [[todo]] -- move data aggregation to data prep, and join to weather data!
+
+## set time index for dataframe (in order to use `resample`):
+dat_trip_raw.set_index(
+    pd.DatetimeIndex(dat_trip_raw['start_date']), 
+    inplace = True)  ## [[?]] use inplace = True?
+
+dat_trip_raw.columns
+
+## daily summary of trips:
+dat_trip_day = pd.DataFrame()
+dat_trip_day['trip_cnt'] = dat_trip_raw['start_date'].resample('24h').count()
+dat_trip_day['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('24h').mean() / 60
+dat_trip_day['start_date'] = dat_trip_day.index
+dat_trip_day.head()
+dat_trip_day.shape
+
+## hourly summary of trips:
+dat_trip_hr = pd.DataFrame()
+dat_trip_hr['trip_cnt'] = dat_trip_raw['start_date'].resample('1h').count()
+dat_trip_hr['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('1h').mean() / 60
+dat_trip_hr['start_date'] = dat_trip_hr.index
+dat_trip_hr.head()
+dat_trip_hr.shape
+
+## [[to do]]
+## * exclude rows with zero trips [[?]]
+## * make two models?
+##   * one for predicting now rides vs. some rides, 
+##   * and one for number of rides?
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## number of trips
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## histogram of number of trips per hour:
+ggplot(dat_trip_hr, aes(x = 'trip_cnt')) + geom_histogram(bins = 100)
+ggplot(dat_trip_hr[dat_trip_hr['trip_cnt'] > 0], 
+       aes(x = 'trip_cnt')) + geom_histogram(bins = 100)
+
+dat_trip_hr[['trip_cnt']].describe()
+
+## histogram of number of trips per day:
+ggplot(dat_trip_day, aes(x = 'trip_cnt')) + geom_histogram(bins = 100)
+ggplot(dat_trip_day[dat_trip_day['trip_cnt'] > 0], 
+       aes(x = 'trip_cnt')) + geom_histogram(bins = 100)
+
+dat_trip_day[['trip_cnt']].describe()
 
 
-## number of trips per day:
-dat_trip_raw.resample() ## [[?]]
-dat_trip_raw.head()
-## number of trips per hour:
+## line plot of number of trips per hour:
+ggplot(dat_trip_hr, aes(y = 'trip_cnt', x = 'start_date')) + \
+    geom_point(alpha = .05) + \
+    geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
+                color = 'red', se = False)
 
-## average length of trips:
+## line plot of number of trips per day:
+ggplot(dat_trip_day, aes(y = 'trip_cnt', x = 'start_date')) + \
+    geom_point(alpha = .1) + \
+    geom_smooth(method = 'mavg', method_args = {'window' : 14}, 
+                color = 'red', se = False)
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## average length of trips
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## average length of trips (raw data):
 %matplotlib inline
 sample_frac = .01
 ggplot(dat_trip_raw.sample(frac = sample_frac), 
        aes(x = 'duration_sec')) + geom_histogram(bins = 100)
+
+## average length of trips (hourly summary data):
+%matplotlib inline
+ggplot(dat_trip_hr, 
+       aes(x = 'duration_min_mean')) + geom_histogram(bins = 100)
+
+## average length of trips (daily summary data):
+%matplotlib inline
+ggplot(dat_trip_day, 
+       aes(x = 'duration_min_mean')) + geom_histogram(bins = 100)
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## weather data
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+dat_weather_raw.describe()
+dat_weather_raw.info()
+dat_weather_raw.head()
+
+## line plot of number of some weather metrics
+
+## select which metrics to plot (or not plot):
+wch_cols = list(set(dat_weather_raw.columns) - set(['Date/Time', 'Year', 'Month']))
+
+for i in wch_cols:
+    p = ggplot(dat_weather_raw, aes(y = i, x = 'Date/Time')) + \
+        geom_point(alpha = .05) + \
+        geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
+                color = 'red', se = False)
+    print(p)
+
+
+
+
+
+
+
+
 
