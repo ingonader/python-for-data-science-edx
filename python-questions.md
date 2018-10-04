@@ -7,6 +7,7 @@
 
 
 * syntax completion in editor of jupyterlab?
+* how to do dummy coding? `pd.get_dummies`, or use `patsy`?
 
 
 
