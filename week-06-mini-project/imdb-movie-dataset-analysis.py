@@ -397,7 +397,7 @@ dat_nona[['rating_mean', 'complexity']].corr()
 dat_raw[['rating_mean', 'complexity']].corr()
 
 ##GD see docstring: dat_nona.corr? -> Compute pairwise correlation of columns, 
-##GD excluding NA/null values
+##excluding NA/null values
 ##GD inconsistency because you also drop rows that have nans in other columns above
 ##GD try dat_nona = dat_raw[['rating_mean', 'complexity']].dropna()
 ##GD or dat_nona = dat_raw.dropna(subset=['rating_mean', 'complexity'])
