@@ -7,6 +7,9 @@
 ## no data directories:
 */data/*
 
+## no output directories:
+*/output/*
+
 ## no plots in mini-project:
 /week-06-mini-project/*.jpg
 
