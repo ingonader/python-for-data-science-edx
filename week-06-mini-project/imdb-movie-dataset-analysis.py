@@ -271,7 +271,7 @@ genre_dict
 ## generic data exploration
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
-## [[?]] ask guenther: how to properly use matplotlib in jupyter lab?
+# %matplotlib osx
 # dat_raw.hist(bins = 20, size = (10, 10))
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
@@ -287,8 +287,7 @@ ggplot(dat_raw, aes(x = 'rating_mean')) + \
 ## same plot (histogram) using matplotlib, simple variant:
 ## (doesn't work with missing values in the data)
 ## (preliminary) conclusion: does not work with jupyterlab, only with 
-## ipython notebooks. No idea why. 
-## [[?]] how to get matplotlib plots working, without showing all intermediate steps?
+## ipython notebooks. No idea why. --> Update: have to use %matplotlib osx
 
 # %matplotlib inline
 # %matplotlib ipympl

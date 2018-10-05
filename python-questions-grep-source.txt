@@ -1,0 +1,1745 @@
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1225-       "4                    1"
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1226-      ]
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1227-     },
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1228-     "execution_count": 43,
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1229-     "metadata": {},
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1230-     "output_type": "execute_result"
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1231-    }
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1232-   ],
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1233-   "source": [
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1234-    "## note: course instructurs copy the data frequently\n",
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb:1235:    "## [[?]] ask guenther: is that best practice?\n",
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1236-    "y=clean_data[['high_humidity_label']].copy()\n",
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1237-    "y.head()"
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1238-   ]
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1239-  },
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1240-  {
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1241-   "cell_type": "code",
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1242-   "execution_count": 44,
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1243-   "metadata": {},
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1244-   "outputs": [
+./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1245-    {
+--
+--
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-795-    "features = ['air_pressure', 'air_temp', 'avg_wind_direction', 'avg_wind_speed', 'max_wind_direction', \n",
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-796-    "        'max_wind_speed','relative_humidity']"
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-797-   ]
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-798-  },
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-799-  {
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-800-   "cell_type": "code",
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-801-   "execution_count": 35,
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-802-   "metadata": {},
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-803-   "outputs": [],
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-804-   "source": [
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb:805:    "## no copying here... [[?]]\n",
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-806-    "select_df = sampled_df[features]"
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-807-   ]
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-808-  },
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-809-  {
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-810-   "cell_type": "code",
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-811-   "execution_count": 36,
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-812-   "metadata": {},
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-813-   "outputs": [
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-814-    {
+./week-07-machine-learning/Weather Data Clustering using k-Means.ipynb-815-     "data": {
+--
+--
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1225-       "4                    1"
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1226-      ]
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1227-     },
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1228-     "execution_count": 43,
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1229-     "metadata": {},
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1230-     "output_type": "execute_result"
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1231-    }
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1232-   ],
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1233-   "source": [
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1234-    "## note: course instructurs copy the data frequently\n",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb:1235:    "## [[?]] ask guenther: is that best practice?\n",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1236-    "y=clean_data[['high_humidity_label']].copy()\n",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1237-    "y.head()"
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1238-   ]
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1239-  },
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1240-  {
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1241-   "cell_type": "code",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1242-   "execution_count": 44,
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1243-   "metadata": {},
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1244-   "outputs": [
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Classification using Decision Trees-checkpoint.ipynb-1245-    {
+--
+--
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-795-    "features = ['air_pressure', 'air_temp', 'avg_wind_direction', 'avg_wind_speed', 'max_wind_direction', \n",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-796-    "        'max_wind_speed','relative_humidity']"
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-797-   ]
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-798-  },
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-799-  {
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-800-   "cell_type": "code",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-801-   "execution_count": 35,
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-802-   "metadata": {},
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-803-   "outputs": [],
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-804-   "source": [
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb:805:    "## no copying here... [[?]]\n",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-806-    "select_df = sampled_df[features]"
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-807-   ]
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-808-  },
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-809-  {
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-810-   "cell_type": "code",
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-811-   "execution_count": 36,
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-812-   "metadata": {},
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-813-   "outputs": [
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-814-    {
+./week-07-machine-learning/.ipynb_checkpoints/Weather Data Clustering using k-Means-checkpoint.ipynb-815-     "data": {
+--
+--
+./python-questions.md-1-# Python-Questions
+./python-questions.md-2-
+./python-questions.md-3-> Collected during  EdX Course "Python for Data Science"
+./python-questions.md-4-
+./python-questions.md-5-
+./python-questions.md-6-
+./python-questions.md:7:==[[todo]]: check out [[todo]] and [[?]] in other files==
+./python-questions.md-8-
+./python-questions.md-9-
+./python-questions.md-10-
+./python-questions.md-11-* How to run / execute an analysis with multiple source files? In Juypterlab?
+./python-questions.md-12-  * Which command to use for running file? How to execute a python script (similar to R's `source()`, with magic commands `%` in the script?)
+./python-questions.md-13-  * Easy way to execute different files in the same console?
+./python-questions.md-14-* JupyterLab
+./python-questions.md-15-  * syntax completion in editor of jupyterlab?
+./python-questions.md-16-* Data Preparation
+./python-questions.md-17-  * How to best normalize data in a pipeline? 
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-48-## ========================================================================= ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-49-## Load data files
+./week-06-mini-project/imdb-movie-dataset-analysis.py-50-## ========================================================================= ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-51-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-52-dat_movies = pd.read_csv(
+./week-06-mini-project/imdb-movie-dataset-analysis.py-53-    os.path.join(path_dat, 'ml-20m/movies.csv'), 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-54-    sep = ',')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-55-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-56-dat_movies.head(2)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-57-dat_movies.info()
+./week-06-mini-project/imdb-movie-dataset-analysis.py:58:dat_movies.dtypes                 	 ##GD you can use DataFrame.dtypes
+./week-06-mini-project/imdb-movie-dataset-analysis.py-59-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-60-#dat_movies.dtype                    ## 'DataFrame' object has no attribute 'dtype'
+./week-06-mini-project/imdb-movie-dataset-analysis.py-61-dat_movies['movieId'].dtype
+./week-06-mini-project/imdb-movie-dataset-analysis.py-62-dat_movies['title'].dtype   
+./week-06-mini-project/imdb-movie-dataset-analysis.py-63-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-64-type(dat_movies)                     ## also for DataFrame: pandas.core.frame.DataFrame
+./week-06-mini-project/imdb-movie-dataset-analysis.py-65-type(dat_movies[['movieId']])        ## pandas.core.frame.DataFrame
+./week-06-mini-project/imdb-movie-dataset-analysis.py-66-type(dat_movies['movieId'])          ## pandas.core.series.Series
+./week-06-mini-project/imdb-movie-dataset-analysis.py-67-type(dat_movies['movieId'].values)   ## numpy.ndarray
+./week-06-mini-project/imdb-movie-dataset-analysis.py-68-type(dat_movies['movieId'][1])       ## numpy.int64
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-136-    .groupby('movieId') \
+./week-06-mini-project/imdb-movie-dataset-analysis.py-137-    .agg({'rating': ['size', 'min', 'max', 'mean', 'std'], 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-138-         'timestamp': ['min', 'max', 'mean', 'std']})
+./week-06-mini-project/imdb-movie-dataset-analysis.py-139-#dat_ratings_agg.head(2)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-140-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-141-## rename columns:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-142-dat_ratings_agg.columns = ['_'.join(col) \
+./week-06-mini-project/imdb-movie-dataset-analysis.py-143-                           for col in dat_ratings_agg.columns]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-144-#dat_ratings_agg.head(2)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-145-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:146:##GD this does not only rename columns, but replaces the multiindex with a flat one - try
+./week-06-mini-project/imdb-movie-dataset-analysis.py:147:##GD mi = dat_ratings_agg.columns
+./week-06-mini-project/imdb-movie-dataset-analysis.py:148:##GD mi.get_values()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-149-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-150-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-151-## add correct timestamp column (after aggregation, 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-152-## as they cannot be aggregated like numerical values):
+./week-06-mini-project/imdb-movie-dataset-analysis.py-153-dat_tags['parsed_time'] = pd.to_datetime(
+./week-06-mini-project/imdb-movie-dataset-analysis.py-154-    dat_tags['timestamp'], unit='s')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-155-dat_ratings['parsed_time'] = pd.to_datetime(
+./week-06-mini-project/imdb-movie-dataset-analysis.py-156-    dat_ratings['timestamp'], unit='s')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-157-dat_ratings_agg['parsed_time_min'] = pd.to_datetime(
+./week-06-mini-project/imdb-movie-dataset-analysis.py-158-    dat_ratings_agg['timestamp_min'], unit='s')
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-193-## exclude movies that have no genres listed:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-194-## '(no genres listed)' --> None
+./week-06-mini-project/imdb-movie-dataset-analysis.py-195-#dat_raw['complexity'] = None if (dat_raw['genres'] == '(no genres listed)') else dat_raw['complexity']
+./week-06-mini-project/imdb-movie-dataset-analysis.py-196-dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-197-                                 None,
+./week-06-mini-project/imdb-movie-dataset-analysis.py-198-                                dat_raw['complexity'])
+./week-06-mini-project/imdb-movie-dataset-analysis.py-199-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-200-## turns 'complexity' into type 'object' again...
+./week-06-mini-project/imdb-movie-dataset-analysis.py-201-dat_raw['complexity'] = dat_raw['complexity'].astype(float)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-202-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:203:##GD try
+./week-06-mini-project/imdb-movie-dataset-analysis.py:204:##GD dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
+./week-06-mini-project/imdb-movie-dataset-analysis.py:205:##GD                                 np.nan,
+./week-06-mini-project/imdb-movie-dataset-analysis.py:206:##GD                                dat_raw['complexity'])
+./week-06-mini-project/imdb-movie-dataset-analysis.py-207-
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-207-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:208:## [[?]] is there also a np.None?
+./week-06-mini-project/imdb-movie-dataset-analysis.py:209:## [[?]] is there a similar distinction between nan and None as in R?
+./week-06-mini-project/imdb-movie-dataset-analysis.py-210-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-211-## inspect correctness:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-212-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
+./week-06-mini-project/imdb-movie-dataset-analysis.py-213-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-214-## Note:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-215-## 'None' values are just omitted by groupby?
+./week-06-mini-project/imdb-movie-dataset-analysis.py-216-
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-210-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-211-## inspect correctness:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-212-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
+./week-06-mini-project/imdb-movie-dataset-analysis.py-213-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-214-## Note:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-215-## 'None' values are just omitted by groupby?
+./week-06-mini-project/imdb-movie-dataset-analysis.py-216-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:217:##GD take care, None is not equivalent to np.nan (.astype(float) above converts None to np.nan)
+./week-06-mini-project/imdb-movie-dataset-analysis.py:218:##GD silently omitting nan in groupby seems to be a long-running issue: https://github.com/pandas-dev/pandas/issues/3729
+./week-06-mini-project/imdb-movie-dataset-analysis.py-219-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-220-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-221-## add is_genre attributes for most common genres
+./week-06-mini-project/imdb-movie-dataset-analysis.py-222-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-223-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-224-## get list of different genres:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-225-tmp = dat_raw['genres'] \
+./week-06-mini-project/imdb-movie-dataset-analysis.py-226-    .str.split('|')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-227-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-228-## similar to unlist, I suppose:
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-294-# %matplotlib widget
+./week-06-mini-project/imdb-movie-dataset-analysis.py-295-%matplotlib osx
+./week-06-mini-project/imdb-movie-dataset-analysis.py-296-plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-297-plt.grid(True)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-298-plt.show()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-299-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-300-## same plot (histogram) using matplotlib, complex variant:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-301-fig, ax = plt.subplots()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-302-plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-303-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:304:##GD i'd recommend using the axis method instead of the module 
+./week-06-mini-project/imdb-movie-dataset-analysis.py:305:##GD to properly use maptlotlib's OO API 
+./week-06-mini-project/imdb-movie-dataset-analysis.py:306:##GD ax.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-307-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-308-## complexity:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-309-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-310-ggplot(dat_raw, aes(x = 'complexity')) + \
+./week-06-mini-project/imdb-movie-dataset-analysis.py-311-  geom_bar(color = 'blue', fill = 'blue')
+./week-06-mini-project/imdb-movie-dataset-analysis.py-312-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-313-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-314-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-315-## multivariate checks
+./week-06-mini-project/imdb-movie-dataset-analysis.py-316-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-388-## The error is reproducible if the array is of dtype=object
+./week-06-mini-project/imdb-movie-dataset-analysis.py-389-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-390-## correlation over all movies (using numpy):
+./week-06-mini-project/imdb-movie-dataset-analysis.py-391-np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'].astype(float))
+./week-06-mini-project/imdb-movie-dataset-analysis.py-392-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-393-## correlation over all movies (using pandas):
+./week-06-mini-project/imdb-movie-dataset-analysis.py-394-## (can handle missings, somehow)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-395-dat_nona[['rating_mean', 'complexity']].corr()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-396-dat_raw[['rating_mean', 'complexity']].corr()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-397-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:398:##GD see docstring: dat_nona.corr? -> Compute pairwise correlation of columns, 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-399-##excluding NA/null values
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-399-##excluding NA/null values
+./week-06-mini-project/imdb-movie-dataset-analysis.py:400:##GD inconsistency because you also drop rows that have nans in other columns above
+./week-06-mini-project/imdb-movie-dataset-analysis.py:401:##GD try dat_nona = dat_raw[['rating_mean', 'complexity']].dropna()
+./week-06-mini-project/imdb-movie-dataset-analysis.py:402:##GD or dat_nona = dat_raw.dropna(subset=['rating_mean', 'complexity'])
+./week-06-mini-project/imdb-movie-dataset-analysis.py-403-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-404-## correlation within each movie category:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-405-dat_cor = pd.DataFrame([])
+./week-06-mini-project/imdb-movie-dataset-analysis.py-406-for i in genre_inds:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-407-    dat_this = dat_raw[dat_raw[i] == True]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-408-    cor_this = dat_this[['rating_mean', 'complexity']].corr().iloc[0, 1]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-409-    dat_cor = dat_cor.append(pd.DataFrame(
+./week-06-mini-project/imdb-movie-dataset-analysis.py-410-        {'Variable': i,
+./week-06-mini-project/imdb-movie-dataset-analysis.py-411-         'Genre'   : genre_dict[i],
+./week-06-mini-project/imdb-movie-dataset-analysis.py-412-         'n'       : dat_this.shape[0],
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-498-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-499-# ## shapes wwith using patsy/dmatrices:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-500-# dat_train_x.shape  # (17756, 41)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-501-# dat_test_x.shape   # (8746, 41)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-502-# dat_train_y.shape  # (17756, 1)    # type: pandas.core.frame.DataFrame
+./week-06-mini-project/imdb-movie-dataset-analysis.py-503-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-504-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-505-dat_train_y = dat_train_y[target]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-506-dat_test_y = dat_test_y[target]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-507-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:508:## [[?]] [[todo]]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-509-## normalize input for scikit-learn regression?
+./week-06-mini-project/imdb-movie-dataset-analysis.py-510-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-511-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-512-## normalize data
+./week-06-mini-project/imdb-movie-dataset-analysis.py-513-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-514-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-515-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-516-## by hand
+./week-06-mini-project/imdb-movie-dataset-analysis.py-517-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-518-
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-537-# dat_test_y = (dat_test_y - ztrans_mean_y) / ztrans_sd_y
+./week-06-mini-project/imdb-movie-dataset-analysis.py-538-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-539-## produces warning:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-540-## /Users/ingonader/anaconda3/lib/python3.6/site-packages/pandas/core/frame.py:3137: SettingWithCopyWarning: 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-541-## A value is trying to be set on a copy of a slice from a DataFrame.
+./week-06-mini-project/imdb-movie-dataset-analysis.py-542-## Try using .loc[row_indexer,col_indexer] = value instead
+./week-06-mini-project/imdb-movie-dataset-analysis.py-543-## 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-544-## See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable## /indexing.html#indexing-view-versus-copy
+./week-06-mini-project/imdb-movie-dataset-analysis.py-545-##   self[k1] = value[k2]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-546-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:547:## [[?]] ask what to do as best practice!
+./week-06-mini-project/imdb-movie-dataset-analysis.py-548-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-549-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-550-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-551-## using StandardScaler
+./week-06-mini-project/imdb-movie-dataset-analysis.py-552-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-553-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-554-# ## variables to normalize (e.g., ignore intercept):
+./week-06-mini-project/imdb-movie-dataset-analysis.py-555-# #varnames_normalize_x = list(set(dat_train_x.columns) - set(['Intercept']))
+./week-06-mini-project/imdb-movie-dataset-analysis.py-556-# 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-557-# ## Standardize features by removing the mean and scaling to unit variance:
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-562-# print(scaler)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-563-# vars(scaler)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-564-# 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-565-# print(scaler.mean_)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-566-# print(scaler.var_)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-567-# 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-568-# dat_train_x = scaler.transform(dat_train_x)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-569-# type(dat_train_x)                  ## numpy.ndarray
+./week-06-mini-project/imdb-movie-dataset-analysis.py-570-# pd.DataFrame(dat_train_x).head()   ## varnames are lost... 
+./week-06-mini-project/imdb-movie-dataset-analysis.py-571-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:572:## [[?]] ask guenther: is there a good way to scale variables with pre-built function?
+./week-06-mini-project/imdb-movie-dataset-analysis.py-573-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-574-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-575-## estimate model and evaluate fit and model assumptions
+./week-06-mini-project/imdb-movie-dataset-analysis.py-576-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/imdb-movie-dataset-analysis.py-577-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-578-## Create linear regression object
+./week-06-mini-project/imdb-movie-dataset-analysis.py-579-mod_01 = linear_model.LinearRegression()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-580-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-581-## Train the model using the training sets
+./week-06-mini-project/imdb-movie-dataset-analysis.py-582-mod_01.fit(dat_train_x, dat_train_y)
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-607-## correlation between features:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-608-cormat = dat_train_x.corr()
+./week-06-mini-project/imdb-movie-dataset-analysis.py-609-cormat.round(2)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-610-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-611-## how many correlations bigger than...:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-612-np.sum(cormat > .90)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-613-cormat.loc[cormat.loc['is_imax'] > .90, 'is_imax']
+./week-06-mini-project/imdb-movie-dataset-analysis.py-614-cormat.loc[cormat.loc['is_adventure'] > .90, 'is_adventure']
+./week-06-mini-project/imdb-movie-dataset-analysis.py-615-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-616-## inspect model coefficients:
+./week-06-mini-project/imdb-movie-dataset-analysis.py:617:## [[?]] something's wrong here
+./week-06-mini-project/imdb-movie-dataset-analysis.py-618-mod_01.coef_                                # coefficients
+./week-06-mini-project/imdb-movie-dataset-analysis.py-619-mod_01.coef_[0]
+./week-06-mini-project/imdb-movie-dataset-analysis.py-620-coefs = pd.DataFrame({
+./week-06-mini-project/imdb-movie-dataset-analysis.py-621-    'coef' : dat_train_x.columns,
+./week-06-mini-project/imdb-movie-dataset-analysis.py-622-    'value': mod_01.coef_[0]       ## without the [0] when not using patsy
+./week-06-mini-project/imdb-movie-dataset-analysis.py-623-})
+./week-06-mini-project/imdb-movie-dataset-analysis.py-624-coefs
+./week-06-mini-project/imdb-movie-dataset-analysis.py-625-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-626-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-627-## calculate residuals:
+--
+--
+./week-06-mini-project/imdb-movie-dataset-analysis.py-683-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-684-# ## add interaction terms:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-685-# ## (not as cool; better use patsy)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-686-# poly = PolynomialFeatures(interaction_only = True,include_bias = False)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-687-# poly.fit_transform(dat_train_x).shape
+./week-06-mini-project/imdb-movie-dataset-analysis.py-688-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-689-## fit model:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-690-mod_ridge = Ridge(alpha=1.0)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-691-mod_ridge.fit(dat_train_x, dat_train_y)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-692-
+./week-06-mini-project/imdb-movie-dataset-analysis.py:693:## [[?]] What about intercept? Is that regularized? (shouldn't be)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-694-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-695-## Make predictions using the testing set
+./week-06-mini-project/imdb-movie-dataset-analysis.py-696-dat_test_pred = mod_ridge.predict(dat_test_x)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-697-dat_train_pred = mod_ridge.predict(dat_train_x)
+./week-06-mini-project/imdb-movie-dataset-analysis.py-698-
+./week-06-mini-project/imdb-movie-dataset-analysis.py-699-## Inspect model:
+./week-06-mini-project/imdb-movie-dataset-analysis.py-700-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-06-mini-project/imdb-movie-dataset-analysis.py-701-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-06-mini-project/imdb-movie-dataset-analysis.py-702-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-06-mini-project/imdb-movie-dataset-analysis.py-703-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-06-mini-project/various-code-chunks.ipynb-827-    "## mean ratings:\n",
+./week-06-mini-project/various-code-chunks.ipynb-828-    "\n",
+./week-06-mini-project/various-code-chunks.ipynb-829-    "## check mean ratings (histogram):\n",
+./week-06-mini-project/various-code-chunks.ipynb-830-    "ggplot(dat_raw, aes(x = 'rating_mean')) + \\\n",
+./week-06-mini-project/various-code-chunks.ipynb-831-    "  geom_histogram(bins = 40, color = 'blue', fill = 'blue')\n",
+./week-06-mini-project/various-code-chunks.ipynb-832-    "\n",
+./week-06-mini-project/various-code-chunks.ipynb-833-    "## same plot (histogram) using matplotlib, simple variant:\n",
+./week-06-mini-project/various-code-chunks.ipynb-834-    "## (doesn't work with missing values in the data)\n",
+./week-06-mini-project/various-code-chunks.ipynb-835-    "## (preliminary) conclusion: does not work with jupyterlab, only with \n",
+./week-06-mini-project/various-code-chunks.ipynb-836-    "## ipython notebooks. No idea why. \n",
+./week-06-mini-project/various-code-chunks.ipynb:837:    "## [[?]] how to get matplotlib plots working, without showing all intermediate steps?\n",
+./week-06-mini-project/various-code-chunks.ipynb-838-    "\n",
+./week-06-mini-project/various-code-chunks.ipynb-839-    "# %matplotlib inline\n",
+./week-06-mini-project/various-code-chunks.ipynb-840-    "# %matplotlib ipympl\n",
+./week-06-mini-project/various-code-chunks.ipynb-841-    "# %matplotlib widget\n",
+./week-06-mini-project/various-code-chunks.ipynb-842-    "plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')\n",
+./week-06-mini-project/various-code-chunks.ipynb-843-    "plt.grid(True)\n",
+./week-06-mini-project/various-code-chunks.ipynb-844-    "plt.show()\n",
+./week-06-mini-project/various-code-chunks.ipynb-845-    "\n",
+./week-06-mini-project/various-code-chunks.ipynb-846-    "## same plot (histogram) using matplotlib, complex variant:\n",
+./week-06-mini-project/various-code-chunks.ipynb-847-    "# fig, ax = plt.subplots()\n",
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-48-## ========================================================================= ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-49-## Load data files
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-50-## ========================================================================= ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-51-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-52-dat_movies = pd.read_csv(
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-53-    os.path.join(path_dat, 'ml-20m/movies.csv'), 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-54-    sep = ',')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-55-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-56-dat_movies.head(2)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-57-dat_movies.info()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:58:dat_movies.dtypes                 	 ##GD you can use DataFrame.dtypes
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-59-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-60-#dat_movies.dtype                    ## 'DataFrame' object has no attribute 'dtype'
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-61-dat_movies['movieId'].dtype
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-62-dat_movies['title'].dtype   
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-63-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-64-type(dat_movies)                     ## also for DataFrame: pandas.core.frame.DataFrame
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-65-type(dat_movies[['movieId']])        ## pandas.core.frame.DataFrame
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-66-type(dat_movies['movieId'])          ## pandas.core.series.Series
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-67-type(dat_movies['movieId'].values)   ## numpy.ndarray
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-68-type(dat_movies['movieId'][1])       ## numpy.int64
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-136-    .groupby('movieId') \
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-137-    .agg({'rating': ['size', 'min', 'max', 'mean', 'std'], 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-138-         'timestamp': ['min', 'max', 'mean', 'std']})
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-139-#dat_ratings_agg.head(2)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-140-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-141-## rename columns:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-142-dat_ratings_agg.columns = ['_'.join(col) \
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-143-                           for col in dat_ratings_agg.columns]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-144-#dat_ratings_agg.head(2)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-145-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:146:##GD this does not only rename columns, but replaces the multiindex with a flat one - try
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:147:##GD mi = dat_ratings_agg.columns
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:148:##GD mi.get_values()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-149-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-150-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-151-## add correct timestamp column (after aggregation, 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-152-## as they cannot be aggregated like numerical values):
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-153-dat_tags['parsed_time'] = pd.to_datetime(
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-154-    dat_tags['timestamp'], unit='s')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-155-dat_ratings['parsed_time'] = pd.to_datetime(
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-156-    dat_ratings['timestamp'], unit='s')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-157-dat_ratings_agg['parsed_time_min'] = pd.to_datetime(
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-158-    dat_ratings_agg['timestamp_min'], unit='s')
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-193-## exclude movies that have no genres listed:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-194-## '(no genres listed)' --> None
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-195-#dat_raw['complexity'] = None if (dat_raw['genres'] == '(no genres listed)') else dat_raw['complexity']
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-196-dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-197-                                 None,
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-198-                                dat_raw['complexity'])
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-199-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-200-## turns 'complexity' into type 'object' again...
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-201-dat_raw['complexity'] = dat_raw['complexity'].astype(float)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-202-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:203:##GD try
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:204:##GD dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:205:##GD                                 np.nan,
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:206:##GD                                dat_raw['complexity'])
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-207-
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-207-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:208:## [[?]] is there also a np.None?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:209:## [[?]] is there a similar distinction between nan and None as in R?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-210-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-211-## inspect correctness:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-212-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-213-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-214-## Note:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-215-## 'None' values are just omitted by groupby?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-216-
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-210-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-211-## inspect correctness:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-212-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'})
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-213-dat_raw.groupby(['genres', 'complexity']).agg({'genres': 'size'}).sort_values(by = 'genres')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-214-## Note:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-215-## 'None' values are just omitted by groupby?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-216-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:217:##GD take care, None is not equivalent to np.nan (.astype(float) above converts None to np.nan)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:218:##GD silently omitting nan in groupby seems to be a long-running issue: https://github.com/pandas-dev/pandas/issues/3729
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-219-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-220-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-221-## add is_genre attributes for most common genres
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-222-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-223-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-224-## get list of different genres:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-225-tmp = dat_raw['genres'] \
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-226-    .str.split('|')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-227-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-228-## similar to unlist, I suppose:
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-264-## ========================================================================= ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-265-## Data exploration
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-266-## ========================================================================= ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-267-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-268-# dat_raw.info()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-269-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-270-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-271-## generic data exploration
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-272-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-273-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:274:## [[?]] ask guenther: how to properly use matplotlib in jupyter lab?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-275-# dat_raw.hist(bins = 20, size = (10, 10))
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-276-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-277-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-278-## univariate data checks
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-279-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-280-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-281-## mean ratings:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-282-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-283-## check mean ratings (histogram):
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-284-ggplot(dat_raw, aes(x = 'rating_mean')) + \
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-281-## mean ratings:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-282-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-283-## check mean ratings (histogram):
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-284-ggplot(dat_raw, aes(x = 'rating_mean')) + \
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-285-  geom_histogram(bins = 40, color = 'blue', fill = 'blue')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-286-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-287-## same plot (histogram) using matplotlib, simple variant:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-288-## (doesn't work with missing values in the data)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-289-## (preliminary) conclusion: does not work with jupyterlab, only with 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-290-## ipython notebooks. No idea why. 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:291:## [[?]] how to get matplotlib plots working, without showing all intermediate steps?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-292-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-293-# %matplotlib inline
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-294-# %matplotlib ipympl
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-295-# %matplotlib widget
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-296-%matplotlib osx
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-297-plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-298-plt.grid(True)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-299-plt.show()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-300-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-301-## same plot (histogram) using matplotlib, complex variant:
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-295-# %matplotlib widget
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-296-%matplotlib osx
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-297-plt.hist(dat_raw['rating_mean'].dropna().values, 40, density = False, facecolor = 'blue')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-298-plt.grid(True)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-299-plt.show()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-300-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-301-## same plot (histogram) using matplotlib, complex variant:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-302-fig, ax = plt.subplots()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-303-plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-304-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:305:##GD i'd recommend using the axis method instead of the module 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:306:##GD to properly use maptlotlib's OO API 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:307:##GD ax.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-308-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-309-## complexity:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-310-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-311-ggplot(dat_raw, aes(x = 'complexity')) + \
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-312-  geom_bar(color = 'blue', fill = 'blue')
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-313-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-314-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-315-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-316-## multivariate checks
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-317-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-389-## The error is reproducible if the array is of dtype=object
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-390-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-391-## correlation over all movies (using numpy):
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-392-np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'].astype(float))
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-393-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-394-## correlation over all movies (using pandas):
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-395-## (can handle missings, somehow)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-396-dat_nona[['rating_mean', 'complexity']].corr()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-397-dat_raw[['rating_mean', 'complexity']].corr()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-398-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:399:##GD see docstring: dat_nona.corr? -> Compute pairwise correlation of columns, 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-400-##excluding NA/null values
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-400-##excluding NA/null values
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:401:##GD inconsistency because you also drop rows that have nans in other columns above
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:402:##GD try dat_nona = dat_raw[['rating_mean', 'complexity']].dropna()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:403:##GD or dat_nona = dat_raw.dropna(subset=['rating_mean', 'complexity'])
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-404-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-405-## correlation within each movie category:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-406-dat_cor = pd.DataFrame([])
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-407-for i in genre_inds:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-408-    dat_this = dat_raw[dat_raw[i] == True]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-409-    cor_this = dat_this[['rating_mean', 'complexity']].corr().iloc[0, 1]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-410-    dat_cor = dat_cor.append(pd.DataFrame(
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-411-        {'Variable': i,
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-412-         'Genre'   : genre_dict[i],
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-413-         'n'       : dat_this.shape[0],
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-499-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-500-# ## shapes wwith using patsy/dmatrices:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-501-# dat_train_x.shape  # (17756, 41)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-502-# dat_test_x.shape   # (8746, 41)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-503-# dat_train_y.shape  # (17756, 1)    # type: pandas.core.frame.DataFrame
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-504-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-505-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-506-dat_train_y = dat_train_y[target]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-507-dat_test_y = dat_test_y[target]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-508-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:509:## [[?]] [[todo]]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-510-## normalize input for scikit-learn regression?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-511-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-512-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-513-## normalize data
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-514-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-515-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-516-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-517-## by hand
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-518-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-519-
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-538-# dat_test_y = (dat_test_y - ztrans_mean_y) / ztrans_sd_y
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-539-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-540-## produces warning:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-541-## /Users/ingonader/anaconda3/lib/python3.6/site-packages/pandas/core/frame.py:3137: SettingWithCopyWarning: 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-542-## A value is trying to be set on a copy of a slice from a DataFrame.
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-543-## Try using .loc[row_indexer,col_indexer] = value instead
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-544-## 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-545-## See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable## /indexing.html#indexing-view-versus-copy
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-546-##   self[k1] = value[k2]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-547-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:548:## [[?]] ask what to do as best practice!
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-549-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-550-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-551-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-552-## using StandardScaler
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-553-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-554-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-555-# ## variables to normalize (e.g., ignore intercept):
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-556-# #varnames_normalize_x = list(set(dat_train_x.columns) - set(['Intercept']))
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-557-# 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-558-# ## Standardize features by removing the mean and scaling to unit variance:
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-563-# print(scaler)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-564-# vars(scaler)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-565-# 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-566-# print(scaler.mean_)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-567-# print(scaler.var_)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-568-# 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-569-# dat_train_x = scaler.transform(dat_train_x)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-570-# type(dat_train_x)                  ## numpy.ndarray
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-571-# pd.DataFrame(dat_train_x).head()   ## varnames are lost... 
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-572-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:573:## [[?]] ask guenther: is there a good way to scale variables with pre-built function?
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-574-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-575-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-576-## estimate model and evaluate fit and model assumptions
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-577-## ------------------------------------------------------------------------- ##
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-578-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-579-## Create linear regression object
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-580-mod_01 = linear_model.LinearRegression()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-581-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-582-## Train the model using the training sets
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-583-mod_01.fit(dat_train_x, dat_train_y)
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-608-## correlation between features:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-609-cormat = dat_train_x.corr()
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-610-cormat.round(2)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-611-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-612-## how many correlations bigger than...:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-613-np.sum(cormat > .90)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-614-cormat.loc[cormat.loc['is_imax'] > .90, 'is_imax']
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-615-cormat.loc[cormat.loc['is_adventure'] > .90, 'is_adventure']
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-616-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-617-## inspect model coefficients:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:618:## [[?]] something's wrong here
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-619-mod_01.coef_                                # coefficients
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-620-mod_01.coef_[0]
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-621-coefs = pd.DataFrame({
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-622-    'coef' : dat_train_x.columns,
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-623-    'value': mod_01.coef_[0]       ## without the [0] when not using patsy
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-624-})
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-625-coefs
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-626-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-627-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-628-## calculate residuals:
+--
+--
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-684-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-685-# ## add interaction terms:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-686-# ## (not as cool; better use patsy)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-687-# poly = PolynomialFeatures(interaction_only = True,include_bias = False)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-688-# poly.fit_transform(dat_train_x).shape
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-689-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-690-## fit model:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-691-mod_ridge = Ridge(alpha=1.0)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-692-mod_ridge.fit(dat_train_x, dat_train_y)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-693-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py:694:## [[?]] What about intercept? Is that regularized? (shouldn't be)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-695-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-696-## Make predictions using the testing set
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-697-dat_test_pred = mod_ridge.predict(dat_test_x)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-698-dat_train_pred = mod_ridge.predict(dat_train_x)
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-699-
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-700-## Inspect model:
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-701-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-702-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-703-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-06-mini-project/.ipynb_checkpoints/imdb-movie-dataset-analysis-checkpoint.py-704-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5469-      "text/plain": [
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5470-       "pandas.core.strings.StringMethods"
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5471-      ]
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5472-     },
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5473-     "execution_count": 228,
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5474-     "metadata": {},
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5475-     "output_type": "execute_result"
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5476-    }
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5477-   ],
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5478-   "source": [
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb:5479:    "## why do I have to put the '.str' in the code in the cell below? [[?]]\n",
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5480-    "type(movies['genres'].str)"
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5481-   ]
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5482-  },
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5483-  {
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5484-   "cell_type": "code",
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5485-   "execution_count": 229,
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5486-   "metadata": {},
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5487-   "outputs": [],
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5488-   "source": [
+./week-04-a-pandas/Week-4-Pandas/Introduction to Pandas.ipynb-5489-    "movie_genres = movies['genres'].str.split('|', expand=True)"
+--
+--
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5469-      "text/plain": [
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5470-       "pandas.core.strings.StringMethods"
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5471-      ]
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5472-     },
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5473-     "execution_count": 228,
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5474-     "metadata": {},
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5475-     "output_type": "execute_result"
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5476-    }
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5477-   ],
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5478-   "source": [
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb:5479:    "## why do I have to put the '.str' in the code in the cell below? [[?]]\n",
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5480-    "type(movies['genres'].str)"
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5481-   ]
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5482-  },
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5483-  {
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5484-   "cell_type": "code",
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5485-   "execution_count": 229,
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5486-   "metadata": {},
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5487-   "outputs": [],
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5488-   "source": [
+./week-04-a-pandas/Week-4-Pandas/.ipynb_checkpoints/Introduction to Pandas-checkpoint.ipynb-5489-    "movie_genres = movies['genres'].str.split('|', expand=True)"
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-1-## ######################################################################### ##
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-2-## Analysis of 
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-3-## For EdX Course
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-4-## Python for Data Science (Week 9 and 10 Final Project)
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-5-## ######################################################################### ##
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-6-
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-7-## questions:
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-8-## * syntax completion in editor of jupyterlab?
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-9-## * ...
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py:10:## * [[todo]]: check out [[todo]] and [[?]] in other files
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-11-
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-12-## [[todo]]
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-13-## * clean up file (remove unnecessary code / comments)
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-14-
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-15-
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-16-## ========================================================================= ## 
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-17-## import libraries
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-18-## ========================================================================= ##
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-19-
+./week-09-and-10-final-project/kgl-cycle-share-01-setup.py-20-import requests
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-14-exec(open("./kgl-cycle-share-04-data-prep.py").read())
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-15-
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-16-## open in editor, as execution makes no sense (and also, contains magic)
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-17-exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-18-
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-19-exec(open("./kgl-cycle-share-06a-random-forest.py").read())
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-20-exec(open("./kgl-cycle-share-main-file.py").read())
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-21-
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-22-
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-23-## [[todo]] 
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py:24:## * save matplotlib plot! how? [[?]]
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py:25:## * modify axes labels on pdp plots... how? [[?]]
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-26-## * repeat line plots from above but with predictions, in addition!
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-27-## * xgboost
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-28-## * some categorical prediction model, in order to try out stuff like f1, confusionmatrix, roc curve
+./week-09-and-10-final-project/kgl-cycle-share-main-file.py-29-
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-89-# formula_txt
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-90-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-91-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-92-#patsy.dmatrix?
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-93-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-94-                               NA_action = 'drop',
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-95-                               return_type = 'dataframe')
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-96-dat_x.head()
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-97-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-98-## other possibilities for dummy coding:
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py:99:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-100-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-101-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-102-## train / test split
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-103-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-104-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-105-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-106-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-107-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-108-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-109-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-127-                               max_depth = 20, 
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-128-                               min_samples_split = 50,
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-129-                               min_samples_leaf = 20,
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-130-                               oob_score = True,
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-131-                               n_jobs = -2,
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-132-                               verbose = 1)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-133-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-134-## Train the model using the training sets:
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-135-mod_rf.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-136-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py:137:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-138-    
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-139-## Make predictions using the testing set
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-140-dat_test_pred = mod_rf.predict(dat_test_x)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-141-dat_train_pred = mod_rf.predict(dat_train_x)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-142-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-143-## Inspect model:
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-144-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-145-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-146-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-147-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-203-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-204-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-205-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-206-## ice-plot for numeric feature:
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-207-fig, axes = pdp.pdp_plot(
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-208-    pdp_current, wch_feature, plot_lines = True, frac_to_plot = 100,  ## percentage! 
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-209-    x_quantile = False, plot_pts_dist = True, show_percentile = True)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-210-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-211-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-212-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py:213:## [[here]] [[?]] how to set axis labels?
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-214-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-215-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-216-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-217-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-218-## partial dependence plots: interactions
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-219-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-220-
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-221-#[features[6], features[5]]
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-222-wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
+./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py-223-inter_current = pdp.pdp_interact(
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-65-## add markers for possible weather stations:
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-66-for i in range(0, len(weatherstation_name)):
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-67-    folium.Marker(location = weatherstation_latlon[i],
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-68-                  popup = weatherstation_name[i])\
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-69-    .add_to(folium_map)
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-70-## save plot as html:
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-71-folium_map.save("map-of-bike-and-possible-weather-stations.html")
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-72-
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-73-## [[todo]]
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-74-## * change color of markers?
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py:75:## * [[?]] make plot with other technique in python? how? basemap? how to get city streets?
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-76-
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-77-## ========================================================================= ##
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-78-## exploratory analysis of trips
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-79-## ========================================================================= ##
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-80-
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-81-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-82-## generic data exploration
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-83-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-84-
+./week-09-and-10-final-project/kgl-cycle-share-05-exploratory-analysis.py-85-%matplotlib osx
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-31-## data preparation
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-32-## ========================================================================= ##
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-33-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-34-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-35-## aggregate trip data
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-36-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-37-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-38-## set time index for dataframe (in order to use `resample`):
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-39-dat_trip_raw.set_index(
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-40-    pd.DatetimeIndex(dat_trip_raw['start_date']), 
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py:41:    inplace = True)  ## [[?]] use inplace = True?
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-42-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-43-dat_trip_raw.columns
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-44-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-45-## daily summary of trips:
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-46-dat_trip_day = pd.DataFrame()
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-47-dat_trip_day['trip_cnt'] = dat_trip_raw['start_date'].resample('24h').count()
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-48-dat_trip_day['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('24h').mean() / 60
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-49-dat_trip_day['start_date'] = dat_trip_day.index
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-50-dat_trip_day.head()
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-51-dat_trip_day.shape
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-52-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-53-## hourly summary of trips:
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-54-dat_trip_hr = pd.DataFrame()
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-55-dat_trip_hr['trip_cnt'] = dat_trip_raw['start_date'].resample('1h').count()
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-56-dat_trip_hr['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('1h').mean() / 60
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-57-dat_trip_hr['start_date'] = dat_trip_hr.index
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-58-dat_trip_hr.head()
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-59-dat_trip_hr.shape
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-60-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-61-## [[to do]]
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py:62:## * exclude rows with zero trips [[?]]
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-63-## * make two models?
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-64-##   * one for predicting now rides vs. some rides, 
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-65-##   * and one for number of rides?
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-66-## * or just leave it and use random forest (and no regression-based model)?
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-67-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-68-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-69-## join trip data to weather data
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-70-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-71-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-72-dat_hr_all = pd.merge(
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-103-## missing value imputation
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-104-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-105-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-106-## cross-table of trip_cnt and duratin_min_mean:
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-107-pd.crosstab(dat_hr_all['trip_cnt'] == 0, 
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-108-            pd.isnull(dat_hr_all['duration_min_mean']),
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-109-            rownames = ['trip_cnt == 0'],
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-110-            colnames = ['isnull(duration_min_mean)'])
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-111-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-112-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py:113:## [[?]] impute missing trip durations with zero?
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-114-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-115-## [[todo]]
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-116-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-117-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-118-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-119-
+./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-120-
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-1-## ######################################################################### ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-2-## Analysis of 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-3-## For EdX Course
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-4-## Python for Data Science (Week 9 and 10 Final Project)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-5-## ######################################################################### ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-6-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-7-## questions:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-8-## * syntax completion in editor of jupyterlab?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-9-## * ...
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:10:## * [[todo]]: check out [[todo]] and [[?]] in other files
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-11-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-12-## [[todo]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-13-## * clean up file (remove unnecessary code / comments)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-14-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-15-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-16-## ========================================================================= ## 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-17-## import libraries
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-18-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-19-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-20-import requests
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-263-## data preparation
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-264-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-265-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-266-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-267-## aggregate trip data
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-268-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-269-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-270-## set time index for dataframe (in order to use `resample`):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-271-dat_trip_raw.set_index(
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-272-    pd.DatetimeIndex(dat_trip_raw['start_date']), 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:273:    inplace = True)  ## [[?]] use inplace = True?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-274-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-275-dat_trip_raw.columns
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-276-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-277-## daily summary of trips:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-278-dat_trip_day = pd.DataFrame()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-279-dat_trip_day['trip_cnt'] = dat_trip_raw['start_date'].resample('24h').count()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-280-dat_trip_day['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('24h').mean() / 60
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-281-dat_trip_day['start_date'] = dat_trip_day.index
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-282-dat_trip_day.head()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-283-dat_trip_day.shape
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-284-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-285-## hourly summary of trips:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-286-dat_trip_hr = pd.DataFrame()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-287-dat_trip_hr['trip_cnt'] = dat_trip_raw['start_date'].resample('1h').count()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-288-dat_trip_hr['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('1h').mean() / 60
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-289-dat_trip_hr['start_date'] = dat_trip_hr.index
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-290-dat_trip_hr.head()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-291-dat_trip_hr.shape
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-292-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-293-## [[to do]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:294:## * exclude rows with zero trips [[?]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-295-## * make two models?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-296-##   * one for predicting now rides vs. some rides, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-297-##   * and one for number of rides?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-298-## * or just leave it and use random forest (and no regression-based model)?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-299-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-300-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-301-## join trip data to weather data
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-302-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-303-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-304-dat_hr_all = pd.merge(
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-335-## missing value imputation
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-336-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-337-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-338-## cross-table of trip_cnt and duratin_min_mean:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-339-pd.crosstab(dat_hr_all['trip_cnt'] == 0, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-340-            pd.isnull(dat_hr_all['duration_min_mean']),
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-341-            rownames = ['trip_cnt == 0'],
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-342-            colnames = ['isnull(duration_min_mean)'])
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-343-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-344-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:345:## [[?]] impute missing trip durations with zero?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-346-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-347-## [[todo]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-348-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-349-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-350-## exploratory analysis of stations
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-351-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-352-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-353-weatherstation_latlon = [[45.5047416666667, -73.5791666666667], 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-354-[45.4705555555556, -73.7408333333333], 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-355-[45.4677777777778, -73.7416666666667], 
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-382-## add markers for possible weather stations:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-383-for i in range(0, len(weatherstation_name)):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-384-    folium.Marker(location = weatherstation_latlon[i],
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-385-                  popup = weatherstation_name[i])\
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-386-    .add_to(folium_map)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-387-## save plot as html:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-388-folium_map.save("map-of-bike-and-possible-weather-stations.html")
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-389-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-390-## [[todo]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-391-## * change color of markers?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:392:## * [[?]] make plot with other technique in python? how? basemap? how to get city streets?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-393-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-394-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-395-## exploratory analysis of trips
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-396-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-397-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-398-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-399-## generic data exploration
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-400-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-401-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-402-%matplotlib osx
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-644-formula_txt
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-645-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-646-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-647-#patsy.dmatrix?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-648-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-649-                               NA_action = 'drop',
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-650-                               return_type = 'dataframe')
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-651-dat_x.head()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-652-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-653-## other possibilities for dummy coding:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:654:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-655-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-656-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-657-## train / test split
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-658-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-659-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-660-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-661-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-662-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-663-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-664-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-682-                               max_depth = 20, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-683-                               min_samples_split = 50,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-684-                               min_samples_leaf = 20,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-685-                               oob_score = True,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-686-                               n_jobs = -2,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-687-                               verbose = 1)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-688-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-689-## Train the model using the training sets:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-690-mod_rf.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-691-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py:692:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-693-    
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-694-## Make predictions using the testing set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-695-dat_test_pred = mod_rf.predict(dat_test_x)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-696-dat_train_pred = mod_rf.predict(dat_train_x)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-697-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-698-## Inspect model:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-699-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-700-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-701-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_2018-10-04-0930.py-702-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-1-## ######################################################################### ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-2-## Analysis of 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-3-## For EdX Course
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-4-## Python for Data Science (Week 9 and 10 Final Project)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-5-## ######################################################################### ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-6-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-7-## questions:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-8-## * syntax completion in editor of jupyterlab?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-9-## * ...
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:10:## * [[todo]]: check out [[todo]] and [[?]] in other files
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-11-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-12-## [[todo]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-13-## * clean up file (remove unnecessary code / comments)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-14-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-15-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-16-## ========================================================================= ## 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-17-## import libraries
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-18-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-19-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-20-import requests
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-263-## data preparation
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-264-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-265-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-266-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-267-## aggregate trip data
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-268-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-269-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-270-## set time index for dataframe (in order to use `resample`):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-271-dat_trip_raw.set_index(
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-272-    pd.DatetimeIndex(dat_trip_raw['start_date']), 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:273:    inplace = True)  ## [[?]] use inplace = True?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-274-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-275-dat_trip_raw.columns
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-276-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-277-## daily summary of trips:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-278-dat_trip_day = pd.DataFrame()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-279-dat_trip_day['trip_cnt'] = dat_trip_raw['start_date'].resample('24h').count()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-280-dat_trip_day['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('24h').mean() / 60
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-281-dat_trip_day['start_date'] = dat_trip_day.index
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-282-dat_trip_day.head()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-283-dat_trip_day.shape
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-284-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-285-## hourly summary of trips:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-286-dat_trip_hr = pd.DataFrame()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-287-dat_trip_hr['trip_cnt'] = dat_trip_raw['start_date'].resample('1h').count()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-288-dat_trip_hr['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('1h').mean() / 60
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-289-dat_trip_hr['start_date'] = dat_trip_hr.index
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-290-dat_trip_hr.head()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-291-dat_trip_hr.shape
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-292-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-293-## [[to do]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:294:## * exclude rows with zero trips [[?]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-295-## * make two models?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-296-##   * one for predicting now rides vs. some rides, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-297-##   * and one for number of rides?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-298-## * or just leave it and use random forest (and no regression-based model)?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-299-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-300-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-301-## join trip data to weather data
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-302-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-303-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-304-dat_hr_all = pd.merge(
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-335-## missing value imputation
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-336-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-337-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-338-## cross-table of trip_cnt and duratin_min_mean:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-339-pd.crosstab(dat_hr_all['trip_cnt'] == 0, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-340-            pd.isnull(dat_hr_all['duration_min_mean']),
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-341-            rownames = ['trip_cnt == 0'],
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-342-            colnames = ['isnull(duration_min_mean)'])
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-343-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-344-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:345:## [[?]] impute missing trip durations with zero?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-346-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-347-## [[todo]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-348-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-349-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-350-## exploratory analysis of stations
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-351-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-352-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-353-weatherstation_latlon = [[45.5047416666667, -73.5791666666667], 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-354-[45.4705555555556, -73.7408333333333], 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-355-[45.4677777777778, -73.7416666666667], 
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-382-## add markers for possible weather stations:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-383-for i in range(0, len(weatherstation_name)):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-384-    folium.Marker(location = weatherstation_latlon[i],
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-385-                  popup = weatherstation_name[i])\
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-386-    .add_to(folium_map)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-387-## save plot as html:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-388-folium_map.save("map-of-bike-and-possible-weather-stations.html")
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-389-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-390-## [[todo]]
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-391-## * change color of markers?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:392:## * [[?]] make plot with other technique in python? how? basemap? how to get city streets?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-393-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-394-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-395-## exploratory analysis of trips
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-396-## ========================================================================= ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-397-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-398-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-399-## generic data exploration
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-400-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-401-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-402-%matplotlib osx
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-644-formula_txt
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-645-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-646-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-647-#patsy.dmatrix?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-648-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-649-                               NA_action = 'drop',
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-650-                               return_type = 'dataframe')
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-651-dat_x.head()
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-652-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-653-## other possibilities for dummy coding:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:654:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-655-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-656-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-657-## train / test split
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-658-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-659-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-660-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-661-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-662-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-663-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-664-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-682-                               max_depth = 20, 
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-683-                               min_samples_split = 50,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-684-                               min_samples_leaf = 20,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-685-                               oob_score = True,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-686-                               n_jobs = -2,
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-687-                               verbose = 1)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-688-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-689-## Train the model using the training sets:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-690-mod_rf.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-691-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py:692:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-693-    
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-694-## Make predictions using the testing set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-695-dat_test_pred = mod_rf.predict(dat_test_x)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-696-dat_train_pred = mod_rf.predict(dat_train_x)
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-697-
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-698-## Inspect model:
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-699-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-700-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-701-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/old/kaggle-cycle-share-analysis_old.py-702-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-31-## data preparation
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-32-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-33-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-34-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-35-## aggregate trip data
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-36-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-37-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-38-## set time index for dataframe (in order to use `resample`):
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-39-dat_trip_raw.set_index(
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-40-    pd.DatetimeIndex(dat_trip_raw['start_date']), 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py:41:    inplace = True)  ## [[?]] use inplace = True?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-42-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-43-dat_trip_raw.columns
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-44-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-45-## daily summary of trips:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-46-dat_trip_day = pd.DataFrame()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-47-dat_trip_day['trip_cnt'] = dat_trip_raw['start_date'].resample('24h').count()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-48-dat_trip_day['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('24h').mean() / 60
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-49-dat_trip_day['start_date'] = dat_trip_day.index
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-50-dat_trip_day.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-51-dat_trip_day.shape
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-52-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-53-## hourly summary of trips:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-54-dat_trip_hr = pd.DataFrame()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-55-dat_trip_hr['trip_cnt'] = dat_trip_raw['start_date'].resample('1h').count()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-56-dat_trip_hr['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('1h').mean() / 60
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-57-dat_trip_hr['start_date'] = dat_trip_hr.index
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-58-dat_trip_hr.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-59-dat_trip_hr.shape
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-60-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-61-## [[to do]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py:62:## * exclude rows with zero trips [[?]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-63-## * make two models?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-64-##   * one for predicting now rides vs. some rides, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-65-##   * and one for number of rides?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-66-## * or just leave it and use random forest (and no regression-based model)?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-67-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-68-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-69-## join trip data to weather data
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-70-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-71-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-72-dat_hr_all = pd.merge(
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-103-## missing value imputation
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-104-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-105-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-106-## cross-table of trip_cnt and duratin_min_mean:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-107-pd.crosstab(dat_hr_all['trip_cnt'] == 0, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-108-            pd.isnull(dat_hr_all['duration_min_mean']),
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-109-            rownames = ['trip_cnt == 0'],
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-110-            colnames = ['isnull(duration_min_mean)'])
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-111-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-112-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py:113:## [[?]] impute missing trip durations with zero?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-114-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-115-## [[todo]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-116-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-117-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-118-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-119-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-04-data-prep-checkpoint.py-120-
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-1-## ######################################################################### ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-2-## Analysis of 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-3-## For EdX Course
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-4-## Python for Data Science (Week 9 and 10 Final Project)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-5-## ######################################################################### ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-6-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-7-## questions:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-8-## * syntax completion in editor of jupyterlab?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-9-## * ...
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:10:## * [[todo]]: check out [[todo]] and [[?]] in other files
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-11-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-12-## [[todo]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-13-## * clean up file (remove unnecessary code / comments)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-14-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-15-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-16-## ========================================================================= ## 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-17-## import libraries
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-18-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-19-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-20-import requests
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-263-## data preparation
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-264-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-265-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-266-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-267-## aggregate trip data
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-268-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-269-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-270-## set time index for dataframe (in order to use `resample`):
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-271-dat_trip_raw.set_index(
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-272-    pd.DatetimeIndex(dat_trip_raw['start_date']), 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:273:    inplace = True)  ## [[?]] use inplace = True?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-274-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-275-dat_trip_raw.columns
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-276-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-277-## daily summary of trips:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-278-dat_trip_day = pd.DataFrame()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-279-dat_trip_day['trip_cnt'] = dat_trip_raw['start_date'].resample('24h').count()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-280-dat_trip_day['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('24h').mean() / 60
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-281-dat_trip_day['start_date'] = dat_trip_day.index
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-282-dat_trip_day.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-283-dat_trip_day.shape
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-284-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-285-## hourly summary of trips:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-286-dat_trip_hr = pd.DataFrame()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-287-dat_trip_hr['trip_cnt'] = dat_trip_raw['start_date'].resample('1h').count()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-288-dat_trip_hr['duration_min_mean'] = dat_trip_raw['duration_sec'].resample('1h').mean() / 60
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-289-dat_trip_hr['start_date'] = dat_trip_hr.index
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-290-dat_trip_hr.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-291-dat_trip_hr.shape
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-292-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-293-## [[to do]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:294:## * exclude rows with zero trips [[?]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-295-## * make two models?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-296-##   * one for predicting now rides vs. some rides, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-297-##   * and one for number of rides?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-298-## * or just leave it and use random forest (and no regression-based model)?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-299-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-300-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-301-## join trip data to weather data
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-302-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-303-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-304-dat_hr_all = pd.merge(
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-335-## missing value imputation
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-336-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-337-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-338-## cross-table of trip_cnt and duratin_min_mean:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-339-pd.crosstab(dat_hr_all['trip_cnt'] == 0, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-340-            pd.isnull(dat_hr_all['duration_min_mean']),
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-341-            rownames = ['trip_cnt == 0'],
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-342-            colnames = ['isnull(duration_min_mean)'])
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-343-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-344-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:345:## [[?]] impute missing trip durations with zero?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-346-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-347-## [[todo]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-348-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-349-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-350-## exploratory analysis of stations
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-351-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-352-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-353-weatherstation_latlon = [[45.5047416666667, -73.5791666666667], 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-354-[45.4705555555556, -73.7408333333333], 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-355-[45.4677777777778, -73.7416666666667], 
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-382-## add markers for possible weather stations:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-383-for i in range(0, len(weatherstation_name)):
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-384-    folium.Marker(location = weatherstation_latlon[i],
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-385-                  popup = weatherstation_name[i])\
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-386-    .add_to(folium_map)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-387-## save plot as html:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-388-folium_map.save("map-of-bike-and-possible-weather-stations.html")
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-389-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-390-## [[todo]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-391-## * change color of markers?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:392:## * [[?]] make plot with other technique in python? how? basemap? how to get city streets?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-393-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-394-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-395-## exploratory analysis of trips
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-396-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-397-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-398-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-399-## generic data exploration
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-400-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-401-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-402-%matplotlib osx
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-644-formula_txt
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-645-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-646-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-647-#patsy.dmatrix?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-648-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-649-                               NA_action = 'drop',
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-650-                               return_type = 'dataframe')
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-651-dat_x.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-652-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-653-## other possibilities for dummy coding:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:654:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-655-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-656-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-657-## train / test split
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-658-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-659-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-660-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-661-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-662-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-663-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-664-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-682-                               max_depth = 20, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-683-                               min_samples_split = 50,
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-684-                               min_samples_leaf = 20,
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-685-                               oob_score = True,
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-686-                               n_jobs = -2,
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-687-                               verbose = 1)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-688-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-689-## Train the model using the training sets:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-690-mod_rf.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-691-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py:692:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-693-    
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-694-## Make predictions using the testing set
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-695-dat_test_pred = mod_rf.predict(dat_test_x)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-696-dat_train_pred = mod_rf.predict(dat_train_x)
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-697-
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-698-## Inspect model:
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-699-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-700-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-701-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/.ipynb_checkpoints/kaggle-cycle-share-analysis-checkpoint.py-702-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-1-## ######################################################################### ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-2-## Analysis of 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-3-## For EdX Course
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-4-## Python for Data Science (Week 9 and 10 Final Project)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-5-## ######################################################################### ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-6-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-7-## questions:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-8-## * syntax completion in editor of jupyterlab?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-9-## * ...
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py:10:## * [[todo]]: check out [[todo]] and [[?]] in other files
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-11-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-12-## [[todo]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-13-## * clean up file (remove unnecessary code / comments)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-14-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-15-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-16-## ========================================================================= ## 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-17-## import libraries
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-18-## ========================================================================= ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-19-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-01-setup-checkpoint.py-20-import requests
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-83-# formula_txt
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-84-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-85-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-86-#patsy.dmatrix?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-87-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-88-                               NA_action = 'drop',
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-89-                               return_type = 'dataframe')
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-90-dat_x.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-91-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-92-## other possibilities for dummy coding:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py:93:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-94-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-95-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-96-## train / test split
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-97-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-98-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-99-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-100-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-101-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-102-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-103-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-121-                                   loss = 'ls',
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-122-                                   learning_rate = 0.1,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-123-                                   max_depth = 20, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-124-                                   min_samples_split = 70,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-125-                                   min_samples_leaf = 30,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-126-                                   verbose = 1)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-127-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-128-## Train the model using the training sets:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-129-mod_gb.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-130-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py:131:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-132-    
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-133-## Make predictions using the testing set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-134-dat_test_pred = mod_gb.predict(dat_test_x)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-135-dat_train_pred = mod_gb.predict(dat_train_x)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-136-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-137-## Inspect model:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-138-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-139-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-140-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-141-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-198-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-199-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-200-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-201-## ice-plot for numeric feature:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-202-fig, axes = pdp.pdp_plot(
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-203-    pdp_current, wch_feature, plot_lines = True, frac_to_plot = 100,  ## percentage!
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-204-    x_quantile = False, plot_pts_dist = True, show_percentile = True)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-205-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-206-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-207-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py:208:## [[here]] [[?]] how to set axis labels?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-209-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-210-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-211-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-212-## partial dependence plots: interactions
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-213-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-214-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-215-#[features[6], features[5]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-216-wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-217-inter_current = pdp.pdp_interact(
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06b-gradient-boosting-checkpoint.py-218-    model = mod_gb, dataset = dat_train_x.join(dat_train_y),
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-14-exec(open("./kgl-cycle-share-04-data-prep.py").read())
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-15-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-16-## open in editor, as execution makes no sense (and also, contains magic)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-17-exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-18-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-19-exec(open("./kgl-cycle-share-06a-random-forest.py").read())
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-20-exec(open("./kgl-cycle-share-main-file.py").read())
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-21-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-22-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-23-## [[todo]] 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py:24:## * save matplotlib plot! how? [[?]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py:25:## * modify axes labels on pdp plots... how? [[?]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-26-## * repeat line plots from above but with predictions, in addition!
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-27-## * xgboost
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-28-## * some categorical prediction model, in order to try out stuff like f1, confusionmatrix, roc curve
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-main-file-checkpoint.py-29-
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-89-# formula_txt
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-90-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-91-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-92-#patsy.dmatrix?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-93-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-94-                               NA_action = 'drop',
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-95-                               return_type = 'dataframe')
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-96-dat_x.head()
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-97-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-98-## other possibilities for dummy coding:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py:99:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-100-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-101-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-102-## train / test split
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-103-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-104-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-105-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-106-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-107-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-108-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-109-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-127-                               max_depth = 20, 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-128-                               min_samples_split = 50,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-129-                               min_samples_leaf = 20,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-130-                               oob_score = True,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-131-                               n_jobs = -2,
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-132-                               verbose = 1)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-133-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-134-## Train the model using the training sets:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-135-mod_rf.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-136-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py:137:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-138-    
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-139-## Make predictions using the testing set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-140-dat_test_pred = mod_rf.predict(dat_test_x)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-141-dat_train_pred = mod_rf.predict(dat_train_x)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-142-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-143-## Inspect model:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-144-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-145-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-146-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-147-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-203-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-204-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-205-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-206-## ice-plot for numeric feature:
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-207-fig, axes = pdp.pdp_plot(
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-208-    pdp_current, wch_feature, plot_lines = True, frac_to_plot = 100,  ## percentage! 
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-209-    x_quantile = False, plot_pts_dist = True, show_percentile = True)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-210-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-211-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-212-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py:213:## [[here]] [[?]] how to set axis labels?
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-214-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-215-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-216-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-217-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-218-## partial dependence plots: interactions
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-219-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-220-
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-221-#[features[6], features[5]]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-222-wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
+./week-09-and-10-final-project/.ipynb_checkpoints/kgl-cycle-share-06a-random-forest-checkpoint.py-223-inter_current = pdp.pdp_interact(
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-83-# formula_txt
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-84-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-85-## create design matrices using patsy (could directly be used for modeling):
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-86-#patsy.dmatrix?
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-87-dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-88-                               NA_action = 'drop',
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-89-                               return_type = 'dataframe')
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-90-dat_x.head()
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-91-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-92-## other possibilities for dummy coding:
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py:93:## * pd.get_dummies [[?]] which to use?
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-94-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-95-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-96-## train / test split
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-97-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-98-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-99-## Split the data into training/testing sets (using patsy/dmatrices):
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-100-dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-101-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-102-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-103-## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-121-                                   loss = 'ls',
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-122-                                   learning_rate = 0.1,
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-123-                                   max_depth = 20, 
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-124-                                   min_samples_split = 70,
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-125-                                   min_samples_leaf = 30,
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-126-                                   verbose = 1)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-127-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-128-## Train the model using the training sets:
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-129-mod_gb.fit(dat_train_x, dat_train_y)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-130-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py:131:## [[?]] missing: how to plot oob error by number of trees, like in R?
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-132-    
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-133-## Make predictions using the testing set
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-134-dat_test_pred = mod_gb.predict(dat_test_x)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-135-dat_train_pred = mod_gb.predict(dat_train_x)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-136-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-137-## Inspect model:
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-138-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-139-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-140-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-141-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+--
+--
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-198-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-199-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-200-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-201-## ice-plot for numeric feature:
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-202-fig, axes = pdp.pdp_plot(
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-203-    pdp_current, wch_feature, plot_lines = True, frac_to_plot = 100,  ## percentage!
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-204-    x_quantile = False, plot_pts_dist = True, show_percentile = True)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-205-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-206-fig.savefig(fname = os.path.join(path_out, filename_this), dpi = 300)
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-207-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py:208:## [[here]] [[?]] how to set axis labels?
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-209-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-210-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-211-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-212-## partial dependence plots: interactions
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-213-## ------------------------------------------------------------------------- ##
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-214-
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-215-#[features[6], features[5]]
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-216-wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-217-inter_current = pdp.pdp_interact(
+./week-09-and-10-final-project/kgl-cycle-share-06b-gradient-boosting.py-218-    model = mod_gb, dataset = dat_train_x.join(dat_train_y),
