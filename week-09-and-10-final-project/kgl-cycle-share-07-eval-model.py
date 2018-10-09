@@ -1,0 +1,200 @@
+## ######################################################################### ##
+## Analysis of 
+## For EdX Course
+## Python for Data Science (Week 9 and 10 Final Project)
+## ######################################################################### ##
+
+## Random Forest (scikit-learn)
+
+## ========================================================================= ## 
+## import libraries
+## ========================================================================= ##
+
+## ========================================================================= ##
+## load model from disk
+## ========================================================================= ##
+
+from sklearn.externals import joblib
+
+## select file and define prefix (for plot output files):
+# filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'
+ #filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'
+filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'
+
+## load model:
+mod_this = joblib.load(os.path.join(path_out, filename_model))
+
+
+## ========================================================================= ##
+## make predictions and get model performance
+## ========================================================================= ##
+
+## Make predictions using the testing set
+dat_test_pred = mod_this.predict(dat_test_x)
+dat_train_pred = mod_this.predict(dat_train_x)
+
+## Inspect model:
+mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
+mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
+r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+
+## ------------------------------------------------------------------------- ##
+## variable importance
+## ------------------------------------------------------------------------- ##
+
+## variable importance:
+var_imp = pd.DataFrame(
+    {'varname'   : dat_train_x.columns,
+    'importance' : list(mod_this.feature_importances_)})
+var_imp.sort_values('importance')#['varname']
+
+## sort variables by importance for plotting:
+varname_list = list(var_imp.sort_values('importance')['varname'])
+varname_cat = CategoricalDtype(categories = varname_list, ordered=True)
+var_imp['varname_cat'] = \
+    var_imp['varname'].astype(str).astype(varname_cat)
+
+## plot variable importance (15 most important):
+p = ggplot(var_imp[-15:], aes(y = 'importance', x = 'varname_cat')) + \
+    geom_bar(stat = 'identity') + \
+    coord_flip()
+print(p)
+
+filename_this = 'plot-variable-importance.jpg'
+#filename_this = 'plot-variable-importance-with-interactions.jpg'
+ggsave(plot = p, 
+       filename = os.path.join(path_out, filename_out_prefix + filename_this),
+       height = 6, width = 6, unit = 'in', dpi = 300)
+
+## ------------------------------------------------------------------------- ##
+## partial dependence plots: main effects
+## ------------------------------------------------------------------------- ##
+
+from pdpbox import pdp, get_dataset, info_plots
+
+# Package scikit-learn (PDP via function plot_partial_dependence() ) 
+#   http://scikit-learn.org/stable/auto_examples/ensemble/plot_partial_dependence.html
+# Package PDPbox (ICE, c-ICE for single and multiple predictors) 
+#   https://github.com/SauceCat/PDPbox 
+
+#pd.merge(dat_train_x, pd.DataFrame(dat_train_y), left_index = True, right_index = True)
+#dat_train_x.join(dat_train_y)  ## identical
+
+## pdp (and then ice plot) calculation for numeric feature:
+#features[1]
+wch_feature = "Q('Temp (°C)')"
+pdp_current = pdp.pdp_isolate(
+    model = mod_this, dataset = dat_train_x.join(dat_train_y), 
+    num_grid_points = 20, n_jobs = -2, ## needs to be 1 for XGBoost model!
+    model_features = dat_train_x.columns, 
+    feature = wch_feature
+)
+
+## pdp plot for numeric features:
+fig, axes = pdp.pdp_plot(pdp_current, wch_feature)
+filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
+
+## ice-plot for numeric feature:
+fig, axes = pdp.pdp_plot(
+    pdp_current, wch_feature, plot_lines = True, frac_to_plot = 100,  ## percentage! 
+    x_quantile = False, plot_pts_dist = True, show_percentile = True)
+filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
+fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
+
+## [[here]] [[?]] how to set axis labels?
+
+
+
+## ------------------------------------------------------------------------- ##
+## partial dependence plots: interactions
+## ------------------------------------------------------------------------- ##
+
+#[features[6], features[5]]
+wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
+inter_current = pdp.pdp_interact(
+    model = mod_this, dataset = dat_train_x.join(dat_train_y),
+    num_grid_points = [10, 10], n_jobs = -2, ## needs to be 1 for XGBoost model!
+    model_features = dat_train_x.columns, features = wch_features)
+fig, axes = pdp.pdp_interact_plot(
+    inter_current, wch_features, x_quantile = False, 
+    plot_type = 'contour', plot_pdp = False
+)
+filename_this = "pdp-interact---" + \
+    pv.sanitize_python_var_name(wch_features[0]) + "--" + \
+    pv.sanitize_python_var_name(wch_features[1]) + ".jpg"
+fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
+
+#[features[6], features[7]]
+wch_features = ["Q('hr_of_day')", "Q('day_of_week')"]
+inter_current = pdp.pdp_interact(
+    model = mod_this, dataset = dat_train_x.join(dat_train_y),
+    num_grid_points = [10, 10], n_jobs = -2, ## needs to be 1 for XGBoost model!
+    model_features = dat_train_x.columns, features = wch_features)
+fig, axes = pdp.pdp_interact_plot(
+    inter_current, wch_features, x_quantile = False, 
+    plot_type = 'contour', plot_pdp = False
+)
+filename_this = "pdp-interact---" + \
+    pv.sanitize_python_var_name(wch_features[0]) + "--" + \
+    pv.sanitize_python_var_name(wch_features[1]) + ".jpg"
+fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
+
+#[features[1], features[2]]
+wch_features = ["Q('Temp (°C)')", "Q('Rel Hum (%)')"]
+inter_current = pdp.pdp_interact(
+    model = mod_this, dataset = dat_train_x.join(dat_train_y),
+    num_grid_points = [10, 10], n_jobs = -2, ## needs to be 1 for XGBoost model!
+    model_features = dat_train_x.columns, features = wch_features)
+fig, axes = pdp.pdp_interact_plot(
+    inter_current, wch_features, x_quantile = False, 
+    plot_type = 'contour', plot_pdp = False
+)
+filename_this = "pdp-interact---" + \
+    pv.sanitize_python_var_name(wch_features[0]) + "--" + \
+    pv.sanitize_python_var_name(wch_features[1]) + ".jpg"
+fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
+
+## ------------------------------------------------------------------------- ##
+## other plots
+## ------------------------------------------------------------------------- ##
+
+
+## target distribution for numeric feature:
+wch_feature = features[1]
+fig, axes, summary_df = info_plots.target_plot(
+    df = dat_train_x.join(dat_train_y),
+    feature = wch_feature,
+    feature_name = wch_feature, target = target, 
+    show_percentile = True
+)
+
+# ## check prediction distribution for numeric feature
+# ## (doesn't work?)
+# wch_feature = features[1]
+# fig, axes, summary_df = info_plots.actual_plot(
+#     model = mod_this, X = dat_train_x, 
+#     feature = wch_feature, feature_name = wch_feature, 
+#     show_percentile = True
+# )
+
+# ## visualize a single tree:
+# from sklearn.tree import export_graphviz
+# import pydot
+# # Pull out one tree from the forest
+# tree = mod_this.estimators_[5]
+# # Export the image to a dot file
+# export_graphviz(tree, out_file = 'tree.dot', feature_names = dat_x.columns, 
+#                 rounded = True, precision = 1)
+# # Use dot file to create a graph
+# (graph, ) = pydot.graph_from_dot_file('tree.dot')
+# # Write graph to a png file
+# graph.write_png('tree.png')
+
+
+
+
+
+
+

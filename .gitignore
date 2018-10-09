@@ -4,6 +4,9 @@
 *.gz
 *.sqlite
 
+## no pickles, as they don't persist anyhow:
+*.pkl
+
 ## no data directories:
 */data/*
 
