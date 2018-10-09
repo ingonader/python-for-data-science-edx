@@ -27,7 +27,5 @@ exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
 
 ## [[todo]] 
 ## * modify axes labels on pdp plots... how? [[?]]
-## * repeat line plots from above but with predictions, in addition!
-## * xgboost
-## * some categorical prediction model, in order to try out stuff like f1, confusionmatrix, roc curve
+## * !!! some categorical prediction model, in order to try out stuff like f1, confusionmatrix, roc curve
 
