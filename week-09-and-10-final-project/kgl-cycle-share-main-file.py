@@ -21,7 +21,6 @@ exec(open("./kgl-cycle-share-main-file.py").read())
 
 
 ## [[todo]] 
-## * save matplotlib plot! how? [[?]]
 ## * modify axes labels on pdp plots... how? [[?]]
 ## * repeat line plots from above but with predictions, in addition!
 ## * xgboost
