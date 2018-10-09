@@ -16,8 +16,13 @@ exec(open("./kgl-cycle-share-04-data-prep.py").read())
 ## open in editor, as execution makes no sense (and also, contains magic)
 exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
 
-exec(open("./kgl-cycle-share-06a-random-forest.py").read())
-exec(open("./kgl-cycle-share-main-file.py").read())
+## open any of the 06<x> script to estimate and save a model:
+# exec(open("./kgl-cycle-share-06a-random-forest.py").read())
+
+## open the 07-eval-model.py script, choose a model and produce plots:
+# exec(open("./kgl-cycle-share-07-eval-model.py").read())
+
+
 
 
 ## [[todo]] 

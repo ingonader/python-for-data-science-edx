@@ -39,6 +39,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import StratifiedKFold
+
 import pathvalidate as pv
 
 ## ------------------------------------------------------------------------- ##
@@ -143,7 +146,7 @@ mod_xgb = xgboost.XGBRegressor(objective ='reg:linear',
 mod_xgb.fit(dat_train_train_x, dat_train_train_y, 
            eval_set = [(dat_train_train_x, dat_train_train_y),
                        (dat_train_eval_x, dat_train_eval_y)],
-           early_stopping_rounds = None)
+           early_stopping_rounds = 10)
 
 ## [[?]] missing: how to plot oob error by number of trees, like in R?
     
@@ -185,8 +188,8 @@ plt.show()
 from sklearn.externals import joblib
 
 # model_name = 
-filename_model = 'model_gradient_boosting.pkl'
-joblib.dump(mod_gb, os.path.join(path_out, filename_model))
+filename_model = 'model_xgb.pkl'
+joblib.dump(mod_xgb, os.path.join(path_out, filename_model))
 
 # ## load:
 # filename_model = 'model_gradient_boosting.pkl'

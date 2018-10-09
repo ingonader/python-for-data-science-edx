@@ -10,6 +10,8 @@
 ## import libraries
 ## ========================================================================= ##
 
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
 ## ========================================================================= ##
 ## load model from disk
 ## ========================================================================= ##
@@ -17,13 +19,16 @@
 from sklearn.externals import joblib
 
 ## select file and define prefix (for plot output files):
-# filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'
- #filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'
-filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'
+#filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2
+#filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
+filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = 1
+#filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
 
 ## load model:
 mod_this = joblib.load(os.path.join(path_out, filename_model))
 
+## define number of grid points for pdp interaction plots:
+num_grid_points = [15, 15]
 
 ## ========================================================================= ##
 ## make predictions and get model performance
@@ -36,8 +41,13 @@ dat_train_pred = mod_this.predict(dat_train_x)
 ## Inspect model:
 mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
 mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+mean_absolute_error(dat_train_y, dat_train_pred) # MAE in training set
+mean_absolute_error(dat_test_y, dat_test_pred)   # MAE in test set
 r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
 r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+
+## r2 for non-zero counts:
+r2_score(dat_test_y[dat_test_y > 0], dat_test_pred[dat_test_y > 0])
 
 ## ------------------------------------------------------------------------- ##
 ## variable importance
@@ -81,12 +91,14 @@ from pdpbox import pdp, get_dataset, info_plots
 #pd.merge(dat_train_x, pd.DataFrame(dat_train_y), left_index = True, right_index = True)
 #dat_train_x.join(dat_train_y)  ## identical
 
+%matplotlib inline
+
 ## pdp (and then ice plot) calculation for numeric feature:
 #features[1]
 wch_feature = "Q('Temp (°C)')"
 pdp_current = pdp.pdp_isolate(
     model = mod_this, dataset = dat_train_x.join(dat_train_y), 
-    num_grid_points = 20, n_jobs = -2, ## needs to be 1 for XGBoost model!
+    num_grid_points = 20, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
     model_features = dat_train_x.columns, 
     feature = wch_feature
 )
@@ -115,7 +127,7 @@ fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
 wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
 inter_current = pdp.pdp_interact(
     model = mod_this, dataset = dat_train_x.join(dat_train_y),
-    num_grid_points = [10, 10], n_jobs = -2, ## needs to be 1 for XGBoost model!
+    num_grid_points = num_grid_points, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
     model_features = dat_train_x.columns, features = wch_features)
 fig, axes = pdp.pdp_interact_plot(
     inter_current, wch_features, x_quantile = False, 
@@ -130,7 +142,7 @@ fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
 wch_features = ["Q('hr_of_day')", "Q('day_of_week')"]
 inter_current = pdp.pdp_interact(
     model = mod_this, dataset = dat_train_x.join(dat_train_y),
-    num_grid_points = [10, 10], n_jobs = -2, ## needs to be 1 for XGBoost model!
+    num_grid_points = num_grid_points, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
     model_features = dat_train_x.columns, features = wch_features)
 fig, axes = pdp.pdp_interact_plot(
     inter_current, wch_features, x_quantile = False, 
@@ -145,7 +157,7 @@ fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
 wch_features = ["Q('Temp (°C)')", "Q('Rel Hum (%)')"]
 inter_current = pdp.pdp_interact(
     model = mod_this, dataset = dat_train_x.join(dat_train_y),
-    num_grid_points = [10, 10], n_jobs = -2, ## needs to be 1 for XGBoost model!
+    num_grid_points = num_grid_points, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
     model_features = dat_train_x.columns, features = wch_features)
 fig, axes = pdp.pdp_interact_plot(
     inter_current, wch_features, x_quantile = False, 
@@ -193,6 +205,31 @@ fig, axes, summary_df = info_plots.target_plot(
 # graph.write_png('tree.png')
 
 
+
+## ========================================================================= ##
+## plot data with predictions
+## ========================================================================= ##
+
+## make predictions for complete dataset:
+dat_y['pred'] = mod_this.predict(dat_x)
+dat_y.head()
+
+## add to original dataset:
+dat_hr_all = pd.merge(dat_hr_all, 
+                      dat_y[['pred']], 
+                      how = 'left',
+                      left_index = True,
+                      right_index = True)
+
+## plot predictions vs. real value of target:
+ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + geom_point(alpha = .1)
+
+## line plot of number of trips per hour:
+ggplot(dat_hr_all, aes(y = 'trip_cnt', x = 'start_date')) + \
+    geom_point(alpha = .05, color = 'black') + \
+    geom_point(aes(y = 'pred'), alpha = .05, color = 'orange') + \
+    geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
+                color = 'red', se = False)
 
 
 
