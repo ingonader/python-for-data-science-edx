@@ -89,6 +89,8 @@ dat_hr_all['hr_of_day'] = dat_hr_all['start_date'].dt.hour
 ## add day of week:
 dat_hr_all['day_of_week'] = dat_hr_all['start_date'].dt.weekday ## or weekday or weekday_name
 
+## add trip indicator:
+dat_hr_all['trip_ind'] = (dat_hr_all['trip_cnt'] > 0).astype(int)
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## further data prep
