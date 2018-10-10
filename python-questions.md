@@ -16,6 +16,8 @@
 * Data Preparation (low-level)
   * Why are so many things of data type `object`? What does this mean? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py-200-## turns 'complexity' into type 'object' again...)
 
+  * Why is it so important for some functions whether arguments are numpy arrays or pandas series? Some seem to produce NaN's a lot... [example](./week-09-and-10-final-project/kgl-cycle-share-06d... line about 155: ConfusionMatrix(y_true = dat_test_y.values,  y_pred = dat_test_pred))
+
   * How does indexing work in pandas? What is a multi-index, and how do I work with it? Is it useful or a pain in the ass? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py:146:##GD this does not only rename columns, but replaces the multiindex with a flat one - try)
 
   * Time-Index? [example](./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-40-    pd.DatetimeIndex(dat_trip_raw['start_date']), )
@@ -66,4 +68,8 @@
     * Other methods?
   * Are all scikit-learn models comparable or similar in their APIs? 
   * Random Forest: How to plot OOB error, like in R? [example](./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py:137:## [[?]] missing: how to plot oob error by number of trees, like in R?)
+  * What to use as a more visually pleasing confusion matrix?
+  * Do you use yellowbrick confusion matrix? Why does it have to have a fit method, is there another way of calling it?
+  * Do you use yellowbrick for some other stuff?
+  * Is there a pre-built function to plot a ROC curve? What is the best way to do it?
 
