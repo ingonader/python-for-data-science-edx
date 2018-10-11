@@ -16,11 +16,14 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score 
-from sklearn.metrics import roc_auc_score, log_loss, roc_curve
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import average_precision_score  ## area under prec-rec-curve?
+from sklearn.metrics import roc_auc_score, log_loss, roc_curve, precision_recall_curve
 from sklearn.metrics import confusion_matrix
 from pandas_ml import ConfusionMatrix
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, cross_val_score
+from scipy.stats import randint as sp_randint
 
 import pathvalidate as pv
 
@@ -85,11 +88,13 @@ dat_x.head()
 
 ## Split the data into training/testing sets (using patsy/dmatrices):
 dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+    dat_x, dat_y, test_size = 0.10, random_state = 142)
 
 ## convert y's to Series (to match data types between patsy and non-patsy data prep:)
 dat_train_y = dat_train_y[target]
 dat_test_y = dat_test_y[target]
+
+# dat_test_x.shape
 
 ## ------------------------------------------------------------------------- ##
 ## normalize data
@@ -110,12 +115,74 @@ mod_class = GradientBoostingClassifier(n_estimators = 100,
                                    max_depth = 10, 
                                    min_samples_split = 70,
                                    min_samples_leaf = 30,
-                                   verbose = 1)
+                                   verbose = 0)
 
 ## Train the model using the training sets:
 mod_class.fit(dat_train_x, dat_train_y)
 
-## [[?]] missing: how to plot oob error by number of trees, like in R?
+## ------------------------------------------------------------------------- ##
+## Alternatively, do a parameter grid search:
+## ------------------------------------------------------------------------- ##
+
+param_grid = {
+    "n_estimators" : [50, 100, 150],
+    "learning_rate" : [0.1], #[0.2, 0.1, 0.05],
+    "max_depth" : [6, 8, 10, 15, 20]}
+
+mod_grid = GridSearchCV(estimator = mod_class, 
+                        param_grid = param_grid, 
+                        scoring = "roc_auc", # "average_precision",
+                        cv = 4,   ## k-fold cross-validation for binary classification
+                        verbose = 2, 
+                        n_jobs = -1)
+mod_grid.fit(dat_train_x, dat_train_y)
+
+## best parameters and score in CV:
+mod_grid.best_params_
+mod_grid.best_score_
+
+## get best model (estimator): 
+mod_class = mod_grid.best_estimator_
+
+## ------------------------------------------------------------------------- ##
+## Randomized Search Cross-validation
+## ------------------------------------------------------------------------- ##
+
+## [[here]] [[todo]] 
+## * different distributions to sample from? (double values, log scale?)
+##   (more reserach needed here)
+
+from scipy import stats
+
+# specify parameters and distributions to sample from:
+param_distributions = { 
+    "n_estimators" : stats.randint(50, 201),    #sp_randint(50, 201), [[?]]
+    "learning_rate" : stats.uniform(0.05, 0.2), #[0.2, 0.1, 0.05],
+    "max_depth" : stats.randint(4, 21)}         #sp_randint(4, 21)}
+
+n_iter = 20
+mod_randsearch = RandomizedSearchCV(
+    estimator = mod_class,
+    param_distributions = param_distributions,
+    n_iter = n_iter,
+    scoring = "roc_auc", # "average_precision",
+    cv = 4,   ## k-fold cross-validation for binary classification
+    verbose = 2,
+    random_state = 7,
+    n_jobs = -1)
+mod_randsearch.fit(dat_train_x, dat_train_y)
+
+## best parameters and score in CV:
+mod_randsearch.best_params_
+mod_randsearch.best_score_
+
+## get best model (estimator): 
+mod_class = mod_randsearch.best_estimator_
+
+## ------------------------------------------------------------------------- ##
+## use and inspect model
+## ------------------------------------------------------------------------- ##
+
 
 ## Make predictions of probability:
 wch_class = 1
@@ -125,10 +192,6 @@ dat_test_predprob = mod_class.predict_proba(dat_test_x)[:, wch_class]    ## nump
 ## Make predictions using the testing set
 dat_train_pred = mod_class.predict(dat_train_x) ## produces 0/1 numpy array (!)
 dat_test_pred = mod_class.predict(dat_test_x)   ## produces 0/1 numpy array (!)
-
-## [[todo]]
-## precision by cutoff plots
-
 
 ## Inspect model:
 
@@ -150,7 +213,35 @@ dat_roc_test = pd.DataFrame({"fpr" : fpr,
 dat_roc = pd.concat([dat_roc_train, dat_roc_test], axis = 0)
 ggplot(dat_roc, aes(y = "tpr", x = "fpr", color = "split")) + \
     geom_abline(slope = 1, intercept = 0, color = "grey", linetype = "dashed") + \
-    geom_line()
+    geom_line(size = 1)
+
+
+## average precision:  
+## [[?]] is this comparable to the area under the precision-recall-curve?
+average_precision_score(dat_train_y, dat_train_predprob)
+average_precision_score(dat_test_y, dat_test_predprob)
+
+## precision-recall-curve:
+precision, recall, cutoff = precision_recall_curve(dat_train_y, dat_train_predprob) 
+## note: need to add another value of 1 to cutoff, as 1/0 is added for precision/recall
+dat_prc_train = pd.DataFrame({"precision" : precision,
+                       "recall" : recall,
+                       "cutoff" : np.append(cutoff, 1),
+                       "split" : "train"})
+precision, recall, cutoff = precision_recall_curve(dat_test_y, dat_test_predprob)
+dat_prc_test = pd.DataFrame({"precision" : precision,
+                       "recall" : recall,
+                       "cutoff" : np.append(cutoff, 1),
+                       "split" : "test"})
+dat_prc = pd.concat([dat_prc_train, dat_prc_test], axis = 0)
+ggplot(dat_prc, aes(y = "precision", x = "recall", color = "split")) + geom_line(size = 1)
+
+## precision by cutoff:
+ggplot(dat_prc, aes(y = "precision", x = "cutoff", color = "split")) + geom_line(size = 1)
+
+## recall by cutoff:
+ggplot(dat_prc, aes(y = "recall", x = "cutoff", color = "split")) + geom_line(size = 1)
+
 
 ## log-loss (cross-entropy):
 log_loss(y_true = dat_train_y, y_pred = dat_train_predprob)
@@ -163,8 +254,11 @@ confusion_matrix(y_true = dat_test_y,  y_pred = dat_test_pred)
              
 ## [[?]] https://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels
 ## confusion matrix from pandas_ml, more beautiful:
-ConfusionMatrix(y_true = dat_train_y.values, y_pred = dat_train_pred)
-ConfusionMatrix(y_true = dat_test_y.values,  y_pred = dat_test_pred)
+cm = ConfusionMatrix(y_true = dat_train_y.values, y_pred = dat_train_pred)
+print(cm, "\n"); cm.print_stats()
+cm = ConfusionMatrix(y_true = dat_test_y.values,  y_pred = dat_test_pred)
+print(cm, "\n"); cm.print_stats()
+
 ## [[!]] Note: only works with numpy arrays!
 ## The following won't work:
 # ConfusionMatrix(y_true = dat_test_y,  y_pred = dat_test_pred)
@@ -200,8 +294,7 @@ f1_score(dat_test_y,  dat_test_pred)
 
 from sklearn.externals import joblib
 
-# model_name = 
-filename_model = 'model_gradient_boosting.pkl'
+filename_model = 'model_class_gb.pkl'
 joblib.dump(mod_gb, os.path.join(path_out, filename_model))
 
 # ## load:

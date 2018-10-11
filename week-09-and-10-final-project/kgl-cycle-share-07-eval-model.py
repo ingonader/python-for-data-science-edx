@@ -23,6 +23,8 @@ from sklearn.externals import joblib
 #filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
 filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = 1
 #filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
+filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1
+
 
 ## load model:
 mod_this = joblib.load(os.path.join(path_out, filename_model))

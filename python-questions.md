@@ -9,10 +9,13 @@
   * Easy way to execute different files in the same console?
 * JupyterLab
 
-  * syntax completion in editor of jupyterlab?
+  * syntax completion in editor of [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/),?
   * any other good alternative as IDE? free?
-  * Can RStudio be used for Python?
-  * What about Spyder, anyone using this still, nowadays?
+  * What about...
+    * Can RStudio be used for Python?
+    * What about [Spyder](https://www.spyder-ide.org/), anyone using this still, nowadays?
+    * Anyone used  [Visual Studio Code](https://code.visualstudio.com/docs/languages/python) or [Rodeo](https://rodeo.yhat.com/)?
+    * [PyCharm](https://www.jetbrains.com/pycharm/)?
 * Data Preparation (low-level)
   * Why are so many things of data type `object`? What does this mean? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py-200-## turns 'complexity' into type 'object' again...)
 
@@ -72,4 +75,5 @@
   * Do you use yellowbrick confusion matrix? Why does it have to have a fit method, is there another way of calling it?
   * Do you use yellowbrick for some other stuff?
   * Is there a pre-built function to plot a ROC curve? What is the best way to do it?
+  * Is there a method to have a pipeline with model prep and (multiple) models? Or is this just a script? (Same question for R, actually).
 

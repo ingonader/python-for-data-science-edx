@@ -27,8 +27,8 @@ exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
 
 ## [[todo]] 
 ## * modify axes labels on pdp plots... how? [[?]]
-## * !!! some categorical prediction model, in order to try out stuff like f1, confusionmatrix, roc curve
-## * precision by cutoff plot
-## * add cross-validation and parameter grid search somewhere
+## * add grid-search or random search somewhere
+## * with cross-validation 
 ## * build a pipeline to score classification, then regression model in one action
+
 
