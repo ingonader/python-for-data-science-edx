@@ -76,4 +76,5 @@
   * Do you use yellowbrick for some other stuff?
   * Is there a pre-built function to plot a ROC curve? What is the best way to do it?
   * Is there a method to have a pipeline with model prep and (multiple) models? Or is this just a script? (Same question for R, actually).
+  * Related: How can I make a class that takes two models, performes some stuff, as a predict function that can be used similar to any model's predict function?
 

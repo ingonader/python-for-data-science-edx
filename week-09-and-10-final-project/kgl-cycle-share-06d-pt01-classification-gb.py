@@ -23,7 +23,7 @@ from sklearn.metrics import confusion_matrix
 from pandas_ml import ConfusionMatrix
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, cross_val_score
-from scipy.stats import randint as sp_randint
+from scipy import stats
 
 import pathvalidate as pv
 
@@ -152,13 +152,13 @@ mod_class = mod_grid.best_estimator_
 ## * different distributions to sample from? (double values, log scale?)
 ##   (more reserach needed here)
 
-from scipy import stats
-
 # specify parameters and distributions to sample from:
 param_distributions = { 
-    "n_estimators" : stats.randint(50, 201),    #sp_randint(50, 201), [[?]]
-    "learning_rate" : stats.uniform(0.05, 0.2), #[0.2, 0.1, 0.05],
-    "max_depth" : stats.randint(4, 21)}         #sp_randint(4, 21)}
+    "n_estimators" : stats.randint(50, 201),
+    "learning_rate" : [0.2, 0.1, 0.05], # stats.uniform(0.05, 0.2 - 0.05),
+    "max_depth" : stats.randint(4, 21)}
+
+#stats.randint(1, 4).rvs(20)
 
 n_iter = 20
 mod_randsearch = RandomizedSearchCV(

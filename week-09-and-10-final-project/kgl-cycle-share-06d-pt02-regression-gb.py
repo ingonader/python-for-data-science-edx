@@ -82,7 +82,7 @@ dat_x.head()
 
 ## Split the data into training/testing sets (using patsy/dmatrices):
 dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
-    dat_x, dat_y, test_size = 0.20, random_state = 142)
+    dat_x, dat_y, test_size = 0.10, random_state = 142)
 
 ## convert y's to Series (to match data types between patsy and non-patsy data prep:)
 dat_train_y = dat_train_y[target]
@@ -115,8 +115,49 @@ mod_gb = GradientBoostingRegressor(n_estimators = 100,
 ## Train the model using the training sets:
 mod_gb.fit(dat_train_x, dat_train_y)
 
-## [[?]] missing: how to plot oob error by number of trees, like in R?
-    
+
+## ------------------------------------------------------------------------- ##
+## Randomized Search Cross-validation
+## ------------------------------------------------------------------------- ##
+
+## [[here]] [[todo]] 
+## * different distributions to sample from? (double values, log scale?)
+##   (more reserach needed here)
+
+# specify parameters and distributions to sample from:
+param_distributions = { 
+    "n_estimators" : stats.randint(50, 201),
+    "learning_rate" : [0.2, 0.1, 0.05], # stats.uniform(0.05, 0.2 - 0.05),
+    "max_depth" : stats.randint(4, 21),
+    #"min_samples_split" : stats.randint(40, 101),
+    "min_samples_leaf" : stats.randint(30, 61)
+}
+
+#stats.randint(1, 4).rvs(20)
+
+n_iter = 40
+mod_randsearch = RandomizedSearchCV(
+    estimator = mod_gb,
+    param_distributions = param_distributions,
+    n_iter = n_iter,
+    scoring = "r2", ## "roc_auc", # "neg_mean_squared_error", "neg_mean_absolute_error"
+    cv = 4,   ## k-fold cross-validation for binary classification
+    verbose = 2,
+    random_state = 7,
+    n_jobs = -1)
+mod_randsearch.fit(dat_train_x, dat_train_y)
+
+## best parameters and score in CV:
+mod_randsearch.best_params_
+mod_randsearch.best_score_
+
+## get best model (estimator): 
+mod_gb = mod_randsearch.best_estimator_
+
+## ------------------------------------------------------------------------- ##
+## use and inspect model
+## ------------------------------------------------------------------------- ##
+
 ## Make predictions using the testing set
 dat_test_pred = mod_gb.predict(dat_test_x)
 dat_train_pred = mod_gb.predict(dat_train_x)

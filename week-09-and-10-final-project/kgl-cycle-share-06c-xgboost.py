@@ -149,7 +149,11 @@ mod_xgb.fit(dat_train_train_x, dat_train_train_y,
            early_stopping_rounds = 10)
 
 ## [[?]] missing: how to plot oob error by number of trees, like in R?
-    
+
+## ------------------------------------------------------------------------- ##
+## use and inspect model
+## ------------------------------------------------------------------------- ##
+
 ## Make predictions using the testing set
 dat_test_pred = mod_xgb.predict(dat_test_x)
 dat_train_pred = mod_xgb.predict(dat_train_x)
