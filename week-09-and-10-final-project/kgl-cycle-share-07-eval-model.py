@@ -4,8 +4,6 @@
 ## Python for Data Science (Week 9 and 10 Final Project)
 ## ######################################################################### ##
 
-## Random Forest (scikit-learn)
-
 ## ========================================================================= ## 
 ## import libraries
 ## ========================================================================= ##
@@ -23,14 +21,14 @@ from sklearn.externals import joblib
 #filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
 filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = 1
 #filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
-filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1
+#filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1
 
 
 ## load model:
 mod_this = joblib.load(os.path.join(path_out, filename_model))
 
 ## define number of grid points for pdp interaction plots:
-num_grid_points = [15, 15]
+num_grid_points = [20, 20]
 
 ## ========================================================================= ##
 ## make predictions and get model performance
@@ -224,16 +222,22 @@ dat_hr_all = pd.merge(dat_hr_all,
                       right_index = True)
 
 ## plot predictions vs. real value of target:
-ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + geom_point(alpha = .1)
+p = ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + geom_point(alpha = .1)
+print(p)
+filename_this = 'plot-pred-vs-true.jpg'
+ggsave(plot = p, 
+       filename = os.path.join(path_out, filename_out_prefix + filename_this),
+       height = 6, width = 6, unit = 'in', dpi = 300)
 
 ## line plot of number of trips per hour:
-ggplot(dat_hr_all, aes(y = 'trip_cnt', x = 'start_date')) + \
+p = ggplot(dat_hr_all, aes(y = 'trip_cnt', x = 'start_date')) + \
     geom_point(alpha = .05, color = 'black') + \
     geom_point(aes(y = 'pred'), alpha = .05, color = 'orange') + \
     geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
                 color = 'red', se = False)
-
-
+print(p)
+## not worth saving -- doesn't show anything of interest.
+## (except maybe some missing values in predictions in the spring of 2014... why?)
 
 
 

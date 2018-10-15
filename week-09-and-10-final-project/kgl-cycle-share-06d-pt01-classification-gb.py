@@ -189,9 +189,15 @@ wch_class = 1
 dat_train_predprob = mod_class.predict_proba(dat_train_x)[:, wch_class]  ## numpy array (!)
 dat_test_predprob = mod_class.predict_proba(dat_test_x)[:, wch_class]    ## numpy array (!)
 
-## Make predictions using the testing set
-dat_train_pred = mod_class.predict(dat_train_x) ## produces 0/1 numpy array (!)
-dat_test_pred = mod_class.predict(dat_test_x)   ## produces 0/1 numpy array (!)
+## convert to classification
+## (0/1 only, does not incorporate labels yet):
+cutoff = .99
+dat_train_pred = (dat_train_predprob >= cutoff).astype(int)  
+dat_test_pred =  (dat_test_predprob  >= cutoff).astype(int)
+
+# ## Make predictions using the testing set
+# dat_train_pred = mod_class.predict(dat_train_x) ## produces 0/1 numpy array (!)
+# dat_test_pred = mod_class.predict(dat_test_x)   ## produces 0/1 numpy array (!)
 
 ## Inspect model:
 

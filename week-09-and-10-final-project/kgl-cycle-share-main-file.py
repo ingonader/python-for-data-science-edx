@@ -27,8 +27,6 @@ exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
 
 ## [[todo]] 
 ## * modify axes labels on pdp plots... how? [[?]]
-## * add grid-search or random search somewhere
-## * with cross-validation 
 ## * build a pipeline to score classification, then regression model in one action
 
 
