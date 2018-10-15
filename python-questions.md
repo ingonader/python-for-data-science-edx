@@ -7,7 +7,8 @@
 * How to run / execute an analysis with multiple source files? In Juypterlab?
   * Which command to use for running file? How to execute a python script (similar to R's `source()`, with magic commands `%` in the script?)
   * Easy way to execute different files in the same console?
-* JupyterLab
+
+* JupyterLab / IDE
 
   * syntax completion in editor of [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/),?
   * any other good alternative as IDE? free?
@@ -16,9 +17,13 @@
     * What about [Spyder](https://www.spyder-ide.org/), anyone using this still, nowadays?
     * Anyone used  [Visual Studio Code](https://code.visualstudio.com/docs/languages/python) or [Rodeo](https://rodeo.yhat.com/)?
     * [PyCharm](https://www.jetbrains.com/pycharm/)?
-* Data Preparation (low-level)
-  * Why are so many things of data type `object`? What does this mean? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py-200-## turns 'complexity' into type 'object' again...)
 
+* Data Exploration
+
+  * Why are so many things of data type `object`? What does this mean? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py-200-## turns 'complexity' into type 'object' again...)
+  * pandas: display more rows once? (like print(n = 200) in tibble?)
+
+* Data Preparation (low-level)
   * Why is it so important for some functions whether arguments are numpy arrays or pandas series? Some seem to produce NaN's a lot... [example](./week-09-and-10-final-project/kgl-cycle-share-06d... line about 155: ConfusionMatrix(y_true = dat_test_y.values,  y_pred = dat_test_pred))
 
   * How does indexing work in pandas? What is a multi-index, and how do I work with it? Is it useful or a pain in the ass? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py:146:##GD this does not only rename columns, but replaces the multiindex with a flat one - try)
@@ -61,6 +66,7 @@
   * Are there different plotting systems in Python, similar to R's base, lattice/grid, and ggplot plotting system?
   * How to do map plots (with city street information) in Python?
   * How to modify (matplotlib) plots that result from different functions? (e.g., PDP plots?) [example](./week-09-and-10-final-project/kgl-cycle-share-06a-random-forest.py:213:## [[here]] [[?]] how to set axis labels?)
+
 * Data Prep (high-level) and Modeling:
   * How to best normalize data in a pipeline? 
   * `StandardScaler` seems to lose variable names? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py-568-# dat_train_x = scaler.transform(dat_train_x))
