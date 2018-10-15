@@ -295,7 +295,7 @@ f1_score(dat_test_y,  dat_test_pred)
 from sklearn.externals import joblib
 
 filename_model = 'model_class_gb.pkl'
-joblib.dump(mod_gb, os.path.join(path_out, filename_model))
+joblib.dump(mod_class, os.path.join(path_out, filename_model))
 
 # ## load:
 # filename_model = 'model_gradient_boosting.pkl'
