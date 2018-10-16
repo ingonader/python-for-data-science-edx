@@ -55,8 +55,11 @@ r2_score(dat_test_y[dat_test_y > 0], dat_test_pred[dat_test_y > 0])
 
 ## variable importance:
 var_imp = pd.DataFrame(
-    {'varname'   : dat_train_x.columns,
+    {'varname_q'   : dat_train_x.columns,   ## quoted
+     'varname_orig'   : [i[3:-2] for i in dat_train_x.columns], 
     'importance' : list(mod_this.feature_importances_)})
+dat_varnames_long = pd.DataFrame.from_dict(varnames_long_dict, orient = 'index', columns = ['varname'])
+var_imp = pd.merge(var_imp, dat_varnames_long, left_on = 'varname_q', right_index = True)
 var_imp.sort_values('importance')#['varname']
 
 ## sort variables by importance for plotting:
@@ -68,6 +71,10 @@ var_imp['varname_cat'] = \
 ## plot variable importance (15 most important):
 p = ggplot(var_imp[-15:], aes(y = 'importance', x = 'varname_cat')) + \
     geom_bar(stat = 'identity') + \
+    labs(
+        title = "Feature importance",
+        x = "Feature",
+        y = "Importance") + \
     coord_flip()
 print(p)
 
@@ -91,11 +98,43 @@ from pdpbox import pdp, get_dataset, info_plots
 #pd.merge(dat_train_x, pd.DataFrame(dat_train_y), left_index = True, right_index = True)
 #dat_train_x.join(dat_train_y)  ## identical
 
+
+#dat_train_x.columns
+
 %matplotlib inline
+
+
+plot_params_default = {
+            # plot title and subtitle
+            #'title': 'Partial Dependence for: %s' % varnames_long_dict[wch_feature],
+            'subtitle': '',
+            'title_fontsize': 20,
+            'subtitle_fontsize': 12,
+            'font_family': 'Arial',
+            # matplotlib color map for ICE lines
+            'line_cmap': 'Blues',
+            'xticks_rotation': 0,
+            # pdp line color, highlight color and line width
+            'pdp_color': '#1A4E5D',
+            'pdp_hl_color': '#FEDC00',
+            'pdp_linewidth': 1.5,
+            # horizon zero line color and with
+            'zero_color': '#E75438',
+            'zero_linewidth': 1,
+            # pdp std fill color and alpha
+            'fill_color': '#66C2D7',
+            'fill_alpha': 0.2,
+            # marker size for pdp line
+            'markersize': 3.5,
+        }
 
 ## pdp (and then ice plot) calculation for numeric feature:
 #features[1]
 wch_feature = "Q('Temp (°C)')"
+plot_params_default.update({
+        'title': 'Partial Dependence for: %s' % \
+        varnames_long_dict[wch_feature]
+    })
 pdp_current = pdp.pdp_isolate(
     model = mod_this, dataset = dat_train_x.join(dat_train_y), 
     num_grid_points = 20, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
@@ -104,7 +143,11 @@ pdp_current = pdp.pdp_isolate(
 )
 
 ## pdp plot for numeric features:
-fig, axes = pdp.pdp_plot(pdp_current, wch_feature)
+#%matplotlib osx
+fig, axes = pdp.pdp_plot(
+    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
+    plot_params = plot_params_default
+)
 filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
 fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
 

@@ -55,5 +55,16 @@ month_list = list(range(1, 13))
 ## data for these years:
 dat_years = [2014, 2015, 2016, 2017]
 
+## "translation" from "quoted" to long variable / feature names:
+varnames_long_dict = {
+    "Q('Month')" :              "Month (1-12)",
+    "Q('Temp (°C)')" :          "Temperature (°C)",    
+    "Q('Rel Hum (%)')" :        "Relative Humidity (%)",      
+    "Q('Wind Dir (10s deg)')" : "Wind Direction (deg)",             
+    "Q('Wind Spd (km/h)')" :    "Wind Speed (km/h)",          
+    "Q('Stn Press (kPa)')" :    "Atmospheric Pressure (kPa)",          
+    "Q('hr_of_day')" :          "Hour of the Day (0-23)",    
+    "Q('day_of_week'" :         "Day of the Week (0-6)"
+}
 
 

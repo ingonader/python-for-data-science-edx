@@ -60,7 +60,7 @@ folium_map = folium.Map(location = loc, zoom_start = 11)
 ## add markers for bike stations:
 for i in range(0, len(dat_stations_raw)):
     folium.CircleMarker(location = list(dat_stations_raw[['latitude', 'longitude']].iloc[i]),
-                        radius = 2)\
+                        radius = 2, color = "red")\
     .add_to(folium_map)
 ## add markers for possible weather stations:
 for i in range(0, len(weatherstation_name)):
@@ -71,7 +71,6 @@ for i in range(0, len(weatherstation_name)):
 folium_map.save("map-of-bike-and-possible-weather-stations.html")
 
 ## [[todo]]
-## * change color of markers?
 ## * [[?]] make plot with other technique in python? how? basemap? how to get city streets?
 
 ## ========================================================================= ##
@@ -143,11 +142,22 @@ ggplot(dat_trip_day[dat_trip_day['trip_cnt'] > 0],
 dat_trip_day[['trip_cnt']].describe()
 
 
+%matplotlib inline
 ## line plot of number of trips per hour:
-ggplot(dat_trip_hr, aes(y = 'trip_cnt', x = 'start_date')) + \
+p = ggplot(dat_trip_hr, aes(y = 'trip_cnt', x = 'start_date')) + \
     geom_point(alpha = .05) + \
     geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
-                color = 'red', se = False)
+                color = 'red', se = False) + \
+    labs(
+        title = 'Number of bike trips from 2014 to 2017',
+        x = 'Date',
+        y = 'Number of trips per hour'
+    ) + \
+    scale_x_date(date_labels = "%b\n%Y")
+print(p)
+ggsave(plot = p, filename = os.path.join(path_out, 'expl-trips-per-hour-2014-2017.jpg'), 
+       height = 6, width = 6, unit = 'in', dpi = 300)
+
 
 ## line plot of number of trips per day:
 ggplot(dat_trip_day, aes(y = 'trip_cnt', x = 'start_date')) + \
