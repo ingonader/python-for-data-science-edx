@@ -1,0 +1,188 @@
+/* *************************************************************** */
+/* CSS style file to cusotmize ioslides presentation in R Markdown */
+/* Template for *um-style presentations                            */
+/* Author: Ingo Nader                                              */
+/* Date: Oct 2016                                                  */
+/* *************************************************************** */
+
+/* standard presentation font (when using smaller: true ?) */
+article {
+    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+
+/* header colors */
+.title-slide hgroup h1 {
+  font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  color: "black";
+  text-align: center;
+}
+
+.title-slide hgroup p {
+  font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+
+.title-slide hgroup {
+  text-align: center;
+}
+
+h1, h2, h3 {
+  font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  color: "black";
+}
+
+/* standard presentation font (when using smaller: true ?) */
+.smaller {
+    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+
+/* overall style of code and results(not inline in text)*/
+pre {
+    font-size: 16px;
+    line-height: 20px;
+    /* font-family: Courier, "Courier New", "Lucida Sans Typewriter", Lucida; */
+    font-family: Consolas, Courier, "Courier New", "Lucida Sans Typewriter", Lucida;
+    color: darkred;
+    left: -5px;
+    padding-left: 10px;
+    margin-top: -1.5em;
+    /* width: 95%; */
+    /*padding-right: -100px;*/
+}
+
+/* code inline with text */
+code {
+    /* font-family: Courier, "Courier New", "Lucida Sans Typewriter", Lucida; */
+    font-family: Consolas, Courier, "Courier New", "Lucida Sans Typewriter", Lucida;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.15em;
+    border-color: #d0d0d0;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
+    color: #505050;
+    background-color: #f1f1f1;
+} 
+
+/* code style (input and comments, not results) */
+.prettyprint {
+    border-radius: 0.3em;
+    /* background-color: #ffffff; */
+    /* font-size: 50%; */
+    /* font-size: 16px; */
+    /* line-height: 18px; */
+}
+
+/* comment style */
+.prettyprint .com {
+    /* color: #808080; */
+    /* color: #101010; */ /* almost black */
+    /*color: #019055; */  /* dark green */
+    color: #01824c;  /* even darker green */
+    font-style: normal;
+    /* font-size: 50%; */
+}
+
+/* strings in r code */
+.prettyprint .str {
+    color: #246dc5;  /* dark blue */
+}
+
+/* symbols like %>% in r code 
+.prettyprint .pun {
+    color: #9027a0;  /* dark magenta 
+}
+*/
+
+/* the following stuff is kept in the main document, as it relates to logo size and placement:
+
+/* gdbar size (that contains logo) on title page   * /
+/* needs to have greater height than logo image, other stuff is irrelevant  * /
+.gdbar {
+  position:absolute !important;
+  top: 50px !important;
+  left: auto;
+  right: 0px !important;
+  width: 0px !important;
+  height: 500px !important;
+}
+
+/* logo size on title page * /
+.gdbar img {
+  position: absolute;
+  top: 0px;
+  left: 50px;
+  /*left: auto;
+  right: 300px; * /
+  width: 260px !important;
+  height: 126px !important;
+}
+
+/* logo size on slides * /
+slides > slide:not(.nobackground):before {
+  width: 130px;
+  height: 63px;
+  background-size: 130px 63px;
+  position: absolute;
+  left: auto;
+  right: -30px;
+  top: 10px;
+}
+*/
+
+
+/* for slides with red background (only works for normal text, not whole slide) {.bgred} */
+.bgred,
+.bgred div,
+.bgred body,
+.bgred .article,
+.bgred article,
+.bgred .prettyprint,
+.bgred .h1,
+.bgred .h2,
+.bgred .h3,
+.bgred backdrop,
+.bgred .backdrop,
+.bgred .slide,
+.bgred slide,
+.bgred slides > slide.backdrop {   
+  background-color:#ffaaaa;
+  background:#ffaaaa;
+}
+
+/*slides > slide.backdrop {   */
+/*  background-color:#ffaaaa;   */
+/*  background:#ffaaaa;   */
+/*}   */
+
+/* smaller code on {.smaller} slides */
+article.smaller pre {
+    font-size: 13px;
+    line-height: 15px;
+    letter-spacing: 0;
+}
+
+/* unordered list, first level */
+ul > li:before {
+    /* content: '*'; /* '\2022';  '*'; */
+    /* content: '\220e';  /* qed. (tombstone) */
+    /* content: '\2598'; /* quadrant upper left */
+    /* content: '\259d'; /* quadrant upper right */
+    /* content: '\259a'; /* quadrant upper left and lower right */
+    /* content: '\25a0';  /* black square */
+    content: '\25aa'; /* small black square */
+    color: "black";
+    font-weight: bold;
+    /* font-size: 130%; */
+    /* margin-left: -0.8em; */
+    /* margin-top: -0.3rem; /*needed when using bigger font, except with asterisk */
+}
+
+/* unordered list, second and further level */
+ul li ul li:before {
+    content: '\25E6';
+    font-weight: 600;
+    font-size: 100%;
+    margin-left: -0.8em;
+    margin-top: 0em;
+}
