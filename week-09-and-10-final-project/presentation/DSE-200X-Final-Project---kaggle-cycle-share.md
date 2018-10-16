@@ -138,6 +138,12 @@ You need not come to a definitive conclusion, but you need to say how your findi
 ## Limitations
 If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures.
 Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).
+
+Brainstorming: 
+
+* Results only valid for cities with roughly the same climate.
+* Bike rides might be influenced by weather *predictions* for a given day, not only by the actual weather.
+* Precipitation (rain, snow) might also be a very good predictor; unfortunately, this was not easily available for the given weather station.
  
 ## Conclusions
 Report your overall conclusions, preferably a conclusion per research question
