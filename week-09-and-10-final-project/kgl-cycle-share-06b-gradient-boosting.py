@@ -18,6 +18,7 @@ import urllib.parse
 import re   ## for regular expressions
 from itertools import chain  ## for chain, similar to R's unlist (flatten lists)
 import collections   ## for Counters (used in frequency tables, for example)
+from scipy import stats
 import numpy as np
 import pandas as pd
 from pandas.api.types import CategoricalDtype  ## for sorted plotnine/ggplot categories
@@ -38,6 +39,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, cross_val_score
 
 import pathvalidate as pv
 
@@ -125,7 +127,7 @@ mod_gb = GradientBoostingRegressor(n_estimators = 100,
                                    max_depth = 20, 
                                    min_samples_split = 70,
                                    min_samples_leaf = 30,
-                                   verbose = 0)
+                                   verbose = 1)
 
 ## Train the model using the training sets:
 mod_gb.fit(dat_train_x, dat_train_y)
@@ -179,6 +181,8 @@ dat_train_pred = mod_gb.predict(dat_train_x)
 ## Inspect model:
 mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
 mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
+mean_absolute_error(dat_train_y, dat_train_pred)  # MSE in training set
+mean_absolute_error(dat_test_y, dat_test_pred)    # MSE in test set
 r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
 r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
 
@@ -196,7 +200,7 @@ r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
 
 from sklearn.externals import joblib
 
-# model_name = 
+# filename_model = 'model_gradient_boosting_interactions.pkl'
 filename_model = 'model_gradient_boosting.pkl'
 joblib.dump(mod_gb, os.path.join(path_out, filename_model))
 
@@ -204,3 +208,43 @@ joblib.dump(mod_gb, os.path.join(path_out, filename_model))
 # filename_model = 'model_gradient_boosting.pkl'
 # mod_this = joblib.load(os.path.join(path_out, filename_model))
 
+
+
+## Notes:
+## most important interactions (17 Oct 2018, 12:45):
+"""
+                                   varname  importance
+19           Q('Temp (°C)'):Q('hr_of_day')    0.158654
+33     Q('Stn Press (kPa)'):Q('hr_of_day')    0.093486
+12         Q('Month'):Q('Stn Press (kPa)')    0.066666
+15         Q('Temp (°C)'):Q('Rel Hum (%)')    0.052042
+18     Q('Temp (°C)'):Q('Stn Press (kPa)')    0.043930
+34   Q('Stn Press (kPa)'):Q('day_of_week')    0.043399
+8                Q('Month'):Q('Temp (°C)')    0.043129
+5               Atmospheric Pressure (kPa)    0.043117
+20         Q('Temp (°C)'):Q('day_of_week')    0.042098
+23   Q('Rel Hum (%)'):Q('Stn Press (kPa)')    0.031272
+16  Q('Temp (°C)'):Q('Wind Dir (10s deg)')    0.030179
+17     Q('Temp (°C)'):Q('Wind Spd (km/h)')    0.028586
+24         Q('Rel Hum (%)'):Q('hr_of_day')    0.027554
+9              Q('Month'):Q('Rel Hum (%)')    0.025869
+25       Q('Rel Hum (%)'):Q('day_of_week')    0.023910
+
+[
+["Q('Temp (°C)')", "Q('hr_of_day')"], 
+["Q('Stn Press (kPa)')", "Q('hr_of_day')"], 
+["Q('Month')", "Q('Stn Press (kPa)')"], 
+["Q('Temp (°C)')", "Q('Rel Hum (%)')"], 
+["Q('Temp (°C)')", "Q('Stn Press (kPa)')"], 
+["Q('Stn Press (kPa)')", "Q('day_of_week')"], 
+["Q('Month')", "Q('Temp (°C)')"], 
+["Atmospheric Pressure (kPa)"], 
+["Q('Temp (°C)')", "Q('day_of_week')"], 
+["Q('Rel Hum (%)')", "Q('Stn Press (kPa)')"], 
+["Q('Temp (°C)')", "Q('Wind Dir (10s deg)')"], 
+["Q('Temp (°C)')", "Q('Wind Spd (km/h)')"], 
+["Q('Rel Hum (%)')", "Q('hr_of_day')"], 
+["Q('Month')", "Q('Rel Hum (%)')"], 
+["Q('Rel Hum (%)')", "Q('day_of_week')"]
+]
+"""

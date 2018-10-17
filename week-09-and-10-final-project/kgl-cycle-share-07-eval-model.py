@@ -20,6 +20,7 @@ from sklearn.externals import joblib
 #filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2
 #filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
 filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
+# filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
 #filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
 #filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1
 
@@ -60,8 +61,16 @@ var_imp = pd.DataFrame(
      'varname_orig'   : [i[3:-2] for i in dat_train_x.columns], 
     'importance' : list(mod_this.feature_importances_)})
 dat_varnames_long = pd.DataFrame.from_dict(varnames_long_dict, orient = 'index', columns = ['varname'])
-var_imp = pd.merge(var_imp, dat_varnames_long, left_on = 'varname_q', right_index = True)
-var_imp.sort_values('importance')#['varname']
+var_imp = pd.merge(var_imp, dat_varnames_long, 
+                   left_on = 'varname_q', right_index = True, 
+                   how = 'left')
+## for missing "varnames" (not defined in dat_varnames_long, e.g., interactions),
+## use varname_q instead:
+var_imp['varname'] = np.where(pd.isnull(var_imp['varname']), 
+                                        var_imp['varname_q'], var_imp['varname'])
+var_imp.sort_values('importance', ascending = False, inplace = True)
+var_imp.head(n = 15)
+#print(var_imp[['varname', 'importance']].head(n = 15))
 
 ## sort variables by importance for plotting:
 varname_list = list(var_imp.sort_values('importance')['varname'])
@@ -70,7 +79,7 @@ var_imp['varname_cat'] = \
     var_imp['varname'].astype(str).astype(varname_cat)
 
 ## plot variable importance (15 most important):
-p = ggplot(var_imp[-15:], aes(y = 'importance', x = 'varname_cat')) + \
+p = ggplot(var_imp[:15], aes(y = 'importance', x = 'varname_cat')) + \
     geom_bar(stat = 'identity') + \
     labs(
         title = "Feature importance",
@@ -179,11 +188,14 @@ def save_pdp_or_ice_plot(fig, feature, filename_stump):
         pv.sanitize_python_var_name(feature) + ".jpg"
     print("Saving ", filename_this)
     fig.savefig(fname = os.path.join(path_out, filename_this), 
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
+            dpi = 150, pad_inches = 0.025, bbox_inches = "tight")
     return
 
+## define features to plot:
 pdp_plot_features = ["Q('Temp (°C)')", "Q('Stn Press (kPa)')", 
                     "Q('hr_of_day')", "Q('Rel Hum (%)')"]
+
+## make and save pdp and ice box plots:
 for wch_feature in pdp_plot_features:
     pdp_current, fig = construct_pdp(model = mod_this, feature = wch_feature)
     fig
@@ -197,12 +209,24 @@ for wch_feature in pdp_plot_features:
 ## ------------------------------------------------------------------------- ##
 ## partial dependence plots: interactions
 ## ------------------------------------------------------------------------- ##
-"""
-def construct_pdp(model = mod_this, feature = wch_feature,
-                  dataset_x = dat_train_x, dataset_y = dat_train_y, 
-                  num_grid_points = num_grid_points_main, n_jobs = n_jobs,
-                 model_features = dat_train_x.columns):
-"""
+
+plot_params_pdp_int_default = {
+            # plot title and subtitle
+            'title': '',
+            'subtitle': '',
+            'title_fontsize': 15,
+            'subtitle_fontsize': 12,
+            # color for contour line
+            'contour_color':  'white',
+            'font_family': 'Arial',
+            # matplotlib color map for interact plot
+            'cmap': 'viridis',
+            # fill alpha for interact plot
+            'inter_fill_alpha': 0.8,
+            # fontsize for interact plot text
+            'inter_fontsize': 9,
+        }
+
 def construct_pdp_interact(model = mod_this, feature_names = wch_features,
                           dataset_x = dat_train_x, dataset_y = dat_train_y,
                           num_grid_points = num_grid_points_int, n_jobs = n_jobs,
@@ -213,7 +237,16 @@ def construct_pdp_interact(model = mod_this, feature_names = wch_features,
         model_features = model_features, features = feature_names)
     fig, axes = pdp.pdp_interact_plot(
         inter_current, feature_names = feature_names, x_quantile = False, 
-        plot_type = 'contour', plot_pdp = False)
+        plot_type = 'contour', plot_pdp = False, 
+        plot_params = plot_params_pdp_int_default)
+    axes["pdp_inter_ax"].set_xlabel(varnames_long_dict[feature_names[0]])
+    axes["pdp_inter_ax"].set_ylabel(varnames_long_dict[feature_names[1]])
+    ## [[here]] y-labels!
+    axes["pdp_inter_ax"].set_title('Number of bike rides per hour\n(Partial Dependence Plot) for\n{0} and {1}\n'\
+                             .format(varnames_long_dict[feature_names[0]], 
+                                    varnames_long_dict[feature_names[1]]), 
+                             y = 1)
+
     return fig
 
 def save_pdp_int_plot(fig, features, filename_stump):
@@ -222,60 +255,29 @@ def save_pdp_int_plot(fig, features, filename_stump):
         pv.sanitize_python_var_name(features[1]) + ".jpg"
     print("Saving ", filename_this)
     fig.savefig(fname = os.path.join(path_out, filename_this), 
-                dpi = 150)
+                dpi = 150, pad_inches = .025, bbox_inches = "tight")
     return
 
-fig = construct_pdp_interact(model = mod_this, feature_names = wch_features, num_grid_points = [5, 5])
-fig
-save_pdp_int_plot(fig, features = wch_features, filename_stump = "pdp-interact---")
 
 
+## define feature combinations to plot:
+pdp_plot_int_feature_pairs = [
+    ["Q('hr_of_day')", "Q('Temp (°C)')", ], 
+    ["Q('hr_of_day')", "Q('Stn Press (kPa)')"], 
+    ["Q('Month')", "Q('Stn Press (kPa)')"], 
+    ["Q('Rel Hum (%)')", "Q('Temp (°C)')"], 
+    ["Q('Stn Press (kPa)')", "Q('Temp (°C)')"], 
+    ["Q('Stn Press (kPa)')", "Q('day_of_week')"]
+]
 
+## make and save pdp interaction plots:
+for wch_features in pdp_plot_int_feature_pairs:
+    fig = construct_pdp_interact(model = mod_this, 
+                                 #num_grid_points = [4, 4], 
+                                 feature_names = wch_features)
+    fig
+    save_pdp_int_plot(fig, features = wch_features, filename_stump = "pdp-interact---")
 
-#[features[6], features[5]]
-wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
-inter_current = pdp.pdp_interact(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y),
-    num_grid_points = num_grid_points_int, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, features = wch_features)
-fig, axes = pdp.pdp_interact_plot(
-    inter_current, wch_features, x_quantile = False, 
-    plot_type = 'contour', plot_pdp = False
-)
-filename_this = "pdp-interact---" + \
-    pv.sanitize_python_var_name(wch_features[0]) + "--" + \
-    pv.sanitize_python_var_name(wch_features[1]) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
-
-#[features[6], features[7]]
-wch_features = ["Q('hr_of_day')", "Q('day_of_week')"]
-inter_current = pdp.pdp_interact(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y),
-    num_grid_points = num_grid_points_int, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, features = wch_features)
-fig, axes = pdp.pdp_interact_plot(
-    inter_current, wch_features, x_quantile = False, 
-    plot_type = 'contour', plot_pdp = False
-)
-filename_this = "pdp-interact---" + \
-    pv.sanitize_python_var_name(wch_features[0]) + "--" + \
-    pv.sanitize_python_var_name(wch_features[1]) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
-
-#[features[1], features[2]]
-wch_features = ["Q('Temp (°C)')", "Q('Rel Hum (%)')"]
-inter_current = pdp.pdp_interact(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y),
-    num_grid_points = num_grid_points_int, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, features = wch_features)
-fig, axes = pdp.pdp_interact_plot(
-    inter_current, wch_features, x_quantile = False, 
-    plot_type = 'contour', plot_pdp = False
-)
-filename_this = "pdp-interact---" + \
-    pv.sanitize_python_var_name(wch_features[0]) + "--" + \
-    pv.sanitize_python_var_name(wch_features[1]) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), dpi = 300)
 
 ## ------------------------------------------------------------------------- ##
 ## other plots

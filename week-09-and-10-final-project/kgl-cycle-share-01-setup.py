@@ -64,7 +64,7 @@ varnames_long_dict = {
     "Q('Wind Spd (km/h)')" :    "Wind Speed (km/h)",          
     "Q('Stn Press (kPa)')" :    "Atmospheric Pressure (kPa)",          
     "Q('hr_of_day')" :          "Hour of the Day (0-23)",    
-    "Q('day_of_week'" :         "Day of the Week (0-6)"
+    "Q('day_of_week')" :         "Day of the Week (0-6)"
 }
 
 
