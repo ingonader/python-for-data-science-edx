@@ -104,7 +104,7 @@ dat_x.head()
 
 ## Split the data into training/testing sets (using patsy/dmatrices):
 dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
-    dat_x, dat_y, test_size = 0.33, random_state = 142)
+    dat_x, dat_y, test_size = 0.1, random_state = 142)
 
 ## convert y's to Series (to match data types between patsy and non-patsy data prep:)
 dat_train_y = dat_train_y[target]
@@ -134,6 +134,52 @@ mod_rf = RandomForestRegressor(n_estimators = 500,
 ## Train the model using the training sets:
 mod_rf.fit(dat_train_x, dat_train_y)
 
+## manual best (train/test r2): 
+## 0.90785676507150148 / 0.89120320733183955 
+## 0.91307831745877188 / 0.89403614532062348
+
+## ------------------------------------------------------------------------- ##
+## Randomized Search Cross-validation
+## ------------------------------------------------------------------------- ##
+
+## [[here]] [[todo]] 
+## * different distributions to sample from? (double values, log scale?)
+##   (more reserach needed here)
+
+# specify parameters and distributions to sample from:
+param_distributions = { 
+    "n_estimators" : stats.randint(300, 700),
+    "max_depth" : stats.randint(10, 31),
+    #"min_samples_split" : stats.randint(40, 101),
+    "min_samples_leaf" : stats.randint(20, 51)
+}
+
+#stats.randint(1, 4).rvs(20)
+
+n_iter = 40
+mod_randsearch = RandomizedSearchCV(
+    estimator = mod_rf,
+    param_distributions = param_distributions,
+    n_iter = n_iter,
+    scoring = "r2", ## "roc_auc", # "neg_mean_squared_error", "neg_mean_absolute_error"
+    cv = 4,   ## k-fold cross-validation for binary classification
+    verbose = 2,
+    random_state = 7,
+    n_jobs = -1)
+mod_randsearch.fit(dat_train_x, dat_train_y)
+## time: about 20 min for 40 iterations
+
+## best parameters and score in CV:
+mod_randsearch.best_params_
+mod_randsearch.best_score_
+
+## get best model (estimator): 
+mod_rf = mod_randsearch.best_estimator_
+
+## ------------------------------------------------------------------------- ##
+## use and inspect model
+## ------------------------------------------------------------------------- ##
+
 ## [[?]] missing: how to plot oob error by number of trees, like in R?
     
 ## Make predictions using the testing set
@@ -158,7 +204,7 @@ r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
 
 from sklearn.externals import joblib
 
-# model_name = 
+# filename_model = 'model_random_forest_interactions.pkl'
 filename_model = 'model_random_forest.pkl'
 joblib.dump(mod_rf, os.path.join(path_out, filename_model))
 
@@ -166,3 +212,25 @@ joblib.dump(mod_rf, os.path.join(path_out, filename_model))
 # filename_model = 'model_random_forest.pkl'
 # mod_rf = joblib.load(os.path.join(path_out, filename_model))
 
+
+
+"""
+print(var_imp[['varname', 'importance']].head(n = 15))
+
+                                  varname  importance
+19          Q('Temp (°C)'):Q('hr_of_day')    0.548121
+33    Q('Stn Press (kPa)'):Q('hr_of_day')    0.171389
+18    Q('Temp (°C)'):Q('Stn Press (kPa)')    0.090000
+8               Q('Month'):Q('Temp (°C)')    0.028317
+35        Q('hr_of_day'):Q('day_of_week')    0.025828
+23  Q('Rel Hum (%)'):Q('Stn Press (kPa)')    0.022665
+6                  Hour of the Day (0-23)    0.018860
+12        Q('Month'):Q('Stn Press (kPa)')    0.018096
+34  Q('Stn Press (kPa)'):Q('day_of_week')    0.013438
+24        Q('Rel Hum (%)'):Q('hr_of_day')    0.010271
+25      Q('Rel Hum (%)'):Q('day_of_week')    0.009835
+2                   Relative Humidity (%)    0.007337
+20        Q('Temp (°C)'):Q('day_of_week')    0.006104
+7                   Day of the Week (0-6)    0.005593
+13              Q('Month'):Q('hr_of_day')    0.004156
+"""
