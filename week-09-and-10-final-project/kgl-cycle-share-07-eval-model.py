@@ -136,194 +136,101 @@ plot_ylim_max = 2000  ## the same for all plots, for comparability.
 #     })
 
 
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-wch_feature = "Q('Temp (°C)')"
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-#features[1]
+def construct_pdp(model = mod_this, feature = wch_feature,
+                  dataset_x = dat_train_x, dataset_y = dat_train_y, 
+                  num_grid_points = num_grid_points_main, n_jobs = n_jobs,
+                 model_features = dat_train_x.columns):
+    ## calculation for pdp (and then ice plot) for numeric feature:
+    pdp_current = pdp.pdp_isolate(
+        model = mod_this, dataset = dataset_x.join(dataset_y), 
+        num_grid_points = num_grid_points, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
+        model_features = dataset_x.columns, 
+        feature = feature)
+    
+    ## construct pdp plot for numeric features:
+    fig, axes = pdp.pdp_plot(
+        pdp_current, varnames_long_dict[feature],
+        plot_params = plot_params_default
+    )
+    axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
+    #axes["pdp_ax"].set_ylim(0, plot_ylim_max)
+    #axes["pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
+    axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
+        varnames_long_dict[feature], y = 1)
+    #axes["pdp_ax"].margins(0)
 
-## calculation for pdp (and then ice plot) for numeric feature:
-pdp_current = pdp.pdp_isolate(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y), 
-    num_grid_points = num_grid_points_main, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, 
-    feature = wch_feature
-)
+    return pdp_current, fig
 
-## pdp plot for numeric features:
-#%matplotlib osx
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_params = plot_params_default
-)
-axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
-axes["pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1)
-#axes["pdp_ax"].margins(0)
-fig
-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), 
+def construct_ice_plot(pdp_current, feature = wch_feature):
+    ## ice-plot for numeric feature:
+    fig, axes = pdp.pdp_plot(
+        pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
+        plot_lines = True, frac_to_plot = 100,  ## percentage! 
+        x_quantile = False, plot_pts_dist = True, show_percentile = True,
+        plot_params = plot_params_default)
+    axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
+    #axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
+    axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
+        varnames_long_dict[feature], y = 1.1)
+    return fig
+
+def save_pdp_or_ice_plot(fig, feature, filename_stump):
+    filename_this = filename_out_prefix + filename_stump + \
+        pv.sanitize_python_var_name(feature) + ".jpg"
+    print("Saving ", filename_this)
+    fig.savefig(fname = os.path.join(path_out, filename_this), 
             dpi = 150, pad_inches = 0, bbox_inches = "tight")
+    return
 
-## ice-plot for numeric feature:
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_lines = True, frac_to_plot = 100,  ## percentage! 
-    x_quantile = False, plot_pts_dist = True, show_percentile = True,
-    plot_params = plot_params_default)
-axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1.1)
-fig
-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
+pdp_plot_features = ["Q('Temp (°C)')", "Q('Stn Press (kPa)')", 
+                    "Q('hr_of_day')", "Q('Rel Hum (%)')"]
+for wch_feature in pdp_plot_features:
+    pdp_current, fig = construct_pdp(model = mod_this, feature = wch_feature)
+    fig
+    save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "pdp-main---")
 
+    fig = construct_ice_plot(pdp_current, feature = wch_feature)
+    fig
+    save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "ice-main---")
 
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-wch_feature = "Q('Stn Press (kPa)')"
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-#features
-
-## calculation for pdp (and then ice plot) for numeric feature:
-pdp_current = pdp.pdp_isolate(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y), 
-    num_grid_points = num_grid_points_main, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, 
-    feature = wch_feature
-)
-
-## pdp plot for numeric features:
-#%matplotlib osx
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_params = plot_params_default
-)
-axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
-axes["pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1)
-#axes["pdp_ax"].margins(0)
-fig
-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), 
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
-
-## ice-plot for numeric feature:
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_lines = True, frac_to_plot = 100,  ## percentage! 
-    x_quantile = False, plot_pts_dist = True, show_percentile = True,
-    plot_params = plot_params_default)
-axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1.1)
-fig
-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
-
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-wch_feature = "Q('hr_of_day')"
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-#features
-
-## calculation for pdp (and then ice plot) for numeric feature:
-pdp_current = pdp.pdp_isolate(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y), 
-    num_grid_points = num_grid_points_main, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, 
-    feature = wch_feature
-)
-
-## pdp plot for numeric features:
-#%matplotlib osx
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_params = plot_params_default
-)
-axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
-axes["pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1)
-#axes["pdp_ax"].margins(0)
-fig
-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), 
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
-
-## ice-plot for numeric feature:
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_lines = True, frac_to_plot = 100,  ## percentage! 
-    x_quantile = False, plot_pts_dist = True, show_percentile = True,
-    plot_params = plot_params_default)
-axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1.1)
-fig
-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
-
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-wch_feature = "Q('Rel Hum (%)')"
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ##
-#features
-
-## calculation for pdp (and then ice plot) for numeric feature:
-pdp_current = pdp.pdp_isolate(
-    model = mod_this, dataset = dat_train_x.join(dat_train_y), 
-    num_grid_points = num_grid_points_main, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
-    model_features = dat_train_x.columns, 
-    feature = wch_feature
-)
-
-## pdp plot for numeric features:
-#%matplotlib osx
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_params = plot_params_default
-)
-axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
-axes["pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1)
-#axes["pdp_ax"].margins(0)
-fig
-filename_this = "pdp-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this), 
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
-
-## ice-plot for numeric feature:
-fig, axes = pdp.pdp_plot(
-    pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
-    plot_lines = True, frac_to_plot = 100,  ## percentage! 
-    x_quantile = False, plot_pts_dist = True, show_percentile = True,
-    plot_params = plot_params_default)
-axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, plot_ylim_max)
-#axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
-axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
-        varnames_long_dict[wch_feature], y = 1.1)
-fig
-filename_this = "ice-main---" + pv.sanitize_python_var_name(wch_feature) + ".jpg"
-fig.savefig(fname = os.path.join(path_out, filename_out_prefix + filename_this),
-            dpi = 150, pad_inches = 0, bbox_inches = "tight")
 
 ## ------------------------------------------------------------------------- ##
 ## partial dependence plots: interactions
 ## ------------------------------------------------------------------------- ##
+"""
+def construct_pdp(model = mod_this, feature = wch_feature,
+                  dataset_x = dat_train_x, dataset_y = dat_train_y, 
+                  num_grid_points = num_grid_points_main, n_jobs = n_jobs,
+                 model_features = dat_train_x.columns):
+"""
+def construct_pdp_interact(model = mod_this, feature_names = wch_features,
+                          dataset_x = dat_train_x, dataset_y = dat_train_y,
+                          num_grid_points = num_grid_points_int, n_jobs = n_jobs,
+                          model_features = dat_train_x.columns):
+    inter_current = pdp.pdp_interact(
+        model = model, dataset = dataset_x.join(dataset_y),
+        num_grid_points = num_grid_points, n_jobs = n_jobs, ## needs to be 1 for XGBoost model!
+        model_features = model_features, features = feature_names)
+    fig, axes = pdp.pdp_interact_plot(
+        inter_current, feature_names = feature_names, x_quantile = False, 
+        plot_type = 'contour', plot_pdp = False)
+    return fig
+
+def save_pdp_int_plot(fig, features, filename_stump):
+    filename_this = filename_out_prefix + filename_stump + \
+        pv.sanitize_python_var_name(features[0]) + "--" + \
+        pv.sanitize_python_var_name(features[1]) + ".jpg"
+    print("Saving ", filename_this)
+    fig.savefig(fname = os.path.join(path_out, filename_this), 
+                dpi = 150)
+    return
+
+fig = construct_pdp_interact(model = mod_this, feature_names = wch_features, num_grid_points = [5, 5])
+fig
+save_pdp_int_plot(fig, features = wch_features, filename_stump = "pdp-interact---")
+
+
+
 
 #[features[6], features[5]]
 wch_features = ["Q('hr_of_day')", "Q('Stn Press (kPa)')"]
