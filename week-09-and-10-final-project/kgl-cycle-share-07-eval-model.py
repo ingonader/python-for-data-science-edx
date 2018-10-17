@@ -18,7 +18,7 @@ from sklearn.externals import joblib
 
 ## select file and define prefix (for plot output files):
 #filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2
-#filename_model = 'model_random_forest_interact.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
+#filename_model = 'model_random_forest_interactions.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
 filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
 # filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
 #filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
@@ -156,9 +156,20 @@ def construct_pdp(model = mod_this, feature = wch_feature,
         model_features = dataset_x.columns, 
         feature = feature)
     
-    ## construct pdp plot for numeric features:
+    ## construct centered pdp plot for numeric features:
+    fig_center, axes_center = pdp.pdp_plot(
+        pdp_current, varnames_long_dict[feature],
+        center = True, 
+        plot_params = plot_params_default
+    )
+    axes_center["pdp_ax"].set_ylabel("Number of bike rides per hour")
+    axes_center["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
+        varnames_long_dict[feature], y = 1)
+    
+    ## construct non-centered pdp plot for numeric features:
     fig, axes = pdp.pdp_plot(
         pdp_current, varnames_long_dict[feature],
+        center = False, 
         plot_params = plot_params_default
     )
     axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
@@ -167,13 +178,23 @@ def construct_pdp(model = mod_this, feature = wch_feature,
     axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
         varnames_long_dict[feature], y = 1)
     #axes["pdp_ax"].margins(0)
-
-    return pdp_current, fig
+    return pdp_current, fig_center, fig
 
 def construct_ice_plot(pdp_current, feature = wch_feature):
-    ## ice-plot for numeric feature:
+    ## centered ice-plot for numeric feature:
+    fig_center, axes_center = pdp.pdp_plot(
+        pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
+        center = True,
+        plot_lines = True, frac_to_plot = 100,  ## percentage! 
+        x_quantile = False, plot_pts_dist = True, show_percentile = True,
+        plot_params = plot_params_default)
+    axes_center["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
+    axes_center["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
+        varnames_long_dict[feature], y = 1.1)
+    ## standard ice-plot for numeric feature:
     fig, axes = pdp.pdp_plot(
         pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
+        center = False,
         plot_lines = True, frac_to_plot = 100,  ## percentage! 
         x_quantile = False, plot_pts_dist = True, show_percentile = True,
         plot_params = plot_params_default)
@@ -181,7 +202,7 @@ def construct_ice_plot(pdp_current, feature = wch_feature):
     #axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
     axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
         varnames_long_dict[feature], y = 1.1)
-    return fig
+    return fig_center, fig
 
 def save_pdp_or_ice_plot(fig, feature, filename_stump):
     filename_this = filename_out_prefix + filename_stump + \
@@ -192,18 +213,24 @@ def save_pdp_or_ice_plot(fig, feature, filename_stump):
     return
 
 ## define features to plot:
+#features
 pdp_plot_features = ["Q('Temp (°C)')", "Q('Stn Press (kPa)')", 
-                    "Q('hr_of_day')", "Q('Rel Hum (%)')"]
+                    "Q('hr_of_day')", "Q('Rel Hum (%)')",
+                    "Q('day_of_week')"]
 
 ## make and save pdp and ice box plots:
 for wch_feature in pdp_plot_features:
-    pdp_current, fig = construct_pdp(model = mod_this, feature = wch_feature)
+    pdp_current, fig_center, fig = construct_pdp(model = mod_this, feature = wch_feature)
+    fig_center
     fig
-    save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "pdp-main---")
+    save_pdp_or_ice_plot(fig_center, feature = wch_feature, filename_stump = "pdp-main-centered---")
+    save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "pdp-main-standard---")
 
-    fig = construct_ice_plot(pdp_current, feature = wch_feature)
+    fig_center, fig = construct_ice_plot(pdp_current, feature = wch_feature)
+    fig_center
     fig
-    save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "ice-main---")
+    save_pdp_or_ice_plot(fig_center, feature = wch_feature, filename_stump = "ice-main-centered---")
+    save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "ice-main-standard---")
 
 
 ## ------------------------------------------------------------------------- ##
@@ -267,7 +294,8 @@ pdp_plot_int_feature_pairs = [
     ["Q('Month')", "Q('Stn Press (kPa)')"], 
     ["Q('Rel Hum (%)')", "Q('Temp (°C)')"], 
     ["Q('Stn Press (kPa)')", "Q('Temp (°C)')"], 
-    ["Q('Stn Press (kPa)')", "Q('day_of_week')"]
+    ["Q('Stn Press (kPa)')", "Q('day_of_week')"],
+    ["Q('hr_of_day')", "Q('day_of_week')"]
 ]
 
 ## make and save pdp interaction plots:
