@@ -26,7 +26,8 @@ exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
 
 
 ## [[todo]] 
-## * modify axes labels on pdp plots... how? [[?]]
 ## * build a pipeline to score classification, then regression model in one action
+## * rerun the whole analysis in a pipenv, and store requirements.txt on github
+## * build a notebook with the most important parts of the code (along with the final presentation)
 
 
