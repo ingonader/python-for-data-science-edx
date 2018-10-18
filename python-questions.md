@@ -60,6 +60,8 @@
   * is there also a `np.None`, on top of `np.nan`? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py:217:##GD take care, None is not equivalent to np.nan (.astype(float) above converts None to np.nan)
   * is there a similar distinction between `NaN` and `None` as in R?
   * What is a good package to impute missing values?
+    * `fancyimpute`?
+    * `impyute`?
 
 * Plotting
   * What common plotting libraries are there in Python?
@@ -84,4 +86,13 @@
   * Is there a method to have a pipeline with model prep and (multiple) models? Or is this just a script? (Same question for R, actually).
   * Related: How can I make a class that takes two models, performes some stuff, as a predict function that can be used similar to any model's predict function?
   * Can there be custom functions in pipelines? If yes, how? What do they need to implement?
+
+* Workflow questions
+  * How do you use python professionally? any tips and hints? 
+  * How do you use virtualenvs? (is there a better way as using the command line to start one each time, like some kind of project concept like in RStudio?)
+  * Some functions turn pandas dataframe back into numpy arrays. How to best deal with that? Is there a way to transform the np.array back into a pandas dataframe (getting back **indices**, **column names** *and* **data types**  from the original pandas dataframe)?
+  * Is there a library to monitor and log model performance for each run of a model? Is there in R? modelDB? <https://github.com/mitdbg/modeldb>
+  * 
+
+
 
