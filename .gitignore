@@ -13,6 +13,9 @@
 ## no output directories:
 */output/*
 
+## but do include model runs data file in output directory:
+!week-09-and-10-final-project/output/model_runs.csv
+
 ## no plots in mini-project:
 /week-06-mini-project/*.jpg
 

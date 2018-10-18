@@ -8,7 +8,12 @@
 ## import libraries
 ## ========================================================================= ##
 
+import csv
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from itertools import chain ## for flattening lists of lists
+#import datetime
+#datetime.datetime.now()
+
 
 ## ========================================================================= ##
 ## load model from disk
@@ -20,9 +25,10 @@ from sklearn.externals import joblib
 #filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2
 #filename_model = 'model_random_forest_interactions.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
 filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
-# filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
+# filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gbx_'; n_jobs = -2
 #filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
 #filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1
+#filename_model = 'model_gradient_boosting_imputed.pkl'; filename_out_prefix = 'mod_gbimp_'; n_jobs = -2
 
 
 ## load model:
@@ -31,6 +37,14 @@ mod_this = joblib.load(os.path.join(path_out, filename_model))
 ## define number of grid points for pdp interaction plots:
 num_grid_points_int = [20, 20]
 num_grid_points_main = 40
+
+dat_perf_metrics = {
+    'timestamp' : pd.Timestamp.today(),
+    'timestamp_str' : str(pd.Timestamp.today()),
+    'filename_model' : filename_model,
+    'filename_out_prefix' : filename_out_prefix
+}
+pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
 
 ## ========================================================================= ##
 ## make predictions and get model performance
@@ -41,15 +55,27 @@ dat_test_pred = mod_this.predict(dat_test_x)
 dat_train_pred = mod_this.predict(dat_train_x)
 
 ## Inspect model:
-mean_squared_error(dat_train_y, dat_train_pred)  # MSE in training set
-mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
-mean_absolute_error(dat_train_y, dat_train_pred) # MAE in training set
-mean_absolute_error(dat_test_y, dat_test_pred)   # MAE in test set
-r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
-r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
+this_perf_metrics = {
+    'mse_train' : mean_squared_error(dat_train_y, dat_train_pred),  # MSE in training set
+    'mse_test'  : mean_squared_error(dat_test_y, dat_test_pred),    # MSE in test set
+    'mae_train' : mean_absolute_error(dat_train_y, dat_train_pred), # MAE in training set
+    'mae_test'  : mean_absolute_error(dat_test_y, dat_test_pred),   # MAE in test set
+    'r2_train'  : r2_score(dat_train_y, dat_train_pred),            # R^2 (r squared) in test set
+    'r2_test'   : r2_score(dat_test_y, dat_test_pred)               # R^2 (r squared) in test set
+}
+#pd.DataFrame(this_perf_metrics, index = [0])
+dat_perf_metrics.update(this_perf_metrics)
+pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
 
-## r2 for non-zero counts:
-r2_score(dat_test_y[dat_test_y > 0], dat_test_pred[dat_test_y > 0])
+
+## r2 for non-zero bike trips counts:
+this_perf_metrics = {
+    'r2_train_nonzero' : r2_score(dat_train_y[dat_train_y > 0], dat_train_pred[dat_train_y > 0]),
+    'r2_test_nonzero' : r2_score(dat_test_y[dat_test_y > 0], dat_test_pred[dat_test_y > 0])
+}
+#pd.DataFrame(this_perf_metrics, index = [0])
+dat_perf_metrics.update(this_perf_metrics)
+pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
 
 ## ------------------------------------------------------------------------- ##
 ## variable importance
@@ -145,7 +171,7 @@ plot_ylim_max = 2000  ## the same for all plots, for comparability.
 #     })
 
 
-def construct_pdp(model = mod_this, feature = wch_feature,
+def construct_pdp(model, feature,
                   dataset_x = dat_train_x, dataset_y = dat_train_y, 
                   num_grid_points = num_grid_points_main, n_jobs = n_jobs,
                  model_features = dat_train_x.columns):
@@ -180,7 +206,7 @@ def construct_pdp(model = mod_this, feature = wch_feature,
     #axes["pdp_ax"].margins(0)
     return pdp_current, fig_center, fig
 
-def construct_ice_plot(pdp_current, feature = wch_feature):
+def construct_ice_plot(pdp_current, feature):
     ## centered ice-plot for numeric feature:
     fig_center, axes_center = pdp.pdp_plot(
         pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
@@ -254,7 +280,7 @@ plot_params_pdp_int_default = {
             'inter_fontsize': 9,
         }
 
-def construct_pdp_interact(model = mod_this, feature_names = wch_features,
+def construct_pdp_interact(model, feature_names,
                           dataset_x = dat_train_x, dataset_y = dat_train_y,
                           num_grid_points = num_grid_points_int, n_jobs = n_jobs,
                           model_features = dat_train_x.columns):
@@ -379,4 +405,44 @@ print(p)
 ## (except maybe some missing values in predictions in the spring of 2014... why?)
 
 
+## ========================================================================= ##
+## save performance metrics to disk
+## ========================================================================= ##
+
+## add comment to model or model run:
+this_perf_metrics = {
+    'comment' : ""
+}
+dat_perf_metrics.update(this_perf_metrics)
+#pd.DataFrame(dat_perf_metrics, index = [0])
+pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
+
+filename_model_runs = "model_runs.csv"
+## check if file exists:
+if os.path.isfile(os.path.join(path_out, filename_model_runs)):
+    dat_model_runs = pd.read_csv(os.path.join(path_out, filename_model_runs))
+else:
+    dat_model_runs = pd.DataFrame()
+
+## append current runs data:
+dat_model_runs = pd.concat([dat_model_runs,
+                            pd.DataFrame(dat_perf_metrics, index = [0])],
+                          sort = True)
+dat_model_runs
+
+## sort columns by order of dict (others at the end):
+colnames_dict = list(dat_perf_metrics.keys())
+colnames_notindict = list(set(dat_model_runs.columns) - set(colnames_dict))
+colnames_ordered = [colnames_dict, colnames_notindict]
+colnames_ordered = list(chain(*colnames_ordered)) ## flatten
+
+## reorder columns:
+dat_model_runs = dat_model_runs[colnames_dict]
+
+## save runs data:
+dat_model_runs.to_csv(os.path.join(path_out, filename_model_runs), 
+                      quoting = csv.QUOTE_NONNUMERIC,
+                      index = False)
+
+    
 
