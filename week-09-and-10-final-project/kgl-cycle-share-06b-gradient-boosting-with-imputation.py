@@ -4,7 +4,7 @@
 ## Python for Data Science (Week 9 and 10 Final Project)
 ## ######################################################################### ##
 
-## Gradient Boosting (scikit-learn) -- without imputation
+## Gradient Boosting (scikit-learn)
 
 ## ========================================================================= ## 
 ## import libraries
@@ -42,6 +42,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, cross_val_score
 
 import pathvalidate as pv
+
+from fancyimpute import KNN, NuclearNormMinimization, SoftImpute, IterativeImputer, BiScaler
 
 ## ------------------------------------------------------------------------- ##
 ## define features and formula
@@ -87,9 +89,11 @@ formula_txt
 ## create design matrices using patsy (could directly be used for modeling):
 #patsy.dmatrix?
 dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
-                               NA_action = 'drop',
+                               #NA_action = 'drop',
+                               NA_action=patsy.NAAction(NA_types=[]),
                                return_type = 'dataframe')
-dat_x.head()
+#dat_x.head()
+#dat_x.shape
 
 ## other possibilities for dummy coding:
 ## * pd.get_dummies [[?]] which to use?
@@ -107,6 +111,8 @@ dat_train_y = dat_train_y[target]
 dat_test_y = dat_test_y[target]
 
 #dat_test_x.shape
+#dat_train_x.shape
+#dat_x.shape
 
 ## ------------------------------------------------------------------------- ##
 ## normalize data
@@ -114,6 +120,58 @@ dat_test_y = dat_test_y[target]
 
 ## [[todo]]
 
+## ------------------------------------------------------------------------- ##
+## impute missing values
+## ------------------------------------------------------------------------- ##
+
+## training data:
+dat_train_x.isnull().any()
+dat_train_x.apply(lambda x: x.isnull().sum(), axis = 0)
+
+## all data: number of missing values (absolute and percent):
+dat_x.apply(lambda x: x.isnull().sum(), axis = 0)
+dat_x.apply(lambda x: x.isnull().sum() / dat_x.shape[0], axis = 0)
+
+#from fancyimpute import KNN, NuclearNormMinimization, SoftImpute, IterativeImputer, BiScaler
+
+## iterative imputation:
+## [[?]] probably only works for continuous variables only...
+mod_impute = IterativeImputer(imputation_order = "ascending",
+                             n_iter = 10,
+                             #predictor = sklearn.linear.RidgeCV(), ## default
+                             random_state = 21)
+
+## fit on training data:
+mod_impute.fit(dat_train_x)
+
+## impute training data:
+dat_train_x_nparray = mod_impute.transform(dat_train_x)
+#type(dat_train_x_nparray)  ## numpy.ndarray (!)
+
+## transform back into a pandas dataframe:
+dat_train_x = pd.DataFrame(data =    dat_train_x_nparray,
+                           index =   dat_train_x.index,
+                           columns = dat_train_x.columns)
+
+
+## impute test data:
+dat_test_x_nparray = mod_impute.transform(dat_test_x)
+#type(dat_train_x_nparray)  ## numpy.ndarray (!)
+
+## transform back into a pandas dataframe:
+dat_test_x = pd.DataFrame(data =    dat_test_x_nparray,
+                          index =   dat_test_x.index,
+                          columns = dat_test_x.columns)
+
+
+## impute complete dataset:
+dat_x_nparray = mod_impute.transform(dat_x)
+#type(dat_train_x_nparray)  ## numpy.ndarray (!)
+
+## transform back into a pandas dataframe:
+dat_x = pd.DataFrame(data =    dat_x_nparray,
+                     index =   dat_x.index,
+                     columns = dat_x.columns)
 
 ## ------------------------------------------------------------------------- ##
 ## estimate model and evaluate fit and model assumptions
@@ -201,7 +259,8 @@ r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
 from sklearn.externals import joblib
 
 # filename_model = 'model_gradient_boosting_interactions.pkl'
-filename_model = 'model_gradient_boosting.pkl'
+# filename_model = 'model_gradient_boosting.pkl'
+filename_model = 'model_gradient_boosting_imputed.pkl'
 joblib.dump(mod_gb, os.path.join(path_out, filename_model))
 
 # ## load:
