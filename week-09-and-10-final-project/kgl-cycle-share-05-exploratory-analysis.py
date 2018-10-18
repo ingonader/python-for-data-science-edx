@@ -256,16 +256,25 @@ ggplot(dat_hr_all, aes(y = 'duration_min_mean', x = 'Stn Press (kPa)', color = '
 ## check correlations
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
+#dat_hr_all.columns
+varnames_cor = ['trip_cnt', 'Year', 'Month', 'Temp (°C)', 
+                'Dew Point Temp (°C)', 'Rel Hum (%)',
+                'Wind Dir (10s deg)', 'Wind Spd (km/h)', 
+                'Stn Press (kPa)', 'hr_of_day', 'day_of_week']
+
+dat_cor = dat_hr_all[varnames_cor]
+
 ## correlation:
-dat_hr_all.corr()
-## [[todo]] correlations!
+dat_cor.corr()
+cormat = dat_cor.corr()
 
 ## correlation heatmap:
 
 ## simple:
-cormat = dat_hr_all.corr()
 colormap = sns.diverging_palette(220, 10, as_cmap=True)
 sns.heatmap(cormat, cmap = colormap)
+
+varnames_heatmap_long = [varnames_orig_long_dict[i] for i in cormat.columns]
 
 ## more complex:
 %matplotlib inline
@@ -275,12 +284,15 @@ fig, ax = plt.subplots(figsize = (10, 10))
 colormap = sns.diverging_palette(220, 10, as_cmap = True)
 #Generate Heat Map, allow annotations and place floats in map
 sns.heatmap(cormat, cmap = colormap, annot = True, fmt = ".2f", center = 0)
-#Apply xticks
-#plt.xticks(range(len(cormat.columns)), cormat.columns);
-#Apply yticks
-#plt.yticks(range(len(cormat.columns)), cormat.columns)
-#show plot
+## Apply axes tickmarks of more explicit variable names:
+plt.xticks(np.arange(0, len(cormat.columns)) + .5, varnames_heatmap_long)
+plt.yticks(np.arange(0, len(cormat.columns)) + .5, varnames_heatmap_long)
 plt.show()
+
+filename_this = "expl-corr-heatmap.jpg"
+fig.savefig(fname = os.path.join(path_out, filename_this), 
+            dpi = 150, pad_inches = 0.025, bbox_inches = "tight")
+
 
 
 

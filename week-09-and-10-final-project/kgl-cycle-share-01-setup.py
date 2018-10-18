@@ -67,4 +67,21 @@ varnames_long_dict = {
     "Q('day_of_week')" :         "Day of the Week (0-6)"
 }
 
+## "translation" of unquoted to long variable / feature names:
+varnames_orig_long_dict = {
+    'trip_cnt' 				: 'Trip Count',
+    'Year' 					: 'Year (2014-2017)',
+    'Month' 				: 'Month (1-12)',
+    'Temp (°C)' 			: 'Temperature (°C)',
+    'Dew Point Temp (°C)' 	: 'Dew Point (°C)',
+    'Rel Hum (%)' 			: 'Relative Humidity (%)',
+    'Wind Dir (10s deg)' 	: 'Wind Direction (10s deg)',
+    'Wind Spd (km/h)'  		: 'Wind Speed (km/h)',
+    'Stn Press (kPa)' 		: 'Atmospheric Pressure (kPa)',
+    'hr_of_day' 			: 'Hour of the Day (0-23)',
+    'day_of_week' 			: 'Day of the Week (0-6)'
+}
+
+
+
 
