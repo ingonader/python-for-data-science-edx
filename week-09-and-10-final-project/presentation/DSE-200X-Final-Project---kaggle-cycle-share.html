@@ -3103,6 +3103,7 @@ if (document.readyState !== "loading" &&
 
 article {
 font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+font-size: 17pt;
 }
 
 .title-slide hgroup h1 {
@@ -3275,51 +3276,119 @@ slides > slide:not(.nobackground):before {
 /*}   */
 </style>
 
-<slide class=""><hgroup><h2>Abstract</h2></hgroup><article  id="abstract">
+<slide class=""><hgroup><h2>[[todo]]</h2></hgroup><article  id="todo">
 
+<ul>
+<li>different font for latex formulas?</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Abstract</h2></hgroup><article  id="abstract">
+
+<p>This piece of work investigates the influences of weather on bike rentals. …[[todo]]</p>
+
+<blockquote>
 <p>Summarize your questions and findings in 1 brief paragraph (4-6 sentences max). Your abstract needs to include: what dataset, what question, what method was used, and findings.</p>
+</blockquote>
 
 </article></slide><slide class=""><hgroup><h2>Motivation</h2></hgroup><article  id="motivation">
 
 <p>Describe the problem you want to solve with the data. It may relate closely with your research question, but your goal here is to make your audience care about the project/problem you are trying to solve. You need to articulate the problem you are exploring and why (and for whom) insight would be valuable.</p>
 
-</article></slide><slide class=""><hgroup><h2>Dataset(s)</h2></hgroup><article  id="datasets">
+</article></slide><slide class=""><hgroup><h2>Dataset(s)</h2></hgroup><article  class="smaller" id="datasets">
 
+<p>Two datasets were used.</p>
+
+<p>Bike sharing data:</p>
+
+<ul>
+<li>BIXI Montreal public bicycle sharing system, North America’s first large-scale bike sharing system</li>
+<li>Available via kaggle from <a href='https://www.kaggle.com/aubertsigouin/biximtl/home' title=''>https://www.kaggle.com/aubertsigouin/biximtl/home</a></li>
+<li>For years 2014 to 2017</li>
+<li>Contains individual records of bike trips: timestamp and station code for start and end of trip, duration</li>
+<li>\(n = 14598961\) records (individual bike trips)</li>
+<li>Station codes, names, and position (latitude, longitude) available in separate files, but only of secondary interest for this analysis</li>
+</ul>
+
+<p>Weather data from the Canadian government:</p>
+
+<ul>
+<li><a href='http://climate.weather.gc.ca/historical_data/search_historic_data_e.html' title=''>http://climate.weather.gc.ca/historical_data/search_historic_data_e.html</a></li>
+<li>API for bulk data download: <a href='http://climate.weather.gc.ca/climate_data/bulk_data_e.html' title=''>http://climate.weather.gc.ca/climate_data/bulk_data_e.html</a></li>
+<li>Data can be downloaded per weather station per month and contains hourly measurements of different metrics (e.g., timestamp, temperature, relative humidity, atmospheric pressure, wind speed; different measures available for different stations)</li>
+<li>\(n = 35064\) hourly weather records in total (between 672 and 744 per monthly file)</li>
+<li>List of available weather stations: [[?]]</li>
+</ul>
+
+<blockquote>
 <p>Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).</p>
+</blockquote>
 
 </article></slide><slide class=""><hgroup><h2>Data Preparation and Cleaning</h2></hgroup><article  id="data-preparation-and-cleaning">
 
-<p>At a high-level, what did you need to do to prepare the data for analysis? Describe what problems, if any, did you encounter with the dataset?</p>
+<ul>
+<li>First, data download was performed manually for the bike share data from kaggle (as only available after login), and via a Python script for the weather data (bulk download).</li>
+<li>Next, the data was loaded and contatenated into a pandas <code>DataFrame</code> each for individual bike rides and hourly weather data.</li>
+<li>The next step was calculating the variable of interest: Hourly bike rides. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.</li>
+<li>Then, the weather data was joined to the hourly bike ride data, using the common timestamp.</li>
+<li>One feature (wind chill) was dropped, as it had too many missing values (77.9% missing).</li>
+<li>Finally, addtional features were added for the analysis: hour of the day (0-23), and day of the week (0-6, zero corresponding to Monday, six corresponding to Sunday).</li>
+<li>For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, 1284 rows (0.04%) of the original data were dropped.</li>
+<li>The remaining rows were split into training set (90% of the data \(n = 26168\) rows) and testing set (the remaining 10%, \(n = 2908\)).</li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Research Question(s)</h2></hgroup><article  id="research-questions">
 
-<p>What is your research question you aim to answer using the dataset? Be sure the research question is well defined (see project description for details).</p>
+<p>The research questions that I wanted to answer with my analysis were:</p>
+
+<ul>
+<li>To what extent do the number of bike rides depend on the current weather conditions? That is, how well can the number of bike rides be predicted from weather data (and time of year, time of day)?</li>
+<li>What are the most important factors that influence the number of bike rides?</li>
+<li>How do these factors influence the number of bike rides?</li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Methods</h2></hgroup><article  id="methods">
+
+<p>First, some data exploration was performed, in order to get to know the data and to find out how the number of hourly bike trips is distributed across the investigated time span. In order to find out how well the number of bike rides can be predicted from the data, different machine learning models were fitted to the data.</p>
 
 <p>What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.</p>
 
 </article></slide><slide class=""><hgroup><h2>Findings</h2></hgroup><article  id="findings">
 
-<p>Feel free to replicate this slide to show multiple findings</p>
+<p>Findings Outline:</p>
 
-<p>Present your findings. Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience. You need not come to a definitive conclusion, but you need to say how your findings relate back to your research question.</p>
+<ul>
+<li>Data Exploration: Mean as baseline model?</li>
+<li>Correlation map?</li>
+<li>Model and Model Quality (+ pic predicted vs. actual), MAE, r^2</li>
+<li>Important variables</li>
+<li>PDP for important variables</li>
+<li>Interaction Plots for important variables</li>
+</ul>
+
+<blockquote>
+<p>Feel free to replicate this slide to show multiple findings Present your findings. Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience. You need not come to a definitive conclusion, but you need to say how your findings relate back to your research question.</p>
+</blockquote>
 
 </article></slide><slide class=""><hgroup><h2>Limitations</h2></hgroup><article  id="limitations">
-
-<p>If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures. Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).</p>
-
-<p>Brainstorming:</p>
 
 <ul>
 <li>Results only valid for cities with roughly the same climate.</li>
 <li>Bike rides might be influenced by weather <em>predictions</em> for a given day, not only by the actual weather.</li>
 <li>Precipitation (rain, snow) might also be a very good predictor; unfortunately, this was not easily available for the given weather station.</li>
+<li>Maybe have slightly overfitted the training data, but still a good result (MAE).</li>
+<li>Missing values: ignored / imputed?</li>
+<li>Using time and month also, or only weather data?</li>
 </ul>
+
+<blockquote>
+<p>If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures. Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).</p>
+</blockquote>
 
 </article></slide><slide class=""><hgroup><h2>Conclusions</h2></hgroup><article  id="conclusions">
 
+<blockquote>
 <p>Report your overall conclusions, preferably a conclusion per research question</p>
+</blockquote>
 
 </article></slide><slide class=""><hgroup><h2>Acknowledgements</h2></hgroup><article  id="acknowledgements">
 

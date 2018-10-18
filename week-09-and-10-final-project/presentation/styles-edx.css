@@ -8,6 +8,7 @@
 /* standard presentation font (when using smaller: true ?) */
 article {
     font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-size: 17pt;
 }
 
 /* header colors */

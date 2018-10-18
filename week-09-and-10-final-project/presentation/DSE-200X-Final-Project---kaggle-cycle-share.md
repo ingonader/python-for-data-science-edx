@@ -110,43 +110,108 @@ slides > slide:not(.nobackground):before {
 
 
 
+
+## [[todo]]
+
+* different font for latex formulas?
+
 ## Abstract
 
-Summarize your questions and findings in 1 brief paragraph (4-6 sentences max). Your abstract needs to include: what dataset, what question, what method was used, and findings.
+This piece of work investigates the influences of weather on bike rentals.
+...[[todo]]
+
+> Summarize your questions and findings in 1 brief paragraph (4-6 sentences max). Your abstract needs to include: what dataset, what question, what method was used, and findings.
  
 ## Motivation
 Describe the problem you want to solve with the data. It may relate closely with your research question, but your goal here is to make your audience care about the project/problem you are trying to solve. You need to articulate the problem you are exploring and why (and for whom) insight would be valuable.
  
-## Dataset(s)
-Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).
+## Dataset(s) {.smaller}
+
+Two datasets were used.
+
+Bike sharing data:
+
+* BIXI Montreal public bicycle sharing system, North America's first large-scale bike sharing system
+* Available via kaggle from [https://www.kaggle.com/aubertsigouin/biximtl/home](https://www.kaggle.com/aubertsigouin/biximtl/home)
+* For years 2014 to 2017
+* Contains individual records of bike trips: timestamp and station code for start and end of trip, duration
+* $n = 14598961$ records (individual bike trips)
+* Station codes, names, and position (latitude, longitude) available in separate files, but only of secondary interest for this analysis
+
+Weather data from the Canadian government:
+
+* [http://climate.weather.gc.ca/historical_data/search_historic_data_e.html](http://climate.weather.gc.ca/historical_data/search_historic_data_e.html)
+* API for bulk data download: [http://climate.weather.gc.ca/climate_data/bulk_data_e.html](http://climate.weather.gc.ca/climate_data/bulk_data_e.html)
+* Data can be downloaded per weather station per month and contains hourly measurements of different metrics (e.g., timestamp, temperature, relative humidity, atmospheric pressure, wind speed; different measures available for different stations)
+* $n = 35064$ hourly weather records in total (between 672 and 744 per monthly file)
+* List of available weather stations: [[?]]
+
+
+> Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).
  
 ## Data Preparation and Cleaning
-At a high-level, what did you need to do to prepare the data for analysis? Describe what problems, if any, did you encounter with the dataset?
- 
-## Research Question(s)
-What is your research question you aim to answer using the dataset? Be sure the research question is well defined (see project description for details).
- 
-## Methods
-What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.
- 
-## Findings
-Feel free to replicate this slide to show multiple findings
 
-Present your findings. Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience.
+* First, data download was performed manually for the bike share data from kaggle (as only available after login), and via a Python script for the weather data (bulk download).
+* Next, the data was loaded and contatenated into a pandas `DataFrame` each for individual bike rides and hourly weather data.
+* The next step was calculating the variable of interest: Hourly bike rides. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.
+* Then, the weather data was joined to the hourly bike ride data, using the common timestamp.
+* One feature (wind chill) was dropped, as it had too many missing values (77.9% missing).
+* Finally, addtional features were added for the analysis: hour of the day (0-23), and day of the week (0-6, zero corresponding to Monday, six corresponding to Sunday).
+* For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, 1284 rows (0.04%) of the original data were dropped.
+* The remaining rows were split into training set (90% of the data $n = 26168$ rows) and testing set (the remaining 10%, $n = 2908$).
+
+
+## Research Question(s)
+
+The research questions that I wanted to answer with my analysis were:
+
+* To what extent do the number of bike rides depend on the current weather conditions? That is, how well can the number of bike rides be predicted from weather data (and time of year, time of day)?
+* What are the most important factors that influence the number of bike rides?
+* How do these factors influence the number of bike rides?
+
+
+## Methods
+
+First, some data exploration was performed, in order to get to know the data 
+and to find out how the number of hourly bike trips is distributed across the 
+investigated time span.
+In order to find out how well the number of bike rides can be predicted from the data, different machine learning models were fitted to the data.
+
+What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.
+
+
+## Findings
+
+Findings Outline:
+
+* Data Exploration: Mean as baseline model?
+* Correlation map?
+* Model and Model Quality (+ pic predicted vs. actual), MAE, r^2 
+* Important variables
+* PDP for important variables
+* Interaction Plots for important variables
+
+>Feel free to replicate this slide to show multiple findings
+>Present your findings. Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience.
 You need not come to a definitive conclusion, but you need to say how your findings relate back to your research question.
+
+
  
 ## Limitations
-If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures.
-Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).
-
-Brainstorming: 
 
 * Results only valid for cities with roughly the same climate.
 * Bike rides might be influenced by weather *predictions* for a given day, not only by the actual weather.
 * Precipitation (rain, snow) might also be a very good predictor; unfortunately, this was not easily available for the given weather station.
- 
+* Maybe have slightly overfitted the training data, but still a good result (MAE).
+* Missing values: ignored / imputed?
+* Using time and month also, or only weather data?
+
+> If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures.
+> Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).
+
 ## Conclusions
-Report your overall conclusions, preferably a conclusion per research question
+
+> Report your overall conclusions, preferably a conclusion per research question
  
 ## Acknowledgements
 Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.
