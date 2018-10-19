@@ -22,13 +22,14 @@ from itertools import chain ## for flattening lists of lists
 from sklearn.externals import joblib
 
 ## select file and define prefix (for plot output files):
-#filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2
-#filename_model = 'model_random_forest_interactions.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2
-filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2
-# filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gbx_'; n_jobs = -2
-#filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1
-#filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1
-#filename_model = 'model_gradient_boosting_imputed.pkl'; filename_out_prefix = 'mod_gbimp_'; n_jobs = -2
+#filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2; comment_str = ""
+#filename_model = 'model_random_forest_interactions.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2; comment_str = ""
+filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2; comment_str = ""
+# filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gbx_'; n_jobs = -2; comment_str = ""
+#filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1; comment_str = ""
+#filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1; comment_str = ""
+#filename_model = 'model_gradient_boosting_imputed.pkl'; filename_out_prefix = 'mod_gbimp_'; n_jobs = -2; comment_str = ""
+#filename_model = 'model_gradient_boosting_weather_only_with_dewpoint.pkl'; filename_out_prefix = 'mod_gbwowdp_'; n_jobs = -2; comment_str = "Including only weather data, but now with dewpoint"
 
 
 ## load model:
@@ -411,7 +412,7 @@ print(p)
 
 ## add comment to model or model run:
 this_perf_metrics = {
-    'comment' : ""
+    'comment' : comment_str
 }
 dat_perf_metrics.update(this_perf_metrics)
 #pd.DataFrame(dat_perf_metrics, index = [0])
@@ -428,8 +429,6 @@ else:
 dat_model_runs = pd.concat([dat_model_runs,
                             pd.DataFrame(dat_perf_metrics, index = [0])],
                           sort = True)
-dat_model_runs
-
 ## sort columns by order of dict (others at the end):
 colnames_dict = list(dat_perf_metrics.keys())
 colnames_notindict = list(set(dat_model_runs.columns) - set(colnames_dict))
@@ -438,6 +437,8 @@ colnames_ordered = list(chain(*colnames_ordered)) ## flatten
 
 ## reorder columns:
 dat_model_runs = dat_model_runs[colnames_dict]
+dat_model_runs
+
 
 ## save runs data:
 dat_model_runs.to_csv(os.path.join(path_out, filename_model_runs), 
