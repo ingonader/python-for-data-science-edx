@@ -16,21 +16,36 @@ from itertools import chain ## for flattening lists of lists
 
 
 ## ========================================================================= ##
-## load model from disk
+## select model to run
 ## ========================================================================= ##
 
 from sklearn.externals import joblib
 
 ## select file and define prefix (for plot output files):
-#filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2; comment_str = ""
-#filename_model = 'model_random_forest_interactions.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2; comment_str = ""
+
+#filename_model = 'model_random_forest.pkl'; filename_out_prefix = 'mod_rf_'; n_jobs = -2; comment_str = "rerun for performance documentation purposes only"
+
+#filename_model = 'model_random_forest_interactions.pkl'; filename_out_prefix = 'mod_rfx_'; n_jobs = -2; comment_str = "rerun for performance documentation purposes only"
+
 filename_model = 'model_gradient_boosting.pkl'; filename_out_prefix = 'mod_gb_'; n_jobs = -2; comment_str = ""
-# filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gbx_'; n_jobs = -2; comment_str = ""
-#filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1; comment_str = ""
+
+#filename_model = 'model_gradient_boosting_interactions.pkl'; filename_out_prefix = 'mod_gbx_'; n_jobs = -2; comment_str = ""
+
+#filename_model = 'model_xgb.pkl'; filename_out_prefix = 'mod_xgb_'; n_jobs = 1; comment_str = "rerun for performance documentation purposes only"
+
 #filename_model = 'model_nonzero_gradient_boosting.pkl'; filename_out_prefix = 'mod_nz_gb_'; n_jobs = 1; comment_str = ""
+
 #filename_model = 'model_gradient_boosting_imputed.pkl'; filename_out_prefix = 'mod_gbimp_'; n_jobs = -2; comment_str = ""
+
 #filename_model = 'model_gradient_boosting_weather_only_with_dewpoint.pkl'; filename_out_prefix = 'mod_gbwowdp_'; n_jobs = -2; comment_str = "Including only weather data, but now with dewpoint"
 
+#filename_model = 'model_gradient_boosting_with_dewpoint.pkl'; filename_out_prefix = 'mod_gbwdp_'; n_jobs = -2; comment_str = "Including time and weather data, but now with dewpoint"
+
+
+
+## ========================================================================= ##
+## load model from disk
+## ========================================================================= ##
 
 ## load model:
 mod_this = joblib.load(os.path.join(path_out, filename_model))
@@ -78,9 +93,9 @@ this_perf_metrics = {
 dat_perf_metrics.update(this_perf_metrics)
 pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
 
-## ------------------------------------------------------------------------- ##
+## ========================================================================= ##
 ## variable importance
-## ------------------------------------------------------------------------- ##
+## ========================================================================= ##
 
 ## variable importance:
 var_imp = pd.DataFrame(
@@ -121,9 +136,83 @@ ggsave(plot = p,
        filename = os.path.join(path_out, filename_out_prefix + filename_this),
        height = 6, width = 6, unit = 'in', dpi = 300)
 
-## ------------------------------------------------------------------------- ##
+## ========================================================================= ##
+## plot data with predictions
+## ========================================================================= ##
+
+## make predictions for complete dataset:
+dat_y['pred'] = mod_this.predict(dat_x)
+dat_y.head()
+
+## add to original dataset:
+dat_hr_all = pd.merge(dat_hr_all, 
+                      dat_y[['pred']], 
+                      how = 'left',
+                      left_index = True,
+                      right_index = True)
+
+## plot predictions vs. real value of target:
+p = ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + geom_point(alpha = .1)
+print(p)
+filename_this = 'plot-pred-vs-true.jpg'
+ggsave(plot = p, 
+       filename = os.path.join(path_out, filename_out_prefix + filename_this),
+       height = 6, width = 6, unit = 'in', dpi = 300)
+
+## line plot of number of trips per hour:
+p = ggplot(dat_hr_all, aes(y = 'trip_cnt', x = 'start_date')) + \
+    geom_point(alpha = .05, color = 'black') + \
+    geom_point(aes(y = 'pred'), alpha = .05, color = 'orange') + \
+    geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
+                color = 'red', se = False)
+print(p)
+## not worth saving -- doesn't show anything of interest.
+## (except maybe some missing values in predictions in the spring of 2014... why?)
+
+
+## ========================================================================= ##
+## save performance metrics to disk
+## ========================================================================= ##
+
+## add comment to model or model run:
+this_perf_metrics = {
+    'comment' : comment_str
+}
+dat_perf_metrics.update(this_perf_metrics)
+#pd.DataFrame(dat_perf_metrics, index = [0])
+pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
+
+filename_model_runs = "model_runs.csv"
+## check if file exists:
+if os.path.isfile(os.path.join(path_out, filename_model_runs)):
+    dat_model_runs = pd.read_csv(os.path.join(path_out, filename_model_runs))
+else:
+    dat_model_runs = pd.DataFrame()
+
+## append current runs data:
+dat_model_runs = pd.concat([dat_model_runs,
+                            pd.DataFrame(dat_perf_metrics, index = [0])],
+                          sort = True)
+## sort columns by order of dict (others at the end):
+colnames_dict = list(dat_perf_metrics.keys())
+colnames_notindict = list(set(dat_model_runs.columns) - set(colnames_dict))
+colnames_ordered = [colnames_dict, colnames_notindict]
+colnames_ordered = list(chain(*colnames_ordered)) ## flatten
+
+## reorder columns:
+dat_model_runs = dat_model_runs[colnames_dict]
+dat_model_runs
+
+
+## save runs data:
+dat_model_runs.to_csv(os.path.join(path_out, filename_model_runs), 
+                      quoting = csv.QUOTE_NONNUMERIC,
+                      index = False)
+
+    
+## ========================================================================= ##
 ## partial dependence plots: main effects
-## ------------------------------------------------------------------------- ##
+## ========================================================================= ##
 
 from pdpbox import pdp, get_dataset, info_plots
 
@@ -260,9 +349,9 @@ for wch_feature in pdp_plot_features:
     save_pdp_or_ice_plot(fig, feature = wch_feature, filename_stump = "ice-main-standard---")
 
 
-## ------------------------------------------------------------------------- ##
+## ========================================================================= ##
 ## partial dependence plots: interactions
-## ------------------------------------------------------------------------- ##
+## ========================================================================= ##
 
 plot_params_pdp_int_default = {
             # plot title and subtitle
@@ -372,78 +461,5 @@ fig, axes, summary_df = info_plots.target_plot(
 
 
 
-## ========================================================================= ##
-## plot data with predictions
-## ========================================================================= ##
 
-## make predictions for complete dataset:
-dat_y['pred'] = mod_this.predict(dat_x)
-dat_y.head()
-
-## add to original dataset:
-dat_hr_all = pd.merge(dat_hr_all, 
-                      dat_y[['pred']], 
-                      how = 'left',
-                      left_index = True,
-                      right_index = True)
-
-## plot predictions vs. real value of target:
-p = ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + geom_point(alpha = .1)
-print(p)
-filename_this = 'plot-pred-vs-true.jpg'
-ggsave(plot = p, 
-       filename = os.path.join(path_out, filename_out_prefix + filename_this),
-       height = 6, width = 6, unit = 'in', dpi = 300)
-
-## line plot of number of trips per hour:
-p = ggplot(dat_hr_all, aes(y = 'trip_cnt', x = 'start_date')) + \
-    geom_point(alpha = .05, color = 'black') + \
-    geom_point(aes(y = 'pred'), alpha = .05, color = 'orange') + \
-    geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
-                color = 'red', se = False)
-print(p)
-## not worth saving -- doesn't show anything of interest.
-## (except maybe some missing values in predictions in the spring of 2014... why?)
-
-
-## ========================================================================= ##
-## save performance metrics to disk
-## ========================================================================= ##
-
-## add comment to model or model run:
-this_perf_metrics = {
-    'comment' : comment_str
-}
-dat_perf_metrics.update(this_perf_metrics)
-#pd.DataFrame(dat_perf_metrics, index = [0])
-pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
-
-filename_model_runs = "model_runs.csv"
-## check if file exists:
-if os.path.isfile(os.path.join(path_out, filename_model_runs)):
-    dat_model_runs = pd.read_csv(os.path.join(path_out, filename_model_runs))
-else:
-    dat_model_runs = pd.DataFrame()
-
-## append current runs data:
-dat_model_runs = pd.concat([dat_model_runs,
-                            pd.DataFrame(dat_perf_metrics, index = [0])],
-                          sort = True)
-## sort columns by order of dict (others at the end):
-colnames_dict = list(dat_perf_metrics.keys())
-colnames_notindict = list(set(dat_model_runs.columns) - set(colnames_dict))
-colnames_ordered = [colnames_dict, colnames_notindict]
-colnames_ordered = list(chain(*colnames_ordered)) ## flatten
-
-## reorder columns:
-dat_model_runs = dat_model_runs[colnames_dict]
-dat_model_runs
-
-
-## save runs data:
-dat_model_runs.to_csv(os.path.join(path_out, filename_model_runs), 
-                      quoting = csv.QUOTE_NONNUMERIC,
-                      index = False)
-
-    
 
