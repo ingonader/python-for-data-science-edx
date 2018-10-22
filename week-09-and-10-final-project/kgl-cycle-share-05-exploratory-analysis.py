@@ -142,11 +142,17 @@ ggplot(dat_trip_day[dat_trip_day['trip_cnt'] > 0],
 dat_trip_day[['trip_cnt']].describe()
 
 
+## define window for rolling mean and calculate:
+window = 14*24
+dat_trip_hr["trip_cnt_rollmean"] = dat_trip_hr[["trip_cnt"]]\
+    .rolling(window = window, center = False).\
+    mean()
+
 %matplotlib inline
 ## line plot of number of trips per hour:
 p = ggplot(dat_trip_hr, aes(y = 'trip_cnt', x = 'start_date')) + \
     geom_point(alpha = .05) + \
-    geom_smooth(method = 'mavg', method_args = {'window' : 14*24}, 
+    geom_smooth(method = 'mavg', method_args = {'window' : window}, 
                 color = 'red', se = False) + \
     labs(
         title = 'Number of bike trips from 2014 to 2017',
@@ -154,10 +160,16 @@ p = ggplot(dat_trip_hr, aes(y = 'trip_cnt', x = 'start_date')) + \
         y = 'Number of trips per hour'
     ) + \
     scale_x_date(date_labels = "%b\n%Y")
+    #geom_line(aes(y = 'trip_cnt_rollmean'), color = "lightgreen") + \
 print(p)
 ggsave(plot = p, filename = os.path.join(path_out, 'expl-trips-per-hour-2014-2017.jpg'), 
-       height = 6, width = 6, unit = 'in', dpi = 300)
+       height = 6, width = 6, unit = 'in', dpi = 150)
 
+
+## correlation and explained variance of rolling mean and actual trip count:
+rollmean_r = dat_trip_hr[["trip_cnt", "trip_cnt_rollmean"]].corr()
+rollmean_r2 = rollmean_r ** 2
+rollmean_r2
 
 ## line plot of number of trips per day:
 ggplot(dat_trip_day, aes(y = 'trip_cnt', x = 'start_date')) + \
