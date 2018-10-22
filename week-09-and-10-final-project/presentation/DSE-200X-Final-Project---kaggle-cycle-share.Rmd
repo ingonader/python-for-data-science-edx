@@ -54,13 +54,13 @@ output:
 ## ## two-column layout:
 ## ## ------------------------------------------- ##
 ## 
-## <div></div>                            <!-- needed, but don't put anything here -->
-## <div style="float: left; width: 50%;"> <!-- start of first column               -->
+## <div></div><!-- ------------------------------- needed, but don't put anything here -->
+## <div style="float: left; width: 50%;"><!-- ---- start of first column               -->
 ## Put col 1 markdown here
-## </div>                                 <!-- end of first column                 -->
-## <div style="float: left; width: 50%;"> <!-- start of second column              --> 
+## </div><!-- ------------------------------------ end of first column                 -->
+## <div style="float: left; width: 50%;"><!-- ---- start of second column              --> 
 ## Put col 2 markdown here
-## </div>                                 <!-- end of second column                -->
+## </div><!-- ------------------------------------ end of second column                -->
 ## 
 ## other possibilities (not as good):
 ## * In slide title line, use:
@@ -132,26 +132,40 @@ Describe the problem you want to solve with the data. It may relate closely with
 
 Two datasets were used.
 
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 50%;"><!-- ---- start of first column               -->
+
 Bike sharing data:
 
-* BIXI Montreal public bicycle sharing system, North America's first large-scale bike sharing system
+* BIXI Montreal public bicycle sharing system, North America's first 
+  large-scale bike sharing system
 * Available via kaggle from [https://www.kaggle.com/aubertsigouin/biximtl/home](https://www.kaggle.com/aubertsigouin/biximtl/home)
 * For years 2014 to 2017
-* Contains individual records of bike trips: timestamp and station code for start and end of trip, duration
+* Contains individual records of bike trips: timestamp and station code for 
+  start and end of trip, duration
 * $n = 14598961$ records (individual bike trips)
-* Station codes, names, and position (latitude, longitude) available in separate files, but only of secondary interest for this analysis
+* Station codes, names, and position (latitude, longitude) 
+  available in separate files, but only of secondary interest for this analysis
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 50%;"><!-- ---- start of second column              --> 
 
 Weather data from the Canadian government:
 
 * [http://climate.weather.gc.ca/historical_data/search_historic_data_e.html](http://climate.weather.gc.ca/historical_data/search_historic_data_e.html)
 * API for bulk data download: [http://climate.weather.gc.ca/climate_data/bulk_data_e.html](http://climate.weather.gc.ca/climate_data/bulk_data_e.html)
-* Data can be downloaded per weather station per month and contains hourly measurements of different metrics (e.g., timestamp, temperature, relative humidity, atmospheric pressure, wind speed; different measures available for different stations)
+* Data can be downloaded per weather station per month and contains 
+  hourly measurements of different metrics (e.g., timestamp, temperature, 
+  relative humidity, atmospheric pressure, wind speed; different measures 
+  available for different stations)
 * $n = 35064$ hourly weather records in total (between 672 and 744 per monthly file)
 * List of available weather stations: [[?]]
 
+</div><!-- ------------------------------------ end of second column                -->
 
 > Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).
- 
+
+
 ## Data Preparation and Cleaning
 
 * First, data download was performed manually for the bike share data from kaggle (as only available after login), and via a Python script for the weather data (bulk download).
@@ -163,6 +177,7 @@ Weather data from the Canadian government:
 * For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, 1284 rows (0.04%) of the original data were dropped.
 * The remaining rows were split into training set (90% of the data $n = 26168$ rows) and testing set (the remaining 10%, $n = 2908$).
 
+* [[?]] dewpoint feature?
 
 ## Research Question(s)
 
@@ -177,10 +192,53 @@ The research questions that I wanted to answer with my analysis were:
 
 First, some data exploration was performed, in order to get to know the data 
 and to find out how the number of hourly bike trips is distributed across the 
-investigated time span.
-In order to find out how well the number of bike rides can be predicted from the data, different machine learning models were fitted to the data.
+investigated time span. Also, the interrelation of features was investigated
+by means of a correlation heatmap.
 
-What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.
+In order to find out how well the number of bike rides can be predicted 
+from the data, different approaches were taken. As a baseline model, a rolling
+mean was calculated to find out how this very simple model can explain the data.
+
+Then, after splitting the data into 90% training and 10% test set, 
+different machine learning models were fitted to the data in order to predict 
+the hourly number of bike rides from the available data: Random forest regression, 
+and gradient boosting regression via `scikit-learn` and `xgboost`. The most 
+promising model, `scikit-learn`'s gradient boosting regression, was fitted
+via a randomized 4-fold cross-validation for indentifying the best hyperparameters.
+Variable importance was used to identify the most important influence factors,
+and partial dependence plots (PDP) and Individual Conditional Expectation (ICE)
+plots were used to visualize the influences of the important variables on the 
+number of bike trips.
+
+
+
+[[todo]]
+* Reference for scikit-learn GBR, Variable iMportance, pdp and ice plots
+
+
+> What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.
+
+
+## Findings: Data Exploration
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 70%;"><!-- ---- start of first column               -->
+
+To get a better understanding of the data, 
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 30%;"><!-- ---- start of second column              --> 
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
+knitr::include_graphics("img/expl-trips-per-hour-2014-2017.jpg")
+```
+```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
+knitr::include_graphics("img/expl-corr-heatmap.jpg")
+```
+
+</div><!-- ------------------------------------ end of second column                -->
+
+
 
 
 ## Findings
@@ -190,6 +248,7 @@ Findings Outline:
 * Data Exploration: Mean as baseline model?
 * Correlation map?
 * Model and Model Quality (+ pic predicted vs. actual), MAE, r^2 
+    * numerical features only, also categorical models tried (but not as good)
 * Important variables
 * PDP for important variables
 * Interaction Plots for important variables
