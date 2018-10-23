@@ -36,6 +36,11 @@ h1, h2, h3 {
     font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 }
 
+/* font for latex formulas: */
+/* .MathJax * { */
+/* font-size: 24px; */
+/*} */  /* does not work for font-family; use <script> in html document instead */
+
 /* overall style of code and results(not inline in text)*/
 pre {
     font-size: 16px;

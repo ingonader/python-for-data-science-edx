@@ -3126,6 +3126,10 @@ color: "black";
 font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 }
 
+
+
+ 
+
 pre {
 font-size: 16px;
 line-height: 20px;
@@ -3275,6 +3279,18 @@ slides > slide:not(.nobackground):before {
 /*}   */
 </style>
 
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  "HTML-CSS": { 
+      preferredFont: "Arial", 
+      availableFonts: [],
+      scale: 85
+      // styles: {".MathJax": {color: "#CCCCCC"}} 
+      }
+});
+</script>
+
 <slide class=""><hgroup><h2>[[todo]]</h2></hgroup><article  id="todo">
 
 <ul>
@@ -3310,7 +3326,7 @@ slides > slide:not(.nobackground):before {
 <ul>
 <li>BIXI Montreal public bicycle sharing system, North America’s first large-scale bike sharing system</li>
 <li>Available via kaggle from <a href='https://www.kaggle.com/aubertsigouin/biximtl/home' title=''>https://www.kaggle.com/aubertsigouin/biximtl/home</a></li>
-<li>For years 2014 to 2017</li>
+<li>For years \(2014\) to \(2017\)</li>
 <li>Contains individual records of bike trips: timestamp and station code for start and end of trip, duration</li>
 <li>\(n = 14598961\) records (individual bike trips)</li>
 <li>Station codes, names, and position (latitude, longitude) available in separate files, but only of secondary interest for this analysis</li>
@@ -3327,7 +3343,7 @@ slides > slide:not(.nobackground):before {
 <li><a href='http://climate.weather.gc.ca/historical_data/search_historic_data_e.html' title=''>http://climate.weather.gc.ca/historical_data/search_historic_data_e.html</a></li>
 <li>API for bulk data download: <a href='http://climate.weather.gc.ca/climate_data/bulk_data_e.html' title=''>http://climate.weather.gc.ca/climate_data/bulk_data_e.html</a></li>
 <li>Data can be downloaded per weather station per month and contains hourly measurements of different metrics (e.g., timestamp, temperature, relative humidity, atmospheric pressure, wind speed; different measures available for different stations)</li>
-<li>\(n = 35064\) hourly weather records in total (between 672 and 744 per monthly file)</li>
+<li>\(n = 35064\) hourly weather records in total (between \(672\) and \(744\) per monthly file)</li>
 <li>List of available weather stations: [[?]]</li>
 </ul></div>
 
@@ -3349,10 +3365,10 @@ slides > slide:not(.nobackground):before {
 <li>Next, the data was loaded and contatenated into a pandas <code>DataFrame</code> each for individual bike rides and hourly weather data.</li>
 <li>The next step was calculating the variable of interest: Hourly bike rides. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.</li>
 <li>Then, the weather data was joined to the hourly bike ride data, using the common timestamp.</li>
-<li>One feature (wind chill) was dropped, as it had too many missing values (77.9% missing).</li>
-<li>Finally, addtional features were added for the analysis: hour of the day (0-23), and day of the week (0-6, zero corresponding to Monday, six corresponding to Sunday).</li>
-<li>For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, 1284 rows (0.04%) of the original data were dropped.</li>
-<li><p>The remaining rows were split into training set (90% of the data \(n = 26168\) rows) and testing set (the remaining 10%, \(n = 2908\)).</p></li>
+<li>One feature (wind chill) was dropped, as it had too many missing values (\(77.9\%\) missing).</li>
+<li>Finally, addtional features were added for the analysis: hour of the day (\(0\)-\(23\)), and day of the week (\(0\)-\(6\), zero corresponding to Monday, six corresponding to Sunday).</li>
+<li>For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, \(1284\) rows (\(0.04\%\)) of the original data were dropped.</li>
+<li><p>The remaining rows were split into training set (\(90\%\) of the data \(n = 26168\) rows) and testing set (the remaining \(10\%\), \(n = 2908\)).</p></li>
 <li><p>[[?]] dewpoint feature?</p></li>
 </ul>
 
@@ -3372,13 +3388,7 @@ slides > slide:not(.nobackground):before {
 
 <p>In order to find out how well the number of bike rides can be predicted from the data, different approaches were taken. As a baseline model, a rolling mean was calculated to find out how this very simple model can explain the data.</p>
 
-<p>Then, after splitting the data into 90% training and 10% test set, different machine learning models were fitted to the data in order to predict the hourly number of bike rides from the available data: Random forest regression, and gradient boosting regression via <code>scikit-learn</code> and <code>xgboost</code>. The most promising model, <code>scikit-learn</code>’s gradient boosting regression, was fitted via a randomized 4-fold cross-validation for indentifying the best hyperparameters. Variable importance was used to identify the most important influence factors, and partial dependence plots (PDP) and Individual Conditional Expectation (ICE) plots were used to visualize the influences of the important variables on the number of bike trips.</p>
-
-<p>[[todo]] * Reference for scikit-learn GBR, Variable iMportance, pdp and ice plots</p>
-
-<blockquote>
-<p>What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.</p>
-</blockquote>
+<p>Then, after splitting the data into \(90\%\) training and \(10\%\) test set, different machine learning models were fitted to the data in order to predict the hourly number of bike rides from the available data: Random forest regression, and gradient boosting regression via <code>scikit-learn</code> and <code>xgboost</code>. The most promising model, <code>scikit-learn</code>’s gradient boosting regression, was fitted via a randomized \(4\)-fold cross-validation for indentifying the best hyperparameters. Variable importance was used to identify the most important influence factors, and <em>Partial Dependence Plots</em> (<em>PDP</em>) and <em>Individual Conditional Expectation</em> (<em>ICE</em>) plots <span class="cite">[1]</span> were used to visualize the influences of the important variables on the number of bike trips.</p>
 
 </article></slide><slide class=""><hgroup><h2>Findings: Data Exploration</h2></hgroup><article  id="findings-data-exploration">
 
@@ -3390,9 +3400,11 @@ slides > slide:not(.nobackground):before {
 <div style="float: left; width: 55%">
 <!-- ---- start of first column               -->
 
-<p>To get a better understanding of the data, the number of hourly bike trips was visualized for the time span between 2014 and 2017.</p>
+<p>To get a better understanding of the data, the number of hourly bike trips was visualized for the time span between \(2014\) and \(2017\).</p>
 
-<p>The moving average that is shown in the plot (red line) can be interpreted as a <em>baseline model</em>, i.e., the simplest possible model to describe the hourly number of bike rides. This baseline model explains 38.8% of the variance \((r^2 = 0.388)\) and has a mean absolute error of 316.2, which means that on average, the &ldquo;prediction&rdquo; for the number of hourly bike rides is wrong by this many bike rides.</p></div>
+<p>The moving average that is shown in the plot (red line) can be interpreted as a <em>baseline model</em>, i.e., the simplest possible model to describe the hourly number of bike rides.</p>
+
+<p>This baseline model explains \(38.8\%\) of the variance \((r^2 = 0.388)\) and has a mean absolute error of \(MAE = 316.2\), which means that on average, the &ldquo;prediction&rdquo; for the number of hourly bike rides is wrong by this many bike rides. This includes also winter months with no rides. For a more realistic estimation of model quality, these numbers drop to \(r^2 = .079\) and \(MAE = 510.7\) when only considering the time frame from May to September.</p></div>
 
 <!-- ------------------------------------ end of first column                 -->
 
@@ -3409,7 +3421,7 @@ slides > slide:not(.nobackground):before {
 
 <p style="font-size: 12px">
 
-<strong>Figure</strong>: Number of hourly rides from 2014 to 2017. Each dot represents the number of trips in one specifc hour. Red line represents a moving average using a window of 14 days.
+<strong>Figure</strong>: Number of hourly rides from \(2014\) to \(2017\). Each dot represents the number of trips in one specifc hour. Red line represents a moving average using a window of \(14\) days.
 
 <p>
 
@@ -3417,7 +3429,7 @@ slides > slide:not(.nobackground):before {
 
 <!-- ------------------------------------ end of second column                -->
 
-</article></slide><slide class=""><hgroup><h2>Findings: Exploration</h2></hgroup><article  id="findings-exploration">
+</article></slide><slide class=""><hgroup><h2>Findings: Data Exploration</h2></hgroup><article  id="findings-data-exploration-1">
 
 <div>
 </div>
@@ -3427,7 +3439,9 @@ slides > slide:not(.nobackground):before {
 <div style="float: left; width: 55%">
 <!-- ---- start of first column               -->
 
-<p>To visualize the relations between the available features, a correlation heatmap is shown on the right. The features are only slightly correlated, with the only exception being temperature and dew point that show an almost perfect (linear) relationship \((r = .93)\).</p></div>
+<p>To visualize the relations between the available features, a correlation heatmap is shown on the right. The features are only slightly correlated, with the only exception being temperature and dew point that show an almost perfect (linear) relationship \((r = .93)\).</p>
+
+<p>To avoid problems resulting from this multicollinearity, only temperature was used as a predictor, and dew point was dropped. Despite the fact that that gradient boosting is less influenced by multicollinearity, it might still influence calculations of variable importance <span class="cite">[2,3]</span>.</p></div>
 
 <!-- ------------------------------------ end of first column                 -->
 
@@ -3453,6 +3467,8 @@ slides > slide:not(.nobackground):before {
 <!-- ------------------------------------ end of second column                -->
 
 </article></slide><slide class=""><hgroup><h2>Findings</h2></hgroup><article  id="findings">
+
+</article></slide><slide class=""><hgroup><h2>Findings</h2></hgroup><article  id="findings-1">
 
 <p>Findings Outline:</p>
 
@@ -3498,9 +3514,21 @@ slides > slide:not(.nobackground):before {
 
 <p>Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.</p>
 
-</article></slide><slide class=""><hgroup><h2>References</h2></hgroup><article  id="references">
+</article></slide><slide class=""><hgroup><h2>References</h2></hgroup><article  class="smaller" id="references">
 
-<p>If applicable, report any references you used in your work. For example, you may have used a research paper from X to help guide your analysis. You should cite that work here. If you did all the work on your own, please state this.</p></article></slide>
+<blockquote>
+<p>If applicable, report any references you used in your work. For example, you may have used a research paper from X to help guide your analysis. You should cite that work here. If you did all the work on your own, please state this.</p>
+</blockquote>
+
+<div class="references" id="refs">
+<div id="ref-ice_plots">
+<p>1. Goldstein A, Kapelner A, Bleich J, Pitkin E. Peeking Inside the Black Box: Visualizing Statistical Learning with Plots of Individual Conditional Expectation [Internet]. 2014. Available: <a href='https://arxiv.org/pdf/1309.6392.pdf' title=''>https://arxiv.org/pdf/1309.6392.pdf</a></p></div>
+
+<div id="ref-rf_or_gbm">
+<p>2. Wheatley J. Random forest or gradient boosting? [Internet]. 2014. Available: <a href='http://joewheatley.net/random-forest-or-gradient-boosting/' title=''>http://joewheatley.net/random-forest-or-gradient-boosting/</a></p></div>
+
+<div id="ref-rf_imp">
+<p>3. Parr T, Turgutlu K, Csiszar C, Howard J. Beware Default Random Forest Importances [Internet]. 2018. Available: <a href='http://explained.ai/rf-importance/index.html' title=''>http://explained.ai/rf-importance/index.html</a></p></div></div></article></slide>
 
 
   <slide class="backdrop"></slide>

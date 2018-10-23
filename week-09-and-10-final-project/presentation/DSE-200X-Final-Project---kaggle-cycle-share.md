@@ -12,6 +12,47 @@ output:
     keep_md: true
     #smaller: true  ## only works without "---" slide breaks (use ##)
     slide_level: 2
+csl: plos-one.csl
+references:
+- id: rf_imp
+  title: Beware Default Random Forest Importances
+  author:
+  - family: Parr
+    given: Terence
+  - family: Turgutlu
+    given: Kerem
+  - family: Csiszar
+    given: Christopher
+  - family: Howard
+    given: Jeremy
+  URL: 'http://explained.ai/rf-importance/index.html'
+  issued:
+    year: 2018
+    month: 3
+- id: rf_or_gbm
+  title: Random forest or gradient boosting?
+  author: 
+  - family: Wheatley
+    given: Joe
+  URL: 'http://joewheatley.net/random-forest-or-gradient-boosting/' 
+  issued:
+    year: 2014
+    month: 2
+- id: ice_plots
+  title: "Peeking Inside the Black Box: Visualizing Statistical Learning with Plots of Individual Conditional Expectation"
+  author:
+    - family: Goldstein
+      given: Alex
+    - family: Kapelner
+      given: Adam
+    - family: Bleich
+      given: Justin
+    - family: Pitkin
+      given: Emil
+  URL: 'https://arxiv.org/pdf/1309.6392.pdf'
+  issued:
+    year: 2014
+    month: 3
 ## Comments and Instructions
 ##
 ## ## ------------------------------------------- ##
@@ -113,6 +154,19 @@ slides > slide:not(.nobackground):before {
 /*}   */
 </style>
 
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  "HTML-CSS": { 
+      preferredFont: "Arial", 
+      availableFonts: [],
+      scale: 85
+      // styles: {".MathJax": {color: "#CCCCCC"}} 
+      }
+});
+</script>
+
+
 
 
 
@@ -142,7 +196,7 @@ Bike sharing data:
 * BIXI Montreal public bicycle sharing system, North America's first 
   large-scale bike sharing system
 * Available via kaggle from [https://www.kaggle.com/aubertsigouin/biximtl/home](https://www.kaggle.com/aubertsigouin/biximtl/home)
-* For years 2014 to 2017
+* For years $2014$ to $2017$
 * Contains individual records of bike trips: timestamp and station code for 
   start and end of trip, duration
 * $n = 14598961$ records (individual bike trips)
@@ -160,7 +214,7 @@ Weather data from the Canadian government:
   hourly measurements of different metrics (e.g., timestamp, temperature, 
   relative humidity, atmospheric pressure, wind speed; different measures 
   available for different stations)
-* $n = 35064$ hourly weather records in total (between 672 and 744 per monthly file)
+* $n = 35064$ hourly weather records in total (between $672$ and $744$ per monthly file)
 * List of available weather stations: [[?]]
 
 </div><!-- ------------------------------------ end of second column                -->
@@ -175,10 +229,10 @@ Weather data from the Canadian government:
 * Next, the data was loaded and contatenated into a pandas `DataFrame` each for individual bike rides and hourly weather data.
 * The next step was calculating the variable of interest: Hourly bike rides. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.
 * Then, the weather data was joined to the hourly bike ride data, using the common timestamp.
-* One feature (wind chill) was dropped, as it had too many missing values (77.9% missing).
-* Finally, addtional features were added for the analysis: hour of the day (0-23), and day of the week (0-6, zero corresponding to Monday, six corresponding to Sunday).
-* For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, 1284 rows (0.04%) of the original data were dropped.
-* The remaining rows were split into training set (90% of the data $n = 26168$ rows) and testing set (the remaining 10%, $n = 2908$).
+* One feature (wind chill) was dropped, as it had too many missing values ($77.9\%$ missing).
+* Finally, addtional features were added for the analysis: hour of the day ($0$-$23$), and day of the week ($0$-$6$, zero corresponding to Monday, six corresponding to Sunday).
+* For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, $1284$ rows ($0.04\%$) of the original data were dropped.
+* The remaining rows were split into training set ($90\%$ of the data $n = 26168$ rows) and testing set (the remaining $10\%$, $n = 2908$).
 
 * [[?]] dewpoint feature?
 
@@ -202,24 +256,17 @@ In order to find out how well the number of bike rides can be predicted
 from the data, different approaches were taken. As a baseline model, a rolling
 mean was calculated to find out how this very simple model can explain the data.
 
-Then, after splitting the data into 90% training and 10% test set, 
+Then, after splitting the data into $90\%$ training and $10\%$ test set, 
 different machine learning models were fitted to the data in order to predict 
 the hourly number of bike rides from the available data: Random forest regression, 
 and gradient boosting regression via `scikit-learn` and `xgboost`. The most 
 promising model, `scikit-learn`'s gradient boosting regression, was fitted
-via a randomized 4-fold cross-validation for indentifying the best hyperparameters.
+via a randomized $4$-fold cross-validation for indentifying the best hyperparameters.
 Variable importance was used to identify the most important influence factors,
-and partial dependence plots (PDP) and Individual Conditional Expectation (ICE)
-plots were used to visualize the influences of the important variables on the 
+and *Partial Dependence Plots* (*PDP*) and *Individual Conditional Expectation* (*ICE*)
+plots [@ice_plots] were used to visualize the influences of the important variables on the 
 number of bike trips.
 
-
-
-[[todo]]
-* Reference for scikit-learn GBR, Variable iMportance, pdp and ice plots
-
-
-> What methods did you use to analyze the data and why are they appropriate? Be sure to adequately, but briefly, describe your methods.
 
 
 ## Findings: Data Exploration
@@ -228,29 +275,33 @@ number of bike trips.
 <div style="float: left; width: 55%"><!-- ---- start of first column               -->
 
 To get a better understanding of the data, the number of hourly bike trips
-was visualized for the time span between 2014 and 2017. 
+was visualized for the time span between $2014$ and $2017$. 
 
-The moving average
-that is shown in the plot (red line) can be interpreted as a *baseline model*, i.e., 
+The moving average that is shown in the plot (red line) can 
+be interpreted as a *baseline model*, i.e., 
 the simplest possible model to describe the hourly number of bike rides. 
-This baseline model explains 38.8% of the variance $(r^2 = 0.388)$ and has
-a mean absolute error of 316.2, which means that on average, the "prediction" 
-for the number of hourly bike rides is wrong by this many bike rides.
+
+This baseline model explains $38.8\%$ of the variance $(r^2 = 0.388)$ and has
+a mean absolute error of $MAE = 316.2$, which means that on average, the "prediction" 
+for the number of hourly bike rides is wrong by this many bike rides. 
+This includes also winter months with no rides. For a more realistic estimation
+of model quality, these numbers drop to $r^2 = .079$ and $MAE = 510.7$ when only 
+considering the time frame from May to September.
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 1%"><br></div><!-- spacing column ----------------- -->
 <div style="float: left; width: 44%; margin-top: -3%"><!-- ---- start of second column              --> 
 <img src="img/expl-trips-per-hour-2014-2017.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 <p style="font-size: 12px">
-**Figure**: Number of hourly rides from 2014 to 2017. Each dot represents the 
+**Figure**: Number of hourly rides from $2014$ to $2017$. Each dot represents the 
 number of trips in one specifc hour. Red line represents a 
-moving average using a window of 14 days.
+moving average using a window of $14$ days.
 <p>
 
 </div><!-- ------------------------------------ end of second column                -->
 
 
-## Findings: Exploration
+## Findings: Data Exploration
 
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 55%"><!-- ---- start of first column               -->
@@ -259,6 +310,12 @@ To visualize the relations between the available features,
 a correlation heatmap is shown on the right. The features are only
 slightly correlated, with the only exception being temperature and dew point
 that show an almost perfect (linear) relationship $(r = .93)$.
+
+To avoid problems resulting from this multicollinearity, 
+only temperature was used as a predictor,
+and dew point was dropped. Despite the fact that that gradient boosting
+is less influenced by multicollinearity, 
+it might still influence calculations of variable importance  [@rf_or_gbm; @rf_imp].
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 1%"><br></div><!-- spacing column ----------------- -->
@@ -269,6 +326,9 @@ that show an almost perfect (linear) relationship $(r = .93)$.
 <p>
 
 </div><!-- ------------------------------------ end of second column                -->
+
+
+## Findings
 
 
 
@@ -310,6 +370,7 @@ You need not come to a definitive conclusion, but you need to say how your findi
 ## Acknowledgements
 Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.
  
-## References
-If applicable, report any references you used in your work. For example, you may have used a research paper from X to help guide your analysis. You should cite that work here. If you did all the work on your own, please state this.
+## References {.smaller}
+
+> If applicable, report any references you used in your work. For example, you may have used a research paper from X to help guide your analysis. You should cite that work here. If you did all the work on your own, please state this.
  
