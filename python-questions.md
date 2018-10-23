@@ -6,12 +6,12 @@
 
 * How to run / execute an analysis with multiple source files? In Juypterlab?
   * Which command to use for running file? How to execute a python script (similar to R's `source()`, with magic commands `%` in the script?)
-  * Easy way to execute different files in the same console?
+  * Easy way to execute different files in the same console in Jupyterlab?
 
 * JupyterLab / IDE
 
   * syntax completion in editor of [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/),?
-  * any other good alternative as IDE? free?
+  * Any other good alternative as IDE? free?
   * What about...
     * Can RStudio be used for Python?
     * What about [Spyder](https://www.spyder-ide.org/), anyone using this still, nowadays?
@@ -21,18 +21,18 @@
 * Data Exploration
 
   * Why are so many things of data type `object`? What does this mean? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py-200-## turns 'complexity' into type 'object' again...)
-  * pandas: display more rows once? (like print(n = 200) in tibble?)
+  * pandas: display more rows once, without using a global pandas option? (like print(n = 200) in tibble?) Is there a convenient way of viewing larger dataframes?
 
 * Data Preparation (low-level)
   * Why is it so important for some functions whether arguments are numpy arrays or pandas series? Some seem to produce NaN's a lot... [example](./week-09-and-10-final-project/kgl-cycle-share-06d... line about 155: ConfusionMatrix(y_true = dat_test_y.values,  y_pred = dat_test_pred))
 
-  * How does indexing work in pandas? What is a multi-index, and how do I work with it? Is it useful or a pain in the ass? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py:146:##GD this does not only rename columns, but replaces the multiindex with a flat one - try)
+  * How does indexing work in pandas? What is a multi-index, and how do I work with it? Is it useful? [example](./week-06-mini-project/imdb-movie-dataset-analysis.py:146:##GD this does not only rename columns, but replaces the multiindex with a flat one - try)
 
   * Time-Index? [example](./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-40-    pd.DatetimeIndex(dat_trip_raw['start_date']), )
 
   * Adding an Index in-place vs. not? [example](./week-09-and-10-final-project/kgl-cycle-share-04-data-prep.py-39-dat_trip_raw.set_index)
 
-  * Variable names that don't conform to standards -- how much of a problem is that in Python / pandas / scikit-learn ?
+  * Variable names that don't conform to standards -- how much of a problem is that in Python / pandas / scikit-learn? (i.e., having spaces or parenthesis in variable names)
 
   * When to copy dataframes, when to modify in place? [example](./week-07-machine-learning/Weather Data Classification using Decision Trees.ipynb-1234-    "## note: course instructurs copy the data frequently\n",)
 
