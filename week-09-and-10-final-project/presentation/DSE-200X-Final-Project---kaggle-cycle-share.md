@@ -54,13 +54,19 @@ output:
 ## ## two-column layout:
 ## ## ------------------------------------------- ##
 ## 
-## <div></div><!-- ------------------------------- needed, but don't put anything here -->
-## <div style="float: left; width: 50%;"><!-- ---- start of first column               -->
+## <div></div><!-- ------------------------------- needed as is before cols - -->
+## <div style="float: left; width: 49%;"><!-- ---- start of first column ---- -->
 ## Put col 1 markdown here
-## </div><!-- ------------------------------------ end of first column                 -->
-## <div style="float: left; width: 50%;"><!-- ---- start of second column              --> 
+## </div><!-- ------------------------------------ end of first column ------ -->
+## <div style="float: left; width: 2%"><br></div><!-- spacing column -------- -->
+## <div style="float: left; width: 49%;"><!-- ---- start of second column --- --> 
 ## Put col 2 markdown here
-## </div><!-- ------------------------------------ end of second column                -->
+## </div><!-- ------------------------------------ end of second column ----- -->
+## <div style="clear: both"></div><!-- end cols for text over both cols below -->
+##
+## additionally, if one column needs to start higher (for right columns and 
+## short slide titles, mostly):
+## <div style="float: left; width: 30%; margin-top: -15%"><!-- ---- start of second column              --> 
 ## 
 ## other possibilities (not as good):
 ## * In slide title line, use:
@@ -100,7 +106,6 @@ slides > slide:not(.nobackground):before {
   right: -30px;  /* modify position */
   top: 10px;
 }
-
 
 /*slides > slide.backdrop {   */
 /*  background-color:#ffaaaa;   */
@@ -159,6 +164,7 @@ Weather data from the Canadian government:
 * List of available weather stations: [[?]]
 
 </div><!-- ------------------------------------ end of second column                -->
+<div style="clear: both"></div><!-- end floating section for text over both cols below -->
 
 > Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).
 
@@ -219,16 +225,48 @@ number of bike trips.
 ## Findings: Data Exploration
 
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
-<div style="float: left; width: 70%;"><!-- ---- start of first column               -->
+<div style="float: left; width: 55%"><!-- ---- start of first column               -->
 
-To get a better understanding of the data, 
+To get a better understanding of the data, the number of hourly bike trips
+was visualized for the time span between 2014 and 2017. 
+
+The moving average
+that is shown in the plot (red line) can be interpreted as a *baseline model*, i.e., 
+the simplest possible model to describe the hourly number of bike rides. 
+This baseline model explains 38.8% of the variance $(r^2 = 0.388)$ and has
+a mean absolute error of 316.2, which means that on average, the "prediction" 
+for the number of hourly bike rides is wrong by this many bike rides.
 
 </div><!-- ------------------------------------ end of first column                 -->
-<div style="float: left; width: 30%;"><!-- ---- start of second column              --> 
-
+<div style="float: left; width: 1%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 44%; margin-top: -3%"><!-- ---- start of second column              --> 
 <img src="img/expl-trips-per-hour-2014-2017.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
-<img src="img/expl-corr-heatmap.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+<p style="font-size: 12px">
+**Figure**: Number of hourly rides from 2014 to 2017. Each dot represents the 
+number of trips in one specifc hour. Red line represents a 
+moving average using a window of 14 days.
+<p>
 
+</div><!-- ------------------------------------ end of second column                -->
+
+
+## Findings: Exploration
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 55%"><!-- ---- start of first column               -->
+
+To visualize the relations between the available features,
+a correlation heatmap is shown on the right. The features are only
+slightly correlated, with the only exception being temperature and dew point
+that show an almost perfect (linear) relationship $(r = .93)$.
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 1%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 44%; margin-top: 0%"><!-- ---- start of second column              --> 
+<img src="img/expl-corr-heatmap.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+<p style="font-size: 12px">
+**Figure**: Pearson Correlations between available features in the data.
+<p>
 
 </div><!-- ------------------------------------ end of second column                -->
 
