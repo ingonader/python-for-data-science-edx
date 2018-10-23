@@ -28,6 +28,8 @@ import folium
 
 %matplotlib osx
 
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
 
 ## ========================================================================= ##
 ## exploratory analysis of stations
@@ -166,10 +168,20 @@ ggsave(plot = p, filename = os.path.join(path_out, 'expl-trips-per-hour-2014-201
        height = 6, width = 6, unit = 'in', dpi = 150)
 
 
+
+dat_tmp = dat_trip_hr[["trip_cnt", "trip_cnt_rollmean"]].dropna()
+
 ## correlation and explained variance of rolling mean and actual trip count:
 rollmean_r = dat_trip_hr[["trip_cnt", "trip_cnt_rollmean"]].corr()
 rollmean_r2 = rollmean_r ** 2
 rollmean_r2
+rollmean_r = dat_tmp.corr()
+rollmean_r2 = rollmean_r ** 2
+rollmean_r2
+r2_score(dat_tmp[["trip_cnt"]], dat_tmp[["trip_cnt_rollmean"]])
+
+## mean absolute error: 
+mean_absolute_error(dat_tmp[["trip_cnt"]], dat_tmp[["trip_cnt_rollmean"]])
 
 ## line plot of number of trips per day:
 ggplot(dat_trip_day, aes(y = 'trip_cnt', x = 'start_date')) + \
