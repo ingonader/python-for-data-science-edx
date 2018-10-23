@@ -66,9 +66,15 @@ pd.DataFrame.from_dict(dat_perf_metrics, orient = "index")
 ## make predictions and get model performance
 ## ========================================================================= ##
 
+## [[here]]
+## * select only summer data (month >= 5 and <= 9)
+dat_test_summer_x = dat_test_x[(dat_test_x["Q('Month')"] >= 5) & (dat_test_x["Q('Month')"] <= 59)]
+dat_test_summer_y = dat_test_y[(dat_test_x["Q('Month')"] >= 5) & (dat_test_x["Q('Month')"] <= 59)]
+
 ## Make predictions using the testing set
-dat_test_pred = mod_this.predict(dat_test_x)
 dat_train_pred = mod_this.predict(dat_train_x)
+dat_test_pred = mod_this.predict(dat_test_x)
+dat_test_summer_pred = mod_this.predict(dat_test_summer_x)
 
 ## Inspect model:
 this_perf_metrics = {
@@ -76,8 +82,10 @@ this_perf_metrics = {
     'mse_test'  : mean_squared_error(dat_test_y, dat_test_pred),    # MSE in test set
     'mae_train' : mean_absolute_error(dat_train_y, dat_train_pred), # MAE in training set
     'mae_test'  : mean_absolute_error(dat_test_y, dat_test_pred),   # MAE in test set
+    'mae_test_summer' : mean_absolute_error(dat_test_summer_y, dat_test_summer_pred),   
     'r2_train'  : r2_score(dat_train_y, dat_train_pred),            # R^2 (r squared) in test set
-    'r2_test'   : r2_score(dat_test_y, dat_test_pred)               # R^2 (r squared) in test set
+    'r2_test'   : r2_score(dat_test_y, dat_test_pred),              # R^2 (r squared) in test set
+    'r2_test_summer' : r2_score(dat_test_summer_y, dat_test_summer_pred)
 }
 #pd.DataFrame(this_perf_metrics, index = [0])
 dat_perf_metrics.update(this_perf_metrics)

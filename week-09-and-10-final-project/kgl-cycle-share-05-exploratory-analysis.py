@@ -167,9 +167,14 @@ print(p)
 ggsave(plot = p, filename = os.path.join(path_out, 'expl-trips-per-hour-2014-2017.jpg'), 
        height = 6, width = 6, unit = 'in', dpi = 150)
 
-
-
+## select subset of data and drop missing values:
 dat_tmp = dat_trip_hr[["trip_cnt", "trip_cnt_rollmean"]].dropna()
+
+## select another subset of this for only specified months (with rides):
+summer_idx = (dat_trip_hr['start_date'].dt.month >= 5) & (dat_trip_hr['start_date'].dt.month <= 10)
+dat_summer = dat_tmp[summer_idx]
+dat_summer = dat_summer[["trip_cnt", "trip_cnt_rollmean"]].dropna()
+# np.sum(dat_summer['trip_cnt'] == 0)
 
 ## correlation and explained variance of rolling mean and actual trip count:
 rollmean_r = dat_trip_hr[["trip_cnt", "trip_cnt_rollmean"]].corr()
@@ -179,9 +184,12 @@ rollmean_r = dat_tmp.corr()
 rollmean_r2 = rollmean_r ** 2
 rollmean_r2
 r2_score(dat_tmp[["trip_cnt"]], dat_tmp[["trip_cnt_rollmean"]])
+r2_score(dat_summer[["trip_cnt"]], dat_summer[["trip_cnt_rollmean"]])
 
 ## mean absolute error: 
 mean_absolute_error(dat_tmp[["trip_cnt"]], dat_tmp[["trip_cnt_rollmean"]])
+mean_absolute_error(dat_summer[["trip_cnt"]], dat_summer[["trip_cnt_rollmean"]])
+
 
 ## line plot of number of trips per day:
 ggplot(dat_trip_day, aes(y = 'trip_cnt', x = 'start_date')) + \
