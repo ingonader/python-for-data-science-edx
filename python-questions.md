@@ -11,6 +11,9 @@
 * JupyterLab / IDE
 
   * syntax completion in editor of [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/),?
+  * What are the most important keyboard shortcuts in JupyterLab?
+    * Comment out block of code?
+    * Block selection?
   * Any other good alternative as IDE? free?
   * What about...
     * Can RStudio be used for Python?
