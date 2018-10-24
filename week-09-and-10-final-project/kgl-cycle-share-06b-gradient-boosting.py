@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns  ## for correlation heatmap
 #from mpl_toolkits.basemap import Basemap
 import folium
+from scipy import stats
 
 ## ========================================================================= ##
 ## modeling number of trips
