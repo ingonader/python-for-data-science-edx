@@ -41,6 +41,23 @@ h1, h2, h3 {
 /* font-size: 24px; */
 /*} */  /* does not work for font-family; use <script> in html document instead */
 
+/* table formating: header */
+table.rmdtable th { 
+  font-size: 65%;
+  line-height: 1.0;
+  padding: 0.2em 0.2em;
+  color: black;
+  background: #888888;
+}
+
+/* table formatting: rows; */
+table.rmdtable tr td {
+  font-size: 55%;
+  line-height: 1.0;
+  padding: 0.2em 0.2em;
+}
+
+
 /* overall style of code and results(not inline in text)*/
 pre {
     font-size: 16px;

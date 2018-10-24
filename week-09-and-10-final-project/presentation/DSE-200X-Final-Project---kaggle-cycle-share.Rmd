@@ -226,9 +226,13 @@ Weather data from the Canadian government:
 > Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).
 
 
-## Data Preparation and Cleaning
+## Data Preparation and Cleaning {.smaller}
 
-* First, data download was performed manually for the bike share data from kaggle (as only available after login), and via a Python script for the weather data (bulk download).
+* First, data download was performed manually for the bike share data 
+  from kaggle (as only available after login), and via a Python script 
+  for the weather data (bulk download).
+* For the weather data, the weather station that was most central to the
+  locations of the bike rides was picked (see data exploration).
 * Next, the data was loaded and contatenated into a pandas `DataFrame` each for individual bike rides and hourly weather data.
 * The next step was calculating the variable of interest: Hourly bike rides. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.
 * Then, the weather data was joined to the hourly bike ride data, using the common timestamp.
@@ -236,8 +240,6 @@ Weather data from the Canadian government:
 * Finally, addtional features were added for the analysis: hour of the day ($0$-$23$), and day of the week ($0$-$6$, zero corresponding to Monday, six corresponding to Sunday).
 * For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, $1284$ rows ($0.04\%$) of the original data were dropped.
 * The remaining rows were split into training set ($90\%$ of the data $n = 26168$ rows) and testing set (the remaining $10\%$, $n = 2908$).
-
-* [[?]] dewpoint feature?
 
 ## Research Question(s)
 
@@ -256,8 +258,8 @@ investigated time span. Also, the interrelation of features was investigated
 by means of a correlation heatmap.
 
 In order to find out how well the number of bike rides can be predicted 
-from the data, different approaches were taken. As a baseline model, a rolling
-mean was calculated to find out how this very simple model can explain the data.
+from the data, different approaches were taken. As a baseline model, a moving
+average was calculated to find out how this very simple model can explain the data.
 
 Then, after splitting the data into $90\%$ training and $10\%$ test set, 
 different machine learning models were fitted to the data in order to predict 
@@ -269,6 +271,42 @@ Variable importance was used to identify the most important influence factors,
 and *Partial Dependence Plots* (*PDP*) and *Individual Conditional Expectation* (*ICE*)
 plots [@ice_plots] were used to visualize the influences of the important variables on the 
 number of bike trips.
+
+
+## Findings: Data Exploration
+
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 54%"><!-- ---- start of first column               -->
+
+**Choosing the closest weather station:**
+
+The Canadian government's past weather and climate service offers a 
+*search by proximity* function. Via this service, some sample data 
+of the closest stations to
+Montreal were downloaded. Each of the data files contains information about
+the weather stations, including the geographical position (latitude and 
+longitude). These coordinates were plotted on a map (see Figure on the right),
+and the closest station to the bulk of the data was chosen (station name: 
+*MCTAVISH*). Only data from this station was used.
+
+
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 2%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 44%"><!-- ---- start of second column              --> 
+```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
+knitr::include_graphics("img/map-of-bike-and-possible-weather-stations_html.jpg")
+```
+<p style="font-size: 12px">
+**Figure**: Plot shows all starting stations of a bike trip (red dots), as
+well as the closest weather stations (blue markers). 
+The closest station in the center is the *MCTAVISH* weather station 
+(Climate Identifier 7024745, WMO Identifier 71612)
+<p>
+
+</div><!-- ------------------------------------ end of second column                -->
+
 
 
 
@@ -335,8 +373,98 @@ knitr::include_graphics("img/expl-corr-heatmap.jpg")
 </div><!-- ------------------------------------ end of second column                -->
 
 
-## Findings
+## Findings: Model Fit
 
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 55%"><!-- ---- start of first column               -->
+
+<p style="font-size: 12px">
+**Table**: Model performance measures for different models. $r^2$ is the amount 
+of variance explained, $MAE$ stands for mean absolute error. $train$ and $test$ 
+specify training and testing set, respectively. For the test set, some performance
+measures were also re-computed for using only the summer months (May to September),
+indicated via the $summer$ subscripts.
+</p>
+
+<p style="margin-top: -4%">
+|Model                        |  $r^2_{train}$|   $r^2_{test}$| $r^2_{test,summer}$| $MAE_{test}$| $MAE_{test,summer}$|
+|:----------------------------|--------------:|--------------:|-------------------:|------------:|-------------------:|
+|Gradient Boosting (XGBoost)  |        $0.889$|        $0.860$|                  NA|      $158.0$|                  NA|
+|Random Forest                |        $0.913$|        $0.894$|                  NA|      $111.2$|                  NA|
+|Gradient Boosting (sklearn)  |        $0.997$|        $0.941$|             $0.933$|       $85.4$|             $105.4$|
+</p>
+
+The explained variance of the different models tried ranged from 
+$r_{test}^2 = 0.860$ to $r_{test}^2 = 0.941$ for the final model 
+(all in the test set; see table).
+The hyperparameters for the final model (gradient boosting via scikit-learn) 
+were selected via randomized search using $4$-fold cross validation 
+(using only the training set). 
+
+The final model fits the data very well, explaining $94.1\%$ of the variance and 
+exhibiting an average error of $85.4$ rides over all hourly predictions. 
+This error only increases to $105.4$ if only summer months are considered. 
+
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 1%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 44%; margin-top: -3%"><!-- ---- start of second column              --> 
+```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
+knitr::include_graphics("img/mod_gb_plot-pred-vs-true.jpg")
+```
+<p style="font-size: 12px">
+**Figure**: The figure shows actual (true) values vs. predicted values for the
+number of hourly bike trips for the final model. 
+A perfect model would yield predictions that are
+identical to the true values, i.e., all points would be on the $45°$ diagonal. 
+This model is relatively close.
+<p>
+
+</div><!-- ------------------------------------ end of second column                -->
+
+
+```{r}
+# library(readr)
+# model_runs <- readr::read_csv("../output/model_runs.csv", 
+#                               col_types = cols(
+#   timestamp = col_datetime(format = ""),
+#   timestamp_str = col_datetime(format = ""),
+#   filename_model = col_character(),
+#   filename_out_prefix = col_character(),
+#   mse_train = col_double(),
+#   mse_test = col_double(),
+#   mae_train = col_double(),
+#   mae_test = col_double(),
+#   mae_test_summer = col_double(),
+#   r2_train = col_double(),
+#   r2_test = col_double(),
+#   r2_test_summer = col_double(),
+#   r2_train_nonzero = col_double(),
+#   r2_test_nonzero = col_double(),
+#   comment = col_character()
+# ))
+# 
+# varnames_table <- c("timestamp", "filename_model", "r2_train", "r2_test", "r2_test_summer",  "mae_test", "mae_test_summer")
+# knitr::kable(model_runs[varnames_table])
+```
+
+
+## Findings: Most Important Features
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 54%"><!-- ---- start of first column               -->
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 2%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 44%"><!-- ---- start of second column              --> 
+```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
+knitr::include_graphics("img/mod_gb_plot-variable-importance.jpg")
+```
+<p style="font-size: 12px">
+**Figure**: 
+<p>
+
+</div><!-- ------------------------------------ end of second column                -->
 
 
 
@@ -351,6 +479,7 @@ Findings Outline:
 * Important variables
 * PDP for important variables
 * Interaction Plots for important variables
+    * most important interactions picked by rerunning the model (without CV) with only interaction terms
 
 >Feel free to replicate this slide to show multiple findings
 >Present your findings. Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience.
