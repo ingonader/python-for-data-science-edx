@@ -142,7 +142,7 @@ filename_this = 'plot-variable-importance.jpg'
 #filename_this = 'plot-variable-importance-with-interactions.jpg'
 ggsave(plot = p, 
        filename = os.path.join(path_out, filename_out_prefix + filename_this),
-       height = 6, width = 6, unit = 'in', dpi = 300)
+       height = 6, width = 6, unit = 'in', dpi = 150)
 
 ## ========================================================================= ##
 ## plot data with predictions
@@ -160,12 +160,22 @@ dat_hr_all = pd.merge(dat_hr_all,
                       right_index = True)
 
 ## plot predictions vs. real value of target:
-p = ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + geom_point(alpha = .1)
+p = ggplot(dat_y, aes(x = "Q('trip_cnt')", y = 'pred')) + \
+    geom_point(alpha = .1) + \
+    geom_abline(intercept = 0, slope = 1, 
+                color = "red", 
+                alpha = .5,
+                linetype = "dashed",
+                size = 1.2) + \
+    labs(
+        title = "Predictions vs. true values",
+        x = "True value of hourly trip count",
+        y = "Prediction for hourly trip count")
 print(p)
 filename_this = 'plot-pred-vs-true.jpg'
 ggsave(plot = p, 
        filename = os.path.join(path_out, filename_out_prefix + filename_this),
-       height = 6, width = 6, unit = 'in', dpi = 300)
+       height = 6, width = 6, unit = 'in', dpi = 150)
 
 ## line plot of number of trips per hour:
 p = ggplot(dat_hr_all, aes(y = 'trip_cnt', x = 'start_date')) + \
