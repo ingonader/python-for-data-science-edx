@@ -135,7 +135,8 @@ p = ggplot(var_imp[:15], aes(y = 'importance', x = 'varname_cat')) + \
         title = "Feature importance",
         x = "Feature",
         y = "Importance") + \
-    coord_flip()
+    coord_flip() + \
+    theme(axis_text = element_text(size = 12))
 print(p)
 
 filename_this = 'plot-variable-importance.jpg'
@@ -296,9 +297,12 @@ def construct_pdp(model, feature,
         center = True, 
         plot_params = plot_params_default
     )
-    axes_center["pdp_ax"].set_ylabel("Number of bike rides per hour")
+    axes_center["pdp_ax"].set_ylabel("Number of bike rides per hour", size = 24)
+    axes_center["pdp_ax"].set_xlabel(varnames_long_dict[feature], size = 24)
     axes_center["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
-        varnames_long_dict[feature], y = 1)
+        varnames_long_dict[feature], y = 1, size = 24)
+    axes_center["pdp_ax"].tick_params(axis = 'both', which = 'major', labelsize = 24)
+    
     
     ## construct non-centered pdp plot for numeric features:
     fig, axes = pdp.pdp_plot(
@@ -306,11 +310,13 @@ def construct_pdp(model, feature,
         center = False, 
         plot_params = plot_params_default
     )
-    axes["pdp_ax"].set_ylabel("Number of bike rides per hour")
+    axes["pdp_ax"].set_ylabel("Number of bike rides per hour", size = 24)
+    axes["pdp_ax"].set_xlabel(varnames_long_dict[feature], size = 24)
     #axes["pdp_ax"].set_ylim(0, plot_ylim_max)
     #axes["pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
     axes["pdp_ax"].set_title('Partial Dependence Plot for: %s' % \
-        varnames_long_dict[feature], y = 1)
+        varnames_long_dict[feature], y = 1, size = 24)
+    axes["pdp_ax"].tick_params(axis = 'both', which = 'major', labelsize = 24)
     #axes["pdp_ax"].margins(0)
     return pdp_current, fig_center, fig
 
@@ -322,9 +328,12 @@ def construct_ice_plot(pdp_current, feature):
         plot_lines = True, frac_to_plot = 100,  ## percentage! 
         x_quantile = False, plot_pts_dist = True, show_percentile = True,
         plot_params = plot_params_default)
-    axes_center["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
+    axes_center["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour", size = 24)
+    axes_center["pdp_ax"]["_count_ax"].set_xlabel(varnames_long_dict[feature], size = 24)
     axes_center["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
-        varnames_long_dict[feature], y = 1.1)
+        varnames_long_dict[feature], y = 1.1, size = 24)
+    axes_center["pdp_ax"]["_pdp_ax"].tick_params(axis = 'both', which = 'major', labelsize = 24)
+    
     ## standard ice-plot for numeric feature:
     fig, axes = pdp.pdp_plot(
         pdp_current, varnames_long_dict[wch_feature], #wch_feature, 
@@ -332,10 +341,12 @@ def construct_ice_plot(pdp_current, feature):
         plot_lines = True, frac_to_plot = 100,  ## percentage! 
         x_quantile = False, plot_pts_dist = True, show_percentile = True,
         plot_params = plot_params_default)
-    axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour")
+    axes["pdp_ax"]["_pdp_ax"].set_ylabel("Number of bike rides per hour", size = 24)
+    axes["pdp_ax"]["_count_ax"].set_xlabel(varnames_long_dict[feature], size = 24)
     #axes["pdp_ax"]["_pdp_ax"].set_ylim(0, np.max(vars(pdp_current)['count_data']['count']))
     axes["pdp_ax"]["_pdp_ax"].set_title('Partial Dependence and ICE Plot for: %s' % \
-        varnames_long_dict[feature], y = 1.1)
+        varnames_long_dict[feature], y = 1.1, size = 24)
+    axes["pdp_ax"]["_pdp_ax"].tick_params(axis = 'both', which = 'major', labelsize = 24)
     return fig_center, fig
 
 def save_pdp_or_ice_plot(fig, feature, filename_stump):

@@ -315,10 +315,13 @@ fig, ax = plt.subplots(figsize = (10, 10))
 #Generate Color Map, red & blue
 colormap = sns.diverging_palette(220, 10, as_cmap = True)
 #Generate Heat Map, allow annotations and place floats in map
-sns.heatmap(cormat, cmap = colormap, annot = True, fmt = ".2f", center = 0)
+sns.heatmap(cormat, cmap = colormap, annot = True, fmt = ".2f", center = 0, 
+            annot_kws = {"size": 14, "rotation": 30})
 ## Apply axes tickmarks of more explicit variable names:
 plt.xticks(np.arange(0, len(cormat.columns)) + .5, varnames_heatmap_long)
 plt.yticks(np.arange(0, len(cormat.columns)) + .5, varnames_heatmap_long)
+plt.rc('xtick', labelsize = 18) 
+plt.rc('ytick', labelsize = 18) 
 plt.show()
 
 filename_this = "expl-corr-heatmap.jpg"
