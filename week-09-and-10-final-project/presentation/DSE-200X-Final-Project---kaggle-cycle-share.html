@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Influences on Bike Rentals</title>
+  <title>Weather and Bike Rentals</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,7 +20,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Influences on Bike Rentals',
+                title: 'Weather and Bike Rentals',
                         subtitle: 'What are the influening factors and <br>how well can they predict the number of rented bikes?',
                 useBuilds: true,
         usePrettify: true,
@@ -3125,6 +3125,10 @@ color: "black";
 .smaller {
 font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 }
+.tiny {
+font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+font-size: 60%;
+}
 
 
 
@@ -3260,6 +3264,11 @@ margin-top: 0em;
   </slide>
 
 <style>
+/* justify text: */
+body {
+  text-align: justify
+}
+
 /* gdbar size (that contains logo) on title page */
 /* needs to have greater height than logo image, other stuff is irrelevant */
 .gdbar {
@@ -3324,40 +3333,42 @@ MathJax.Hub.Config({
 
 </article></slide><slide class=""><hgroup><h2>Dataset(s)</h2></hgroup><article  id="datasets" class="smaller">
 
-<p>Two datasets were used.</p>
-
 <div>
 </div>
 
 <!-- ------------------------------- needed, but don't put anything here -->
 
-<div style="float: left; width: 50%;">
+<div style="float: left; width: 48%;">
 <!-- ---- start of first column               -->
 
-<p>Bike sharing data:</p>
+<p>Two datasets were used: <strong>Bike sharing data</strong>…</p>
 
 <ul>
-<li>BIXI Montreal public bicycle sharing system, North America’s first large-scale bike sharing system</li>
-<li>Available via kaggle from <a href='https://www.kaggle.com/aubertsigouin/biximtl/home' title=''>https://www.kaggle.com/aubertsigouin/biximtl/home</a></li>
+<li><strong>BIXI Montreal public bicycle sharing system</strong>, North America’s first large-scale bike sharing system</li>
+<li>Available via kaggle from<br> <a href='https://www.kaggle.com/aubertsigouin/biximtl/home' title=''>https://www.kaggle.com/aubertsigouin/biximtl/home</a></li>
 <li>For years \(2014\) to \(2017\)</li>
-<li>Contains individual records of bike trips: timestamp and station code for start and end of trip, duration</li>
+<li>Contains <strong>individual records of bike trips</strong>: timestamp and station code for start and end of trip, duration</li>
 <li>\(n = 14598961\) records (individual bike trips)</li>
 <li>Station codes, names, and position (latitude, longitude) available in separate files, but only of secondary interest for this analysis</li>
 </ul></div>
 
 <!-- ------------------------------------ end of first column                 -->
 
-<div style="float: left; width: 50%;">
+<div style="float: left; width: 4%">
+<br></div>
+
+<!-- spacing column -------- -->
+
+<div style="float: left; width: 48%;">
 <!-- ---- start of second column              -->
 
-<p>Weather data from the Canadian government:</p>
+<p>…and <strong>weather data</strong> from the Canadian government:</p>
 
 <ul>
-<li><a href='http://climate.weather.gc.ca/historical_data/search_historic_data_e.html' title=''>http://climate.weather.gc.ca/historical_data/search_historic_data_e.html</a></li>
-<li>API for bulk data download: <a href='http://climate.weather.gc.ca/climate_data/bulk_data_e.html' title=''>http://climate.weather.gc.ca/climate_data/bulk_data_e.html</a></li>
-<li>Data can be downloaded per weather station per month and contains hourly measurements of different metrics (e.g., timestamp, temperature, relative humidity, atmospheric pressure, wind speed; different measures available for different stations)</li>
+<li>Available from<br> <a href='http://climate.weather.gc.ca/historical_data/search_historic_data_e.html' title=''>http://climate.weather.gc.ca/ historical_data/ <br> search_historic_data_e.html</a></li>
+<li>API for <strong>bulk data download</strong>:<br> <a href='http://climate.weather.gc.ca/climate_data/bulk_data_e.html' title=''>http://climate.weather.gc.ca/climate_data/ <br> bulk_data_e.html</a></li>
+<li>Data can be downloaded per weather station per month and contains <strong>hourly measurements</strong> of different metrics (e.g., timestamp, temperature, relative humidity, atmospheric pressure, wind speed; different measures available for different stations)</li>
 <li>\(n = 35064\) hourly weather records in total (between \(672\) and \(744\) per monthly file)</li>
-<li>List of available weather stations: [[?]]</li>
 </ul></div>
 
 <!-- ------------------------------------ end of second column                -->
@@ -3367,41 +3378,65 @@ MathJax.Hub.Config({
 
 <!-- end floating section for text over both cols below -->
 
-<blockquote>
-<p>Describe your dataset(s) here. You should say what data is in the dataset, how much data, and where you found the dataset (if applicable).</p>
-</blockquote>
-
 </article></slide><slide class=""><hgroup><h2>Data Preparation and Cleaning</h2></hgroup><article  id="data-preparation-and-cleaning" class="smaller">
 
+<div>
+</div>
+
+<!-- ------------------------------- needed as is before cols - -->
+
+<div style="float: left; width: 48%;">
+<!-- ---- start of first column ---- -->
+
 <ul>
-<li>First, data download was performed manually for the bike share data from kaggle (as only available after login), and via a Python script for the weather data (bulk download).</li>
-<li>For the weather data, the weather station that was most central to the locations of the bike rides was picked (see data exploration).</li>
-<li>Next, the data was loaded and contatenated into a pandas <code>DataFrame</code> each for individual bike rides and hourly weather data.</li>
-<li>The next step was calculating the variable of interest: Hourly bike rides. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.</li>
-<li>Then, the weather data was joined to the hourly bike ride data, using the common timestamp.</li>
-<li>One feature (wind chill) was dropped, as it had too many missing values (\(77.9\%\) missing).</li>
-<li>Finally, addtional features were added for the analysis: hour of the day (\(0\)-\(23\)), and day of the week (\(0\)-\(6\), zero corresponding to Monday, six corresponding to Sunday).</li>
-<li>For modeling, rows with missing values were dropped, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, \(1284\) rows (\(0.04\%\)) of the original data were dropped.</li>
-<li>The remaining rows were split into training set (\(90\%\) of the data \(n = 26168\) rows) and testing set (the remaining \(10\%\), \(n = 2908\)).</li>
-</ul>
+<li>First, <strong>data download</strong> was performed manually for the bike share data from kaggle (as only available after login), and via a Python script for the weather data (bulk download).</li>
+<li>For the weather data, the <strong>weather station</strong> that was most central to the locations of the bike rides was picked (see data exploration).</li>
+<li>Next, the <strong>data was loaded</strong> and contatenated into a pandas <code>DataFrame</code> each for individual bike rides and hourly weather data.</li>
+<li>The next step was <strong>calculating the variable of interest: Hourly bike rides</strong>. This was done by aggregating individual bike trips to hourly counts of trips (how many trips in each hour), using the starting time of the trip.</li>
+<li>Then, the <strong>weather data was joined to the hourly bike ride data</strong>, using the common timestamp as join key.</li>
+</ul></div>
+
+<!-- ------------------------------------ end of first column ------ -->
+
+<div style="float: left; width: 4%">
+<br></div>
+
+<!-- spacing column -------- -->
+
+<div style="float: left; width: 48%;">
+<!-- ---- start of second column --- -->
+
+<ul>
+<li>One feature <strong>(wind chill) was dropped</strong>, as it had too many missing values (\(77.9\%\) missing).</li>
+<li>Finally, <strong>addtional features were added</strong> for the analysis: hour of the day (\(0\)-\(23\)), and day of the week (\(0\)-\(6\), zero corresponding to Monday, six corresponding to Sunday).</li>
+<li>For modeling, <strong>rows with missing values were dropped</strong>, as the goal is not having the most complete prediction coverage, but rather an indication of the prediction quality that is possible with complete data. In total, \(1284\) rows (\(0.04\%\)) of the original data were dropped.</li>
+<li>The remaining rows were <strong>split into training and testing set</strong> (\(90\%\) of the data, \(n = 26168\) rows for training, the remaining \(10\%\), \(n = 2908\) for testing).</li>
+</ul></div>
+
+<!-- ------------------------------------ end of second column ----- -->
+
+<div style="clear: both">
+</div>
+
+<!-- end cols for text over both cols below -->
 
 </article></slide><slide class=""><hgroup><h2>Research Question(s)</h2></hgroup><article  id="research-questions">
 
 <p>The research questions that I wanted to answer with my analysis were:</p>
 
 <ul>
-<li>To what extent do the number of bike rides depend on the current weather conditions? That is, how well can the number of bike rides be predicted from weather data (and time of year, time of day)?</li>
-<li>What are the most important factors that influence the number of bike rides?</li>
-<li>How do these factors influence the number of bike rides?</li>
+<li><strong>To what extent do</strong> the number of <strong>bike rides depend on the current weather conditions</strong>? That is, how well can the number of bike rides be predicted from weather data (and time of year, time of day)?</li>
+<li>What are the <strong>most important factors</strong> that influence the number of bike rides?</li>
+<li><strong>How do these factors influence</strong> the number of bike rides?</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Methods</h2></hgroup><article  id="methods">
 
-<p>First, some data exploration was performed, in order to get to know the data and to find out how the number of hourly bike trips is distributed across the investigated time span. Also, the interrelation of features was investigated by means of a correlation heatmap.</p>
+<p>First, some <strong>data exploration</strong> was performed, in order to get to know the data and to find out how the number of hourly bike trips is distributed across the investigated time span. Also, the interrelation of features was investigated by means of a correlation heatmap.</p>
 
-<p>In order to find out how well the number of bike rides can be predicted from the data, different approaches were taken. As a baseline model, a moving average was calculated to find out how this very simple model can explain the data.</p>
+<p>In order to find out how well the number of bike rides can be predicted from the data, different models were used As a <strong>baseline model</strong>, a moving average was calculated to find out how this very simple model can explain the data.</p>
 
-<p>Then, after splitting the data into \(90\%\) training and \(10\%\) test set, different machine learning models were fitted to the data in order to predict the hourly number of bike rides from the available data: Random forest regression, and gradient boosting regression via <code>scikit-learn</code> and <code>xgboost</code>. The most promising model, <code>scikit-learn</code>’s gradient boosting regression, was fitted via a randomized \(4\)-fold cross-validation for indentifying the best hyperparameters. Variable importance was used to identify the most important influence factors, and <em>Partial Dependence Plots</em> (<em>PDP</em>) and <em>Individual Conditional Expectation</em> (<em>ICE</em>) plots <span class="cite">[1]</span> were used to visualize the influences of the important variables on the number of bike trips.</p>
+<p>Then, after splitting the data into \(90\%\) training and \(10\%\) test set, <strong>different machine learning models</strong> were fitted to the data in order to predict the hourly number of bike rides from the available data: Random forest regression, and gradient boosting regression via <code>scikit-learn</code> and <code>xgboost</code>. The most promising model, <code>scikit-learn</code>’s gradient boosting regression, was fitted via a randomized \(4\)-fold cross-validation for indentifying the best hyperparameters. Variable importance was used to identify the most important influence factors, and <em>Partial Dependence Plots</em> (<em>PDP</em>) and <em>Individual Conditional Expectation</em> (<em>ICE</em>) plots <span class="cite">[1]</span> were used to <strong>visualize the influences of the important variables</strong> on the number of bike trips.</p>
 
 </article></slide><slide class=""><hgroup><h2>Findings: Data Exploration</h2></hgroup><article  id="findings-data-exploration">
 
@@ -3410,7 +3445,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------- needed, but don't put anything here -->
 
-<div style="float: left; width: 54%">
+<div style="float: left; width: 53%">
 <!-- ---- start of first column               -->
 
 <p><strong>Choosing the closest weather station:</strong></p>
@@ -3419,12 +3454,12 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------------ end of first column                 -->
 
-<div style="float: left; width: 2%">
+<div style="float: left; width: 4%">
 <br></div>
 
 <!-- spacing column ----------------- -->
 
-<div style="float: left; width: 44%">
+<div style="float: left; width: 43%">
 
 <!-- ---- start of second column              -->
 
@@ -3447,7 +3482,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------- needed, but don't put anything here -->
 
-<div style="float: left; width: 55%">
+<div style="float: left; width: 53%">
 <!-- ---- start of first column               -->
 
 <p>To get a better understanding of the data, the number of hourly bike trips was visualized for the time span between \(2014\) and \(2017\).</p>
@@ -3458,12 +3493,12 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------------ end of first column                 -->
 
-<div style="float: left; width: 1%">
+<div style="float: left; width: 4%">
 <br></div>
 
 <!-- spacing column ----------------- -->
 
-<div style="float: left; width: 44%; margin-top: -3%">
+<div style="float: left; width: 43%; margin-top: -3%">
 
 <!-- ---- start of second column              -->
 
@@ -3486,7 +3521,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------- needed, but don't put anything here -->
 
-<div style="float: left; width: 55%">
+<div style="float: left; width: 53%">
 <!-- ---- start of first column               -->
 
 <p>To visualize the relations between the available features, a correlation heatmap is shown on the right. The features are only slightly correlated, with the only exception being temperature and dew point that show an almost perfect (linear) relationship \((r = .93)\).</p>
@@ -3495,12 +3530,12 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------------ end of first column                 -->
 
-<div style="float: left; width: 1%">
+<div style="float: left; width: 4%">
 <br></div>
 
 <!-- spacing column ----------------- -->
 
-<div style="float: left; width: 44%; margin-top: 0%">
+<div style="float: left; width: 43%; margin-top: 0%">
 
 <!-- ---- start of second column              -->
 
@@ -3523,12 +3558,12 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------- needed, but don't put anything here -->
 
-<div style="float: left; width: 55%">
+<div style="float: left; width: 53%">
 <!-- ---- start of first column               -->
 
 <p style="font-size: 12px">
 
-<strong>Table</strong>: Model performance measures for different models. \(r^2\) is the amount of variance explained, \(MAE\) stands for mean absolute error. \(train\) and \(test\) specify training and testing set, respectively. For the test set, some performance measures were also re-computed for using only the summer months (May to September), indicated via the \(summer\) subscripts.
+<strong>Table</strong>: Model performance measures for different models. \(r^2\) is the amount of variance explained, \(MAE\) stands for mean absolute error. \(train\) and \(test\) specify training and testing set, respectively. For the test set, some performance measures were also re-computed for using only the summer months of the test set (May to September), indicated via the \(summer\) subscripts.
 
 </p>
 
@@ -3539,9 +3574,9 @@ MathJax.Hub.Config({
 <th align="left">Model</th>
 <th align="right">\(r^2_{train}\)</th>
 <th align="right">\(r^2_{test}\)</th>
-<th align="right">\(r^2_{test,summer}\)</th>
+<th align="right">\(r^2_{summer}\)</th>
 <th align="right">\(MAE_{test}\)</th>
-<th align="right">\(MAE_{test,summer}\)</th>
+<th align="right">\(MAE_{summer}\)</th>
 </tr>
 <tr class="odd">
 <td align="left">Gradient Boosting (XGBoost)</td>
@@ -3577,12 +3612,12 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------------ end of first column                 -->
 
-<div style="float: left; width: 1%">
+<div style="float: left; width: 4%">
 <br></div>
 
 <!-- spacing column ----------------- -->
 
-<div style="float: left; width: 44%; margin-top: -3%">
+<div style="float: left; width: 43%; margin-top: -3%">
 
 <!-- ---- start of second column              -->
 
@@ -3605,17 +3640,21 @@ MathJax.Hub.Config({
 
 <!-- ------------------------------- needed, but don't put anything here -->
 
-<div style="float: left; width: 54%">
-<!-- ---- start of first column               --></div>
+<div style="float: left; width: 53%">
+<!-- ---- start of first column               -->
+
+<p>The most important features that influenced the prediciton of hourly bike rides were temperature and atmospheric pressure. While the former is easily comprehensible, the latter is best understood as a proxy for precipitation, which was not available from the weather data: low pressure is commonly related to rainy weather <span class="cite">[4]</span>. While Relative humidity is not as tightly connected to rain <span class="cite">[5]</span>, it interacts with temperature, e.g., it influences how (high) temperatures are perceived <span class="cite">[6]</span>.</p>
+
+<p>Further important predictors are the hour of the day and the day of the week, as well as wind direction and speed. How these features influence the predicted number of bike trips is best detailed by specific plots, so-called <em>Partial Dependence Plots</em> (<em>PDP</em>) and <em>Individual Conditional Expectation</em> (<em>ICE</em>) plots <span class="cite">[1]</span>.</p></div>
 
 <!-- ------------------------------------ end of first column                 -->
 
-<div style="float: left; width: 2%">
+<div style="float: left; width: 4%">
 <br></div>
 
 <!-- spacing column ----------------- -->
 
-<div style="float: left; width: 44%">
+<div style="float: left; width: 43%">
 
 <!-- ---- start of second column              -->
 
@@ -3681,11 +3720,7 @@ MathJax.Hub.Config({
 
 <p>Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.</p>
 
-</article></slide><slide class=""><hgroup><h2>References</h2></hgroup><article  id="references" class="smaller">
-
-<blockquote>
-<p>If applicable, report any references you used in your work. For example, you may have used a research paper from X to help guide your analysis. You should cite that work here. If you did all the work on your own, please state this.</p>
-</blockquote>
+</article></slide><slide class=""><hgroup><h2>References</h2></hgroup><article  id="references" class="unnumbered columns-2 tiny">
 
 <div id="refs" class="references">
 <div id="ref-ice_plots">
@@ -3695,7 +3730,16 @@ MathJax.Hub.Config({
 <p>2. Wheatley J. Random forest or gradient boosting? [Internet]. 2014. Available: <a href='http://joewheatley.net/random-forest-or-gradient-boosting/' title=''>http://joewheatley.net/random-forest-or-gradient-boosting/</a></p></div>
 
 <div id="ref-rf_imp">
-<p>3. Parr T, Turgutlu K, Csiszar C, Howard J. Beware Default Random Forest Importances [Internet]. 2018. Available: <a href='http://explained.ai/rf-importance/index.html' title=''>http://explained.ai/rf-importance/index.html</a></p></div></div></article></slide>
+<p>3. Parr T, Turgutlu K, Csiszar C, Howard J. Beware Default Random Forest Importances [Internet]. 2018. Available: <a href='http://explained.ai/rf-importance/index.html' title=''>http://explained.ai/rf-importance/index.html</a></p></div>
+
+<div id="ref-pressure_and_rain">
+<p>4. Morgan L. Why Does it Rain When the Pressure Is Low? [Internet]. 2017. Available: <a href='https://sciencing.com/rain-pressure-low-8738476.html' title=''>https://sciencing.com/rain-pressure-low-8738476.html</a></p></div>
+
+<div id="ref-humidity_and_rain">
+<p>5. Haby J. RELATIVE HUMIDITY PITFALLS [Internet]. Available: <a href='http://www.theweatherprediction.com/habyhints2/564/' title=''>http://www.theweatherprediction.com/habyhints2/564/</a></p></div>
+
+<div id="ref-humidity_and_temp">
+<p>6. Dotson JD. How Temperature &amp; Humidity are Related [Internet]. 2018. Available: <a href='https://sciencing.com/temperature-ampamp-humidity-related-7245642.html' title=''>https://sciencing.com/temperature-ampamp-humidity-related-7245642.html</a></p></div></div></article></slide>
 
 
   <slide class="backdrop"></slide>

@@ -36,6 +36,11 @@ h1, h2, h3 {
     font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 }
 
+.tiny {
+    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-size: 60%;
+}
+
 /* font for latex formulas: */
 /* .MathJax * { */
 /* font-size: 24px; */
