@@ -201,7 +201,9 @@ MathJax.Hub.Config({
 
 ## [[todo]]
 
-* different font for latex formulas?
+* Figure and Table numbering?
+* Figure caption in first column, for ICE plots?
+* Or figure caption in separate column with font facing upwards (90% rotated)?
 
 ## Abstract
 
@@ -297,7 +299,9 @@ The research questions that I wanted to answer with my analysis were:
   be predicted from weather data (and time of year, time of day)?
 * What are the **most important factors** that influence the number 
   of bike rides?
-* **How do these factors influence** the number of bike rides?
+* **How do these factors influence** the number of bike rides? What are 
+  the main effects of these factors, and what are the interactions between
+  them?
 
 
 ## Methods
@@ -491,7 +495,7 @@ plots [@ice_plots].
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
-<div style="float: left; width: 43%"><!-- ---- start of second column              --> 
+<div style="float: left; width: 43%; margin-top: 0%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_plot-variable-importance.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 <p style="font-size: 12px">
 **Figure**: 
@@ -499,6 +503,68 @@ plots [@ice_plots].
 
 </div><!-- ------------------------------------ end of second column                -->
 
+
+## Findings: Main effects
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 59%"><!-- ---- start of first column               -->
+
+*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] to quantify
+the main effects of some of the predictors.
+
+For details, see figure caption.
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 37%; margin-top: -15%"><!-- ---- start of second column              --> 
+<img src="img/mod_gb_ice-main-standard---Qhr_of_day.jpg" width="100%" style="display: block; margin: auto auto auto 0;" /><img src="img/mod_gb_ice-main-standard---QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" /><img src="img/mod_gb_ice-main-standard---QRelHum.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+
+</div><!-- ------------------------------------ end of second column                -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
+
+
+<div style="float: left; width: 20%"><br></div>
+<div style="float: left; width: 42%; margin-top: -10%">
+<p style="font-size: 12px">
+**Figure**: Figure Caption ... Figure Caption ... Figure Caption ... 
+Figure Caption ... Figure Caption ... Figure Caption ... Figure Caption ... 
+Figure Caption ... Figure Caption ... Figure Caption ... Figure Caption ... 
+<p>
+</div>
+<div style="float: left; width: 38%"><br></div>
+<div style="clear: both"></div>
+
+
+## Findings: Interactions
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 53%"><!-- ---- start of first column               -->
+
+*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] to quantify
+the main effects of some of the predictors.
+
+For details, see figure caption.
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
+<img src="img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+</div><!-- ------------------------------------ end of second column                -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
+
+
+## Findings: Interactions
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of first column               -->
+<img src="img/mod_gb_pdp-interact---Qhr_of_day--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 14%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
+<img src="img/mod_gb_pdp-interact---QRelHum--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+
+</div><!-- ------------------------------------ end of second column                -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
 
 
 ## Findings
