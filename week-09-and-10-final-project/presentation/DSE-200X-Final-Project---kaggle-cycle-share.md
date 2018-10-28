@@ -201,9 +201,10 @@ MathJax.Hub.Config({
 
 ## [[todo]]
 
-* Figure and Table numbering?
+* Figure and Table numbering? --> rather not.
 * Figure caption in first column, for ICE plots?
 * Or figure caption in separate column with font facing upwards (90% rotated)?
+* Features: numeric, not categorical (!)
 
 ## Abstract
 
