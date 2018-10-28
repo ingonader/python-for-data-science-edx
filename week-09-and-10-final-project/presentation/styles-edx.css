@@ -216,3 +216,14 @@ ul li ul li:before {
     margin-left: -0.8em;
     margin-top: 0em;
 }
+
+/* rotatet text */
+#rot
+{
+   -webkit-transform: rotate(-90deg); /* safari */
+   -moz-transform: rotate(-90deg);    /* firefox */
+   -ms-transform: rotate(-90deg); /* internet explorer */
+   -o-transform: rotate(-90deg); /* opera */
+   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* internet explorer */
+   /* width: 100px; */
+}

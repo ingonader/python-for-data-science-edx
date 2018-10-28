@@ -550,6 +550,9 @@ For details, see figure caption.
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+<p style="font-size: 12px">
+**Figure**: 
+<p>
 </div><!-- ------------------------------------ end of second column                -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
@@ -560,7 +563,19 @@ For details, see figure caption.
 <div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of first column               -->
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 </div><!-- ------------------------------------ end of first column                 -->
-<div style="float: left; width: 14%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 14%"><br>
+<!-- <div id="rot" style="margin-left: -10%; margin-right: -10%"> -->
+<p style="font-size: 12px">
+**Figure**: Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+<p>
+<!-- </div> -->
+</div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---QRelHum--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 

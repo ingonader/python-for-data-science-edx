@@ -592,6 +592,9 @@ For details, see figure caption.
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
 knitr::include_graphics("img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg")
 ```
+<p style="font-size: 12px">
+**Figure**: 
+<p>
 </div><!-- ------------------------------------ end of second column                -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
@@ -604,7 +607,19 @@ knitr::include_graphics("img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg"
 knitr::include_graphics("img/mod_gb_pdp-interact---Qhr_of_day--QTempC.jpg")
 ```
 </div><!-- ------------------------------------ end of first column                 -->
-<div style="float: left; width: 14%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 14%"><br>
+<!-- <div id="rot" style="margin-left: -10%; margin-right: -10%"> -->
+<p style="font-size: 12px">
+**Figure**: Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
+<p>
+<!-- </div> -->
+</div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
 knitr::include_graphics("img/mod_gb_pdp-interact---QRelHum--QTempC.jpg")
