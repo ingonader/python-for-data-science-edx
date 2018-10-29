@@ -113,6 +113,7 @@ dat_start_station_freq['start_station_code_cat'] = \
 
 ## plot counter data (frequency table, with identity relation):
 ## (sorting does not work here)
+%matplotlib inline
 ggplot(dat_start_station_freq, aes(x = 'start_station_code_cat', y = 'frequency')) + \
     geom_bar(stat = 'identity') + \
     coord_flip()

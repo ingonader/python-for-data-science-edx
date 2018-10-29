@@ -13,6 +13,8 @@ exec(open("./kgl-cycle-share-02-data-download.py").read())
 exec(open("./kgl-cycle-share-03-data-load.py").read())
 exec(open("./kgl-cycle-share-04-data-prep.py").read())
 
+#%run -i kgl-cycle-share-05-exploratory-analysis.py
+
 ## open in editor, as execution makes no sense (and also, contains magic)
 exec(open("./kgl-cycle-share-05-exploratory-analysis.py").read())
 

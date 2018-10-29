@@ -194,10 +194,11 @@ dat_raw.info()
 ## '(no genres listed)' --> None
 #dat_raw['complexity'] = None if (dat_raw['genres'] == '(no genres listed)') else dat_raw['complexity']
 dat_raw['complexity'] = np.where(dat_raw['genres'] == '(no genres listed)', 
-                                 None,
+                                 np.nan,
                                 dat_raw['complexity'])
 
-## turns 'complexity' into type 'object' again...
+## turns 'complexity' into type 'object' again if "None" is used
+## (does not exist in int64 / float64 numpy array data types).
 dat_raw['complexity'] = dat_raw['complexity'].astype(float)
 
 ##GD try
@@ -299,7 +300,9 @@ plt.show()
 
 ## same plot (histogram) using matplotlib, complex variant:
 fig, ax = plt.subplots()
-plt.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
+#ax.grid(True)
+#plt.show()
+ax.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
 
 ##GD i'd recommend using the axis method instead of the module 
 ##GD to properly use maptlotlib's OO API 
@@ -382,6 +385,7 @@ for i in genre_inds_plot:
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 dat_nona = dat_raw.dropna()
+
 
 ## np.corrcoef(dat_nona['rating_mean'], dat_nona['complexity'])
 ## AttributeError: 'float' object has no attribute 'shape'
