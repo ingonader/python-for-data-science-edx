@@ -13,6 +13,10 @@ output:
     #smaller: true  ## only works without "---" slide breaks (use ##)
     slide_level: 2
 csl: plos-one.csl
+link-citations: true
+# References: See 
+# http://pandoc.org/MANUAL.html#citation-rendering
+# https://github.com/jgm/pandoc-citeproc
 references:
 - id: rf_imp
   title: Beware Default Random Forest Importances
@@ -77,6 +81,16 @@ references:
   issued:
     year: 2018
     month: 4
+- id: gbr_feat_imp
+  title: "Cross Validated: Relative variable importance for Boosting"
+  author:
+    - family: Drury
+      given: Matthew
+  URL: 'https://stats.stackexchange.com/questions/162162/relative-variable-importance-for-boosting'
+  issued: 
+    year: 2017
+    month: 11
+    day: 30
 ## Comments and Instructions
 ##
 ## ## ------------------------------------------- ##
@@ -207,7 +221,8 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE)
 * Figure and Table numbering? --> rather not.
 * Figure caption in first column, for ICE plots?
 * Or figure caption in separate column with font facing upwards (90% rotated)?
-* Features: numeric, not categorical (!)
+* Features: continuous, not categorical (!) -- in data prep slide!
+* References: Accessed at?
 
 ## Abstract
 
@@ -338,9 +353,8 @@ on the number of bike trips.
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-**Choosing the closest weather station:**
-
-The Canadian government's past weather and climate service offers a 
+The Canadian government's past weather and climate service provides data
+from weather stations around the whole country. Fortunately, it offers a 
 *search by proximity* function. Via this service, some sample data 
 of the closest stations to
 Montreal were downloaded. Each of the data files contains information about
@@ -357,7 +371,7 @@ and the closest station to the bulk of the data was chosen (station name:
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
 knitr::include_graphics("img/map-of-bike-and-possible-weather-stations_html.jpg")
 ```
-<p style="font-size: 12px">
+<p style="font-size: 12px; margin-top: 1%">
 **Figure**: Plot shows all starting stations of a bike trip (red dots), as
 well as the closest weather stations (blue markers). 
 The closest station in the center is the *MCTAVISH* weather station 
@@ -517,7 +531,7 @@ The most important features that influenced the prediciton of hourly bike
 rides were temperature and atmospheric pressure. While the former is easily 
 comprehensible, the latter is best understood as a proxy for precipitation,
 which was not available from the weather data: low pressure is commonly
-related to rainy weather [@pressure_and_rain]. While Relative humidity is 
+related to rainy weather [@pressure_and_rain]. While relative humidity is 
 not as tightly connected to rain [@humidity_and_rain], it interacts with 
 temperature, e.g., it influences how (high) temperatures are perceived 
 [@humidity_and_temp]. 
@@ -530,12 +544,18 @@ plots [@ice_plots].
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
-<div style="float: left; width: 43%; margin-top: 0%"><!-- ---- start of second column              --> 
+<div style="float: left; width: 43%; margin-top: -2%"><!-- ---- start of second column              --> 
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
 knitr::include_graphics("img/mod_gb_plot-variable-importance.jpg")
 ```
 <p style="font-size: 12px">
-**Figure**: 
+**Figure**: Most important features in the best-fitting model, gradient
+boosting via scikit-learn. The plot show the most important features and 
+their relative importance for predicting the hourly number of bike trips.
+The importance is indicating how well a feature performs in order to reduce
+the mean squared error for predicting the outcome, averaged over all trees
+in the ensemble. Values are normed and cannot be interpreted on an
+absolute scale [@gbr_feat_imp].
 <p>
 
 </div><!-- ------------------------------------ end of second column                -->
@@ -544,18 +564,68 @@ knitr::include_graphics("img/mod_gb_plot-variable-importance.jpg")
 ## Findings: Main effects
 
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
-<div style="float: left; width: 59%"><!-- ---- start of first column               -->
+<div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] to quantify
-the main effects of some of the predictors.
-
-For details, see figure caption.
+Regarding **hour of the day**, rush hours are clearly associated with higher
+number of hourly bike rides. There is a peak at  at eight o'clock 
+in the morning and a (less pronounced) one in the afternoon. It is also visible
+that hour of the day interacts with other variables. First, the average PDP line
+is misleading, as there is a dense area of parallel lines indicating higher bike
+rides, as well as a high density at zero bike rides (i.e., the average PDP line
+obscures these two clusters). Second, There are a few lines showing a different
+pattern, starting to pick up only after the rush hour and steadily rising
+until the afternoon. This might be the interaction with the day of the week
+(see section *Interactions*; see also figure caption for more details about
+PDP and ICE plots).
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
-<div style="float: left; width: 37%; margin-top: -15%"><!-- ---- start of second column              --> 
+<div style="float: left; width: 43%; margin-top: -5%"><!-- ---- start of second column              --> 
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
 knitr::include_graphics("img/mod_gb_ice-main-standard---Qhr_of_day.jpg")
+```
+<p style="font-size: 12px; margin-top: 2%">
+**Figure**: 
+*Partial Dependence Plots* (*PDP*) [@ice_plots] show the influence of a 
+feature by detailing the effect on the target value ($y$-axis) over the 
+whole range of the feature ($x$-axis). That is, the 
+**thick, dark blue line** in the 
+plot shows the main effect of a feature.
+<br>
+In addition, *Individual Conditional Expectation* (*ICE*) plots [@ice_plots] 
+quantify the extent of interactions that exist with other variables. The
+**fine, light blue lines** in the plot show predictions at different levels of the feature
+in question. If they are parallel, there are no interactions 
+with other features. If they are not and show varying slopes compared to the
+main affect, the feature interacts with other features.
+<br>
+In addition, the plot shows the **distribution of the data** over the whole
+feature range as dark blue ticks below the $y$-axis. For hour of the day,
+this is not very interesting (only full hours), but it shows areas with
+sparse data for other features.
+<p>
+
+</div><!-- ------------------------------------ end of second column                -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
+
+
+
+## Findings: Main effects
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 53%"><!-- ---- start of first column               -->
+
+Bike rides also rise with the **temperature**, the most important feature, once
+it has reached a certain treshold of about two or three degrees celcius. The
+rise is relatively steady up to a temperature or about 25 degrees celcius, 
+where the number of hourly rides starts to level off and then to slightly
+decline. It is also visible (from the spread of the ICE plot lines) that
+there are massive interactions of temperature with other features.
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 43%; margin-top: -5%"><!-- ---- start of second column              --> 
+```{r, eval = TRUE, echo = FALSE, out.width = "100%", fig.align = "left"}
 knitr::include_graphics("img/mod_gb_ice-main-standard---QTempC.jpg")
 knitr::include_graphics("img/mod_gb_ice-main-standard---QRelHum.jpg")
 ```
@@ -567,14 +637,15 @@ knitr::include_graphics("img/mod_gb_ice-main-standard---QRelHum.jpg")
 <div style="float: left; width: 20%"><br></div>
 <div style="float: left; width: 42%; margin-top: -10%">
 <p style="font-size: 12px">
-**Figure**: Figure Caption ... Figure Caption ... Figure Caption ... 
-Figure Caption ... Figure Caption ... Figure Caption ... Figure Caption ... 
-Figure Caption ... Figure Caption ... Figure Caption ... Figure Caption ... 
+**Figure**: 
+*Partial Dependence Plots* (*PDP*; thick lines) and 
+*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] (thin lines). 
+For a more detailed explanation, see first occurence of this plot type on the
+previous page.
 <p>
 </div>
 <div style="float: left; width: 38%"><br></div>
 <div style="clear: both"></div>
-
 
 ## Findings: Interactions
 
@@ -656,6 +727,7 @@ You need not come to a definitive conclusion, but you need to say how your findi
 * Maybe have slightly overfitted the training data, but still a good result (MAE).
 * Missing values: ignored / imputed?
 * Using time and month also, or only weather data?
+* continuous vs categorical features for hour of day and day of week etc.
 
 > If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures.
 > Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).
