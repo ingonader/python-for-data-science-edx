@@ -220,6 +220,7 @@ MathJax.Hub.Config({
 * Or figure caption in separate column with font facing upwards (90% rotated)?
 * Features: continuous, not categorical (!) -- in data prep slide!
 * References: Accessed at?
+* Link to github repo (full analysis, notebook synopsis)
 
 ## Abstract
 
@@ -584,44 +585,59 @@ where the number of hourly rides starts to level off and then to slightly
 decline. It is also visible (from the spread of the ICE plot lines) that
 there are massive interactions of temperature with other features.
 
+With **relative humidity**, the main effect is less pronounced. The general
+tendency is a slight decrease for higher humidity, with a more pronounced
+drop around $95\%$. But the main effect is relatively weak compared to the
+overall spread of the ICE plot lines, and there are strong interactions 
+with other features for higher relative humidity.
+
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -5%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_ice-main-standard---QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" /><img src="img/mod_gb_ice-main-standard---QRelHum.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
-
+<p style="font-size: 12px; margin-top: 2%">
+**Figure**: 
+*Partial Dependence Plots* (*PDP*; thick, dark blue lines) and 
+*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] 
+(thin, light blue lines). 
+For a more detailed explanation, see first occurence of this plot type on the
+previous page.
+<p>
 </div><!-- ------------------------------------ end of second column                -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
 
-<div style="float: left; width: 20%"><br></div>
-<div style="float: left; width: 42%; margin-top: -10%">
-<p style="font-size: 12px">
-**Figure**: 
-*Partial Dependence Plots* (*PDP*; thick lines) and 
-*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] (thin lines). 
-For a more detailed explanation, see first occurence of this plot type on the
-previous page.
-<p>
-</div>
-<div style="float: left; width: 38%"><br></div>
-<div style="clear: both"></div>
 
 ## Findings: Interactions
 
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] to quantify
-the main effects of some of the predictors.
+The interaction between **day of the week** and **hour of the day** is not
+the strongest interaction in this model, but it serves well to describe the
+two-feature partial dependence plots (for details, see figure caption). 
+It is clearly visible that during week days ($0$-$4$), there are 
+peaks in the number of predicted hourly bike rides between 
+$7$ and $8$ o'clock in the morning, as well as an even more 
+pronounced peak in the afternoon (higher predicted
+numbers, as well as a broader peak). The number or predicted bike rides
+is slightly lower on Monday mornings.
 
-For details, see figure caption.
+During the weekend (days $5$ and $6$), the distribution is different (i.e.,
+there is an interaction between the two features). There are by far fewer
+predicted bike rides, also the peak is in the afternoon. Additionally, there
+are more bike rides during the night, as compared to weekdays.
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
-<p style="font-size: 12px">
-**Figure**: 
+<p style="font-size: 12px; margin-top: 2%">
+**Figure**: Partial Dependence Plots (PDPs) [@ice_plots] for two features. 
+These plots show the two-way interactions of features (as the number of predicted
+hourly bike rides, coded as the color in the plot) as a function of 
+the features, in this case day of the week and hour of the day.
+These plots do not show further, higher-order interactions with other features.
 <p>
 </div><!-- ------------------------------------ end of second column                -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
