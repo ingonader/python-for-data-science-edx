@@ -42,6 +42,19 @@ references:
   issued:
     year: 2014
     month: 2
+- id: pdp_plots
+  title: "Partial Dependence Plot (PDP)"
+  author: 
+  - family: Molnar
+    given: Christoph
+  URL: https://christophm.github.io/interpretable-ml-book/pdp.html
+  issued:
+    year: 2018
+    month: 10
+  urldate: 
+    year: 2018
+    month: 10
+    day: 30
 - id: ice_plots
   title: "Peeking Inside the Black Box: Visualizing Statistical Learning with Plots of Individual Conditional Expectation"
   author:
@@ -339,8 +352,8 @@ and gradient boosting regression via `scikit-learn` and `xgboost`. The most
 promising model, `scikit-learn`'s gradient boosting regression, was fitted
 via a randomized $4$-fold cross-validation for indentifying the best hyperparameters.
 Variable importance was used to identify the most important influence factors,
-and *Partial Dependence Plots* (*PDP*) and *Individual Conditional Expectation* (*ICE*)
-plots [@ice_plots] were used to 
+and *Partial Dependence Plots* (*PDP*) [@pdp_plots] and 
+*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] were used to 
 **visualize the influences of the important variables** 
 on the number of bike trips.
 
@@ -506,7 +519,8 @@ temperature, e.g., it influences how (high) temperatures are perceived
 Further important predictors are the hour of the day and the day of the week,
 as well as wind direction and speed. How these features influence the 
 predicted number of bike trips is best detailed by specific plots, so-called
-*Partial Dependence Plots* (*PDP*) and *Individual Conditional Expectation* (*ICE*)
+*Partial Dependence Plots* (*PDP*) [@pdp_plots] and 
+*Individual Conditional Expectation* (*ICE*)
 plots [@ice_plots].
 
 </div><!-- ------------------------------------ end of first column                 -->
@@ -549,7 +563,7 @@ PDP and ICE plots).
 <img src="img/mod_gb_ice-main-standard---Qhr_of_day.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 <p style="font-size: 12px; margin-top: 2%">
 **Figure**: 
-*Partial Dependence Plots* (*PDP*) [@ice_plots] show the influence of a 
+*Partial Dependence Plots* (*PDP*) [[@pdp_plots; @ice_plots] show the influence of a 
 feature by detailing the effect on the target value ($y$-axis) over the 
 whole range of the feature ($x$-axis). That is, the 
 **thick, dark blue line** in the 
@@ -585,7 +599,7 @@ where the number of hourly rides starts to level off and then to slightly
 decline. It is also visible (from the spread of the ICE plot lines) that
 there are massive interactions of temperature with other features.
 
-With **relative humidity**, the main effect is less pronounced. The general
+For **relative humidity**, the main effect is less pronounced. The general
 tendency is a slight decrease for higher humidity, with a more pronounced
 drop around $95\%$. But the main effect is relatively weak compared to the
 overall spread of the ICE plot lines, and there are strong interactions 
@@ -597,7 +611,7 @@ with other features for higher relative humidity.
 <img src="img/mod_gb_ice-main-standard---QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" /><img src="img/mod_gb_ice-main-standard---QRelHum.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 <p style="font-size: 12px; margin-top: 2%">
 **Figure**: 
-*Partial Dependence Plots* (*PDP*; thick, dark blue lines) and 
+*Partial Dependence Plots* (*PDP*; thick, dark blue lines) [@pdp_plots] and 
 *Individual Conditional Expectation* (*ICE*) plots [@ice_plots] 
 (thin, light blue lines). 
 For a more detailed explanation, see first occurence of this plot type on the
@@ -613,8 +627,9 @@ previous page.
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-The interaction between **day of the week** and **hour of the day** is not
-the strongest interaction in this model, but it serves well to describe the
+The interaction between **day of the week and hour of the day** is not
+the strongest interaction in this model (see note on the side), 
+but it serves well to describe the
 two-feature partial dependence plots (for details, see figure caption). 
 It is clearly visible that during week days ($0$-$4$), there are 
 peaks in the number of predicted hourly bike rides between 
@@ -630,15 +645,22 @@ are more bike rides during the night, as compared to weekdays.
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
-<div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
+<div style="float: left; width: 43%; margin-top: -11%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 <p style="font-size: 12px; margin-top: 2%">
-**Figure**: Partial Dependence Plots (PDPs) [@ice_plots] for two features. 
+**Figure**: Partial Dependence Plots (PDPs) [@pdp_plots; @ice_plots] for two features. 
 These plots show the two-way interactions of features (as the number of predicted
 hourly bike rides, coded as the color in the plot) as a function of 
 the features, in this case day of the week and hour of the day.
 These plots do not show further, higher-order interactions with other features.
 <p>
+
+<p style="font-size: 12px; margin-top: -2%">
+**Note**: The strength of two-way interactions was determined by estimating a
+gradient boosting regression model similar to the model described before,
+but with using main effects and two-way interactions as distinct features.
+<p>
+
 </div><!-- ------------------------------------ end of second column                -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
@@ -646,7 +668,7 @@ These plots do not show further, higher-order interactions with other features.
 ## Findings: Interactions
 
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
-<div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of first column               -->
+<div style="float: left; width: 43%; margin-top: -11%"><!-- ---- start of first column               -->
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 14%"><br>
@@ -662,11 +684,19 @@ Figure ... Figure ... Figure ... Figure ... Figure ... Figure ...
 <p>
 <!-- </div> -->
 </div><!-- spacing column ----------------- -->
-<div style="float: left; width: 43%; margin-top: -10%"><!-- ---- start of second column              --> 
+<div style="float: left; width: 43%; margin-top: -11%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---QRelHum--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 
 </div><!-- ------------------------------------ end of second column                -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
+
+The interaction between **temperature and hour of the day** is the strongest
+two-way interaction. The plot shows that the pattern described for hour of
+the day (see last slide) is only valid for temperatures above zero degrees
+celsius. The same pattern is visible for the interaction between
+**temperature and relative humidity**: For temperatures above $0°$C,
+there is peak at $25°$C for medium relative humidity, with a decrease 
+of predicted hourly bike rides with increasing relative humidity.
 
 
 ## Findings
