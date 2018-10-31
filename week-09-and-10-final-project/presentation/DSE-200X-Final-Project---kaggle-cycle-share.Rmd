@@ -232,21 +232,34 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE)
 ## [[todo]]
 
 * Figure and Table numbering? --> rather not.
-* Figure caption in first column, for ICE plots?
-* Or figure caption in separate column with font facing upwards (90% rotated)?
+* figure caption in separate column with font facing upwards (90% rotated)?
 * Features: continuous, not categorical (!) -- in data prep slide!
 * References: Accessed at?
 * Link to github repo (full analysis, notebook synopsis)
+* move stuff to css file and bibtex file
 
 ## Abstract
 
-This piece of work investigates the influences of weather on bike rentals.
-...[[todo]]
+This piece of work investigates to what extent and how weather and 
+time of day influence bike rentals in a public bike sharing system in Montreal.
+Public data obtained from the Canadian government’s past weather and 
+climate service as well as bike sharing data available from kaggle are
+analyzed via a simple baseline model (moving average) and a more complex 
+machine learning model (gradient boosting regression). Partial dependence
+plots (PDP) and individual conditional expectation plots (ICE) are used
+to visualize the influences of the different factors.
 
-> Summarize your questions and findings in 1 brief paragraph (4-6 sentences max). Your abstract needs to include: what dataset, what question, what method was used, and findings.
- 
+Results show that the model can explain the number of hourly bike rides very
+well ($93.3\%$ of variance explained). The most important influences on the 
+number of bike rides seem to be temperature, atmospheric pressure, hour
+of the day and relative humidity, but there are strong interactions between
+these influences: For example, the number of predicted bike rides increases
+with temperature, but only if relative humidity is not too high. 
+
+
 ## Motivation
-Describe the problem you want to solve with the data. It may relate closely with your research question, but your goal here is to make your audience care about the project/problem you are trying to solve. You need to articulate the problem you are exploring and why (and for whom) insight would be valuable.
+
+> Describe the problem you want to solve with the data. It may relate closely with your research question, but your goal here is to make your audience care about the project/problem you are trying to solve. You need to articulate the problem you are exploring and why (and for whom) insight would be valuable.
  
 ## Dataset(s) {.smaller}
 
@@ -272,7 +285,7 @@ Two datasets were used: **Bike sharing data**...
 
 ...and **weather data** from the Canadian government:
 
-* Available from<br> [http://climate.weather.gc.ca/ 
+* Canadian government’s past weather and climate service, available from<br> [http://climate.weather.gc.ca/ 
   historical_data/ <br> search_historic_data_e.html](http://climate.weather.gc.ca/historical_data/search_historic_data_e.html)
 * API for **bulk data download**:<br> [http://climate.weather.gc.ca/climate_data/ <br> bulk_data_e.html](http://climate.weather.gc.ca/climate_data/bulk_data_e.html)
 * Data can be downloaded per weather station per month and contains 
@@ -355,8 +368,8 @@ and gradient boosting regression via `scikit-learn` and `xgboost`. The most
 promising model, `scikit-learn`'s gradient boosting regression, was fitted
 via a randomized $4$-fold cross-validation for indentifying the best hyperparameters.
 Variable importance was used to identify the most important influence factors,
-and *Partial Dependence Plots* (*PDP*) [@pdp_plots] and 
-*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] were used to 
+and *partial dependence plots* (*PDP*) [@pdp_plots] and 
+*individual conditional expectation* (*ICE*) plots [@ice_plots] were used to 
 **visualize the influences of the important variables** 
 on the number of bike trips.
 
@@ -553,8 +566,8 @@ temperature, e.g., it influences how (high) temperatures are perceived
 Further important predictors are the hour of the day and the day of the week,
 as well as wind direction and speed. How these features influence the 
 predicted number of bike trips is best detailed by specific plots, so-called
-*Partial Dependence Plots* (*PDP*) [@pdp_plots] and 
-*Individual Conditional Expectation* (*ICE*)
+*partial dependence plots* (*PDP*) [@pdp_plots] and 
+*individual conditional expectation* (*ICE*)
 plots [@ice_plots].
 
 </div><!-- ------------------------------------ end of first column                 -->
@@ -601,13 +614,13 @@ knitr::include_graphics("img/mod_gb_ice-main-standard---Qhr_of_day.jpg")
 ```
 <p style="font-size: 12px; margin-top: 2%">
 **Figure**: 
-*Partial Dependence Plots* (*PDP*) [[@pdp_plots; @ice_plots] show the influence of a 
+*Partial dependence plots* (*PDP*) [[@pdp_plots; @ice_plots] show the influence of a 
 feature by detailing the effect on the target value ($y$-axis) over the 
 whole range of the feature ($x$-axis). That is, the 
 **thick, dark blue line** in the 
 plot shows the main effect of a feature.
 <br>
-In addition, *Individual Conditional Expectation* (*ICE*) plots [@ice_plots] 
+In addition, *individual conditional expectation* (*ICE*) plots [@ice_plots] 
 quantify the extent of interactions that exist with other variables. The
 **fine, light blue lines** in the plot show predictions at different levels of the feature
 in question. If they are parallel, there are no interactions 
@@ -652,8 +665,8 @@ knitr::include_graphics("img/mod_gb_ice-main-standard---QRelHum.jpg")
 ```
 <p style="font-size: 12px; margin-top: 2%">
 **Figure**: 
-*Partial Dependence Plots* (*PDP*; thick, dark blue lines) [@pdp_plots] and 
-*Individual Conditional Expectation* (*ICE*) plots [@ice_plots] 
+*Partial dependence plots* (*PDP*; thick, dark blue lines) [@pdp_plots] and 
+*individual conditional expectation* (*ICE*) plots [@ice_plots] 
 (thin, light blue lines). 
 For a more detailed explanation, see first occurence of this plot type on the
 previous page.
@@ -691,7 +704,7 @@ are more bike rides during the night, as compared to weekdays.
 knitr::include_graphics("img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg")
 ```
 <p style="font-size: 12px; margin-top: 2%">
-**Figure**: Partial Dependence Plots (PDPs) [@pdp_plots; @ice_plots] for two features. 
+**Figure**: Partial dependence plots (PDPs) [@pdp_plots; @ice_plots] for two features. 
 These plots show the two-way interactions of features (as the number of predicted
 hourly bike rides, coded as the color in the plot) as a function of 
 the features, in this case day of the week and hour of the day.
