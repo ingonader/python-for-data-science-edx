@@ -234,6 +234,7 @@ MathJax.Hub.Config({
 * References: Accessed at?
 * Link to github repo (full analysis, notebook synopsis)
 * move stuff to css file and bibtex file
+* make pdf and link it into presentation
 
 ## Abstract
 
@@ -253,6 +254,9 @@ of the day and relative humidity, but there are strong interactions between
 these influences: For example, the number of predicted bike rides increases
 with temperature, but only if relative humidity is not too high. 
 
+The full analysis is available in multiple python files on github:  [kgl-cycle-share-main-file.py](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/kgl-cycle-share-main-file.py).
+<br>
+A synopsis is available as an ipython notebook [cycle-share-analysis-synopsis.ipynb](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/cycle-share-analysis-synopsis.ipynb).
 
 ## Motivation
 
@@ -683,23 +687,25 @@ but with using main effects and two-way interactions as distinct features.
 
 ## Findings: Interactions
 
+
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 10%"><br> <!-- style="transform: rotate(90deg)" -->
+<!-- <div id="rot" style="margin-left: -100%; margin-right: -60%"> -->
+
+<p style="font-size: 12px; position: absolute; width: 30%; top: 40%; left: -5%; transform: rotate(270deg)">
+**Figure**: Partial dependence plots (PDPs) [@pdp_plots; @ice_plots] 
+for two features. The number of predicted
+hourly bike rides is coded as the color in the plot.
+For a more detailed explanation, see first occurence 
+of this plot type on the previous page.
+</p>
+
+<!-- </div> -->
+</div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -11%"><!-- ---- start of first column               -->
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 </div><!-- ------------------------------------ end of first column                 -->
-<div style="float: left; width: 14%"><br>
-<!-- <div id="rot" style="margin-left: -10%; margin-right: -10%"> -->
-<p style="font-size: 12px">
-**Figure**: Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-Figure ... Figure ... Figure ... Figure ... Figure ... Figure ... 
-<p>
-<!-- </div> -->
-</div><!-- spacing column ----------------- -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
 <div style="float: left; width: 43%; margin-top: -11%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---QRelHum--QTempC.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 
@@ -707,12 +713,12 @@ Figure ... Figure ... Figure ... Figure ... Figure ... Figure ...
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
 The interaction between **temperature and hour of the day** is the strongest
-two-way interaction. The plot shows that the pattern described for hour of
-the day (see last slide) is only valid for temperatures above zero degrees
-celsius. The same pattern is visible for the interaction between
-**temperature and relative humidity**: For temperatures above $0°$C,
-there is peak at $25°$C for medium relative humidity, with a decrease 
-of predicted hourly bike rides with increasing relative humidity.
+two-way interaction. The plot shows that the main effect (peaks at rush hour) 
+is only valid for temperatures above approx. $0°$C. This also applies for 
+the interaction between **temperature and relative humidity**: 
+The number of predicted bike rides drops with increasing relative humidity 
+only for temperatures above $0°$C. For lower temperatures, 
+there are hardly any rides at all.
 
 
  
@@ -737,4 +743,3 @@ of predicted hourly bike rides with increasing relative humidity.
 Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.
  
 ## References {.columns-2 .tiny}
-
