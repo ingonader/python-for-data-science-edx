@@ -322,9 +322,12 @@ Two datasets were used: **Bike sharing data**...
 
 * One feature **(wind chill) was dropped**, as it had too many 
   missing values ($77.9\%$ missing).
-* Finally, **addtional features were added** for the analysis: 
-  hour of the day ($0$-$23$), and day of the week ($0$-$6$, zero corresponding 
-  to Monday, six corresponding to Sunday).
+* Finally, **additional features were added** for the analysis: 
+  hour of the day ($0$-$23$), day of the week ($0$-$6$, zero corresponding 
+  to Monday, six corresponding to Sunday), month ($1$-$12$).
+* These features, despite being categorical in nature, were kept as
+  **continuous features**, as this proved to have more predictive
+  power in the models.
 * For modeling, **rows with missing values were dropped**, as the goal 
   is not having the most complete prediction coverage, but rather an 
   indication of the prediction quality that is possible with complete data. 
@@ -757,24 +760,6 @@ celsius. The same pattern is visible for the interaction between
 **temperature and relative humidity**: For temperatures above $0°$C,
 there is peak at $25°$C for medium relative humidity, with a decrease 
 of predicted hourly bike rides with increasing relative humidity.
-
-
-## Findings
-
-Findings Outline:
-
-* Data Exploration: Mean as baseline model?
-* Correlation map?
-* Model and Model Quality (+ pic predicted vs. actual), MAE, r^2 
-    * numerical features only, also categorical models tried (but not as good)
-* Important variables
-* PDP for important variables
-* Interaction Plots for important variables
-    * most important interactions picked by rerunning the model (without CV) with only interaction terms
-
->Feel free to replicate this slide to show multiple findings
->Present your findings. Include at least one visualization in your presentation (feel free to include more). The visualization should be honest, accessible, and elegant for a general audience.
-You need not come to a definitive conclusion, but you need to say how your findings relate back to your research question.
 
 
  
