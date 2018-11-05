@@ -263,10 +263,24 @@ A synopsis is available as an ipython notebook [cycle-share-analysis-synopsis.ip
 
 ## Motivation
 
-> Describe the problem you want to solve with the data. It may relate closely with your research question, but your goal here is to make your audience care about the project/problem you are trying to solve. You need to articulate the problem you are exploring and why (and for whom) insight would be valuable.
+There are quite a few analyses that investigate bike sharing in relation
+to weather, and also some freely available and easily retrievable datasets. 
+But they often use daily aggregates (e.g., the 
+[UCI machine learning dataset on bike sharing](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset)), 
+or they only have a relatively small sample size (e.g., 
+[Kaggle bike sharing demand](https://www.kaggle.com/c/bike-sharing-demand/data)). 
+As I use my bike on a daily basis for (parts of) my commute, I found these 
+investigations very interesting. However, I always thought that daily 
+aggregate data is not enough to understand the phenomenon. Personally, 
+I don't decide on the weather of the whole day if I'll be using the bike. 
+Rather, I just decide if I can use the bike right now. Hence, I wanted to do
+a similar analysis myself, but on a more fine-grained level, i.e., on 
+hourly data, with a big enough sample size to try out some machine
+learning models.
+
+ 
  
 ## Dataset(s) {.smaller}
-
 
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 48%;"><!-- ---- start of first column               -->
