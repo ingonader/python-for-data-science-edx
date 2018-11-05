@@ -229,17 +229,20 @@ MathJax.Hub.Config({
 ## [[todo]]
 
 * Figure and Table numbering? --> rather not.
-* figure caption in separate column with font facing upwards (90% rotated)?
 * Features: continuous, not categorical (!) -- in data prep slide!
 * References: Accessed at?
 * Link to github repo (full analysis, notebook synopsis)
 * move stuff to css file and bibtex file
 * make pdf and link it into presentation
+* remove NA from table: either use "--", or calculate values
+* make text bold in all slides
+
 
 ## Abstract
 
-This piece of work investigates to what extent and how weather and 
-time of day influence bike rentals in a public bike sharing system in Montreal.
+This piece of work investigates **to what extent** and 
+**how weather and time of day influence bike rentals** 
+in a public bike sharing system in Montreal.
 Public data obtained from the Canadian government’s past weather and 
 climate service as well as bike sharing data available from kaggle are
 analyzed via a simple baseline model (moving average) and a more complex 
@@ -384,14 +387,14 @@ on the number of bike trips.
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-The Canadian government's past weather and climate service provides data
+The Canadian government's **past weather and climate service** provides data
 from weather stations around the whole country. Fortunately, it offers a 
 *search by proximity* function. Via this service, some sample data 
 of the closest stations to
 Montreal were downloaded. Each of the data files contains information about
 the weather stations, including the geographical position (latitude and 
 longitude). These coordinates were plotted on a map (see Figure on the right),
-and the closest station to the bulk of the data was chosen (station name: 
+and the **closest station** to the bulk of the data was chosen (station name: 
 *MCTAVISH*). Only data from this station was used.
 
 
@@ -450,7 +453,7 @@ moving average using a window of $14$ days.
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
 To visualize the relations between the available features,
-a correlation heatmap is shown on the right. The features are only
+a **correlation heatmap** is shown on the right. The features are only
 slightly correlated, with the only exception being temperature and dew point
 that show an almost perfect (linear) relationship $(r = .93)$.
 
@@ -501,7 +504,7 @@ were selected via randomized search using $4$-fold cross validation
 
 The final model fits the data very well, explaining $94.1\%$ of the variance and 
 exhibiting an average error of $85.4$ rides over all hourly predictions. 
-This error only increases to $105.4$ if only summer months are considered. 
+This error increases only slightly (to $105.4$) when only summer months are considered. 
 
 
 </div><!-- ------------------------------------ end of first column                 -->
@@ -529,7 +532,7 @@ This model is relatively close.
 
 The most important features that influenced the prediciton of hourly bike 
 rides were temperature and atmospheric pressure. While the former is easily 
-comprehensible, the latter is best understood as a proxy for precipitation,
+comprehensible, the latter is probably best understood as a proxy for precipitation,
 which was not available from the weather data: low pressure is commonly
 related to rainy weather [@pressure_and_rain]. While relative humidity is 
 not as tightly connected to rain [@humidity_and_rain], it interacts with 
