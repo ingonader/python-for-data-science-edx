@@ -229,13 +229,14 @@ MathJax.Hub.Config({
 ## [[todo]]
 
 * ~~Figure and Table numbering? --> rather not.~~
-* Features: continuous, not categorical (!) -- in data prep slide!
-* References: Accessed at?
-* Link to github repo (full analysis, notebook synopsis)
-* move stuff to css file and bibtex file
-* make pdf and link it into presentation
-* remove NA from table: either use "--", or calculate values
+* ~~Features: continuous, not categorical (!) -- in data prep slide!~~
+* ~~Link to github repo (full analysis, notebook synopsis)~~
+* ~~remove NA from table: either use "--", or calculate values~~
 * make text bold in all slides
+* rerun ipython notebook and make pdf or html of notebook 
+  and link it into presentation
+* References: Accessed at?
+* move stuff to css file and bibtex file
 
 
 ## Abstract
@@ -504,13 +505,13 @@ measures were also re-computed for using only the summer months of the test set
 <p style="margin-top: -4%">
 |Model                        |  $r^2_{train}$|   $r^2_{test}$| $r^2_{summer}$| $MAE_{test}$| $MAE_{summer}$|
 |:----------------------------|--------------:|--------------:|-------------------:|------------:|-------------------:|
-|Gradient Boosting (XGBoost)  |        $0.889$|        $0.860$|                  NA|      $158.0$|                  NA|
-|Random Forest                |        $0.913$|        $0.894$|                  NA|      $111.2$|                  NA|
+|Gradient Boosting (XGBoost)  |        $0.896$|        $0.865$|             $0.856$|      $155.3$|             $173.1$|
+|Random Forest                |        $0.913$|        $0.894$|             $0.880$|      $111.2$|             $139.9$|
 |Gradient Boosting (sklearn)  |        $0.997$|        $0.941$|             $0.933$|       $85.4$|             $105.4$|
 </p>
 
 The explained variance of the different models tried ranged from 
-$r_{test}^2 = 0.860$ to $r_{test}^2 = 0.941$ for the final model 
+$r_{test}^2 = 0.865$ to $r_{test}^2 = 0.941$ for the final model 
 (all in the test set; see table).
 The hyperparameters for the final model (gradient boosting via scikit-learn) 
 were selected via randomized search using $4$-fold cross validation 
