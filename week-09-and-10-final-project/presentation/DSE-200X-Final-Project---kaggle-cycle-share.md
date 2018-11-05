@@ -228,7 +228,7 @@ MathJax.Hub.Config({
 
 ## [[todo]]
 
-* Figure and Table numbering? --> rather not.
+* ~~Figure and Table numbering? --> rather not.~~
 * Features: continuous, not categorical (!) -- in data prep slide!
 * References: Accessed at?
 * Link to github repo (full analysis, notebook synopsis)

@@ -231,10 +231,10 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE)
 
 ## [[todo]]
 
-* Figure and Table numbering? --> rather not.
-* Features: continuous, not categorical (!) -- in data prep slide!
+* ~~Figure and Table numbering? --> rather not.~~
+* ~~Features: continuous, not categorical (!) -- in data prep slide!~~
+* ~~Link to github repo (full analysis, notebook synopsis)~~
 * References: Accessed at?
-* Link to github repo (full analysis, notebook synopsis)
 * move stuff to css file and bibtex file
 * make pdf and link it into presentation
 * remove NA from table: either use "--", or calculate values
