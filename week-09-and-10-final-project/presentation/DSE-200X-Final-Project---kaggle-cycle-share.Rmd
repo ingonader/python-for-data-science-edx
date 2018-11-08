@@ -789,16 +789,28 @@ there are hardly any rides at all.
  
 ## Limitations
 
-* Results only valid for cities with roughly the same climate.
-* Bike rides might be influenced by weather *predictions* for a given day, not only by the actual weather.
-* Precipitation (rain, snow) might also be a very good predictor; unfortunately, this was not easily available for the given weather station.
-* Maybe have slightly overfitted the training data, but still a good result (MAE).
-* Missing values: ignored / imputed?
-* Using time and month also, or only weather data?
-* continuous vs categorical features for hour of day and day of week etc.
+There are a few methodological issues that might merrit discussion. First,
+the gradient boosting model might have slightly overfitted the training data,
+but still the results in the test that were quite okay. Also, the decision to
+treat day of the week and time of day as continuous variables (and not
+categorical) might be worth revisiting.
 
-> If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures.
-> Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).
+Regarding the data used, it might have been beneficial to use precipitation 
+(rain, snow) as additional predictor. Unfortunately, this feature was not
+available for the given weather station. Moreover, it might also be worth
+using not actual weather, but weather predictions as additional features,
+as this could also be a good predictor.
+
+The results identified in this analysis might also be applicable for other,
+comparable cities, but only as long as the climate is somewhat comparable.
+Probably the biggest limitation of this analysis is that it only considers 
+influences within the bike sharing system (i.e., how many of the available 
+bikes are rented). It does not consider outside influences like traffic,
+availability of other means of transport, or the need for additional bike
+renting stations. This sets rather narrow boundaries on the usefulness of 
+these results, unfortunately.
+
+
 
 ## Conclusions
 
