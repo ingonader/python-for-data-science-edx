@@ -217,7 +217,8 @@ ul li ul li:before {
     margin-top: 0em;
 }
 
-/* rotatet text */
+/* rotate text; usage: id="rot" in htmltag  */
+/* (not necessary, as style="transform: rotate(90deg)" can be used) */ 
 #rot
 {
    -webkit-transform: rotate(-90deg); /* safari */
