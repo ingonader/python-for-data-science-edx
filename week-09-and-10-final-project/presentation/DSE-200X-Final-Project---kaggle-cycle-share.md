@@ -14,96 +14,11 @@ output:
     slide_level: 2
 csl: plos-one.csl
 link-citations: true
-# References: See 
-# http://pandoc.org/MANUAL.html#citation-rendering
-# https://github.com/jgm/pandoc-citeproc
-references:
-- id: rf_imp
-  title: Beware Default Random Forest Importances
-  author:
-  - family: Parr
-    given: Terence
-  - family: Turgutlu
-    given: Kerem
-  - family: Csiszar
-    given: Christopher
-  - family: Howard
-    given: Jeremy
-  URL: 'http://explained.ai/rf-importance/index.html'
-  issued:
-    year: 2018
-    month: 3
-- id: rf_or_gbm
-  title: Random forest or gradient boosting?
-  author: 
-  - family: Wheatley
-    given: Joe
-  URL: 'http://joewheatley.net/random-forest-or-gradient-boosting/' 
-  issued:
-    year: 2014
-    month: 2
-- id: pdp_plots
-  title: "Partial Dependence Plot (PDP)"
-  author: 
-  - family: Molnar
-    given: Christoph
-  URL: https://christophm.github.io/interpretable-ml-book/pdp.html
-  issued:
-    year: 2018
-    month: 10
-  urldate: 
-    year: 2018
-    month: 10
-    day: 30
-- id: ice_plots
-  title: "Peeking Inside the Black Box: Visualizing Statistical Learning with Plots of Individual Conditional Expectation"
-  author:
-    - family: Goldstein
-      given: Alex
-    - family: Kapelner
-      given: Adam
-    - family: Bleich
-      given: Justin
-    - family: Pitkin
-      given: Emil
-  URL: 'https://arxiv.org/pdf/1309.6392.pdf'
-  issued:
-    year: 2014
-    month: 3
-- id: pressure_and_rain
-  title: "Why Does it Rain When the Pressure Is Low?"
-  author:
-    - family: Morgan
-      given: Lee
-  URL: 'https://sciencing.com/rain-pressure-low-8738476.html'
-  issued: 
-    year: 2017
-    month: 4
-- id: humidity_and_rain
-  title: "RELATIVE HUMIDITY PITFALLS"
-  author:
-    - family: Haby
-      given: Jeff
-  URL: 'http://www.theweatherprediction.com/habyhints2/564/'
-- id: humidity_and_temp
-  title: "How Temperature & Humidity are Related"
-  author:
-    - family: Dotson
-      given: J. Dianne
-  URL: 'https://sciencing.com/temperature-ampamp-humidity-related-7245642.html'
-  issued:
-    year: 2018
-    month: 4
-- id: gbr_feat_imp
-  title: "Cross Validated: Relative variable importance for Boosting"
-  author:
-    - family: Drury
-      given: Matthew
-  URL: 'https://stats.stackexchange.com/questions/162162/relative-variable-importance-for-boosting'
-  issued: 
-    year: 2017
-    month: 11
-    day: 30
+bibliography: references.yaml
+## References: See 
+## http://pandoc.org/MANUAL.html#citation-rendering
+## https://github.com/jgm/pandoc-citeproc
+##
 ## Comments and Instructions
 ##
 ## ## ------------------------------------------- ##
@@ -742,16 +657,28 @@ there are hardly any rides at all.
  
 ## Limitations
 
-* Results only valid for cities with roughly the same climate.
-* Bike rides might be influenced by weather *predictions* for a given day, not only by the actual weather.
-* Precipitation (rain, snow) might also be a very good predictor; unfortunately, this was not easily available for the given weather station.
-* Maybe have slightly overfitted the training data, but still a good result (MAE).
-* Missing values: ignored / imputed?
-* Using time and month also, or only weather data?
-* continuous vs categorical features for hour of day and day of week etc.
+There are a few methodological issues that might merrit discussion. First,
+the gradient boosting model might have slightly overfitted the training data,
+but still the results in the test that were quite okay. Also, the decision to
+treat day of the week and time of day as continuous variables (and not
+categorical) might be worth revisiting.
 
-> If applicable, describe limitations to your findings. For example, you might note that these results were true for British Premier league players but may not be applicable to other leagues because of differences in league structures.
-> Or you may note that your data has inherent limitations. For example, you may not have access to the number of Twitter followers per users so you assumed all users are equally influential. If you had the number of followers, you could weight the impact of their tweet’s sentiment by their influence (# of followers).
+Regarding the data used, it might have been beneficial to use precipitation 
+(rain, snow) as additional predictor. Unfortunately, this feature was not
+available for the given weather station. Moreover, it might also be worth
+using not actual weather, but weather predictions as additional features,
+as this could also be a good predictor.
+
+The results identified in this analysis might also be applicable for other,
+comparable cities, but only as long as the climate is somewhat comparable.
+Probably the biggest limitation of this analysis is that it only considers 
+influences within the bike sharing system (i.e., how many of the available 
+bikes are rented). It does not consider outside influences like traffic,
+availability of other means of transport, or the need for additional bike
+renting stations. This sets rather narrow boundaries on the usefulness of 
+these results, unfortunately.
+
+
 
 ## Conclusions
 
