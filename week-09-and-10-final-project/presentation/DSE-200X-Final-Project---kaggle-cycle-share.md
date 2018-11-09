@@ -682,9 +682,29 @@ these results, unfortunately.
 
 ## Conclusions
 
-> Report your overall conclusions, preferably a conclusion per research question
- 
+The number of bike rides seems to depend heavily on weather and time variables.
+It is possible to explain most of the variation and to make somewhat accurate 
+predictions with a machine learning model. 
+
+The most important factors are relatively obvious ones. The number of bike
+rides increases with temperature (picking up at about $2$-$3°C$, 
+up to about $25°C$). Atmospheric pressure does not have a strong effect
+on its own, but interacts heavily with other factors.. For relative humidity, 
+the number of bike rides drops with increasing humidity. Hour of the day 
+might be the most obvious factor, with most bike rides in the morning and 
+in the afternoon. 
+
+For all of the variables, there are strong interactions. For example, 
+bike rides only have morning and afternoon peaks during work days, not at
+weekends, and high relative humidity leads to fewer bike rides in general,
+but more so for higher temperatures.
+
+In summary, the analysis confirmed obvious assumptions. Probably the biggest 
+surprise was how well the model was able to predict the number of bike rides.
+
+
 ## Acknowledgements
+
 Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.
  
 ## References {.columns-2 .tiny}
