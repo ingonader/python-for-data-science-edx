@@ -653,6 +653,38 @@ The number of predicted bike rides drops with increasing relative humidity
 only for temperatures above $0°$C. For lower temperatures, 
 there are hardly any rides at all.
 
+## Findings: Interactions
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 53%"><!-- ---- start of first column               -->
+
+* Atmospheric pressure: no main effect, but second-most important interaction 
+(with hour of the day). 
+
+* 
+
+<div style="float: left; width: 85%"><!-- ---- inner first col start -->
+<img src="img/mod_gb_ice-main-standard---QStnPresskPa.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+</div>
+<div style="float: left; width: 15%; margin-top: -0%"><!-- inner second col start -->
+<p style="font-size: 12px; position: absolute; width: 20%; top: 55%; left: 40%; transform: rotate(270deg)">
+**Figure**: Partial dependence plot (PDP) shows No obvious main effect 
+of atmospheric pressure on numer of bike rides.
+<p>
+</div>
+
+</div><!-- ------------------------------------ end of first column                 -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 43%; margin-top: -15%"><!-- ---- start of second column              --> 
+<img src="img/mod_gb_pdp-interact---Qhr_of_day--QStnPresskPa.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+<p style="font-size: 12px; margin-top: 2%">
+**Figure**: 
+<p>
+
+
+
+</div><!-- ------------------------------------ end of second column                -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
 
  
 ## Limitations
