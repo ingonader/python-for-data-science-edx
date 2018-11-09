@@ -655,23 +655,32 @@ there are hardly any rides at all.
 
 ## Findings: Interactions
 
+<!-- absolutely positioned figure at the bottom: -->
+<div style="position: absolute; top: 58%">
+<div style="float: left; width: 43%"><!-- ---- inner first col start -->
+<img src="img/mod_gb_ice-main-standard---QStnPresskPa.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+</div>
+<div style="float: left; width: 15%; margin-top: -0%"><!-- inner second col start -->
+<p style="font-size: 12px; position: absolute; width: 21%; top: 43%; left: 36%; transform: rotate(270deg)">
+**Figure**: Partial dependence plot (PDP) shows no obvious main effect 
+of atmospheric pressure on numer of bike rides.
+<p>
+</div>
+</div>
+
+
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
 * Atmospheric pressure: no main effect, but second-most important interaction 
 (with hour of the day). 
 
-* 
+* In the morning, number of bike rides increase when atmospheric 
+pressure is above $100$ kPa. 
 
-<div style="float: left; width: 85%"><!-- ---- inner first col start -->
-<img src="img/mod_gb_ice-main-standard---QStnPresskPa.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
-</div>
-<div style="float: left; width: 15%; margin-top: -0%"><!-- inner second col start -->
-<p style="font-size: 12px; position: absolute; width: 20%; top: 55%; left: 40%; transform: rotate(270deg)">
-**Figure**: Partial dependence plot (PDP) shows No obvious main effect 
-of atmospheric pressure on numer of bike rides.
-<p>
-</div>
+* In the afternoon, the increase in bike rides seems to happen at a slightly
+lower atmospheric pressure. 
+
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
