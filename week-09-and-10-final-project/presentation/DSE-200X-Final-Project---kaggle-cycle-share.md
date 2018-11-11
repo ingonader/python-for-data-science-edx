@@ -449,7 +449,7 @@ identical to the true values, i.e., all points would be on the $45°$ diagonal.
 This model is relatively close.
 <p>
 
-</div><!-- ------------------------------------ end of second column                -->
+</div><!-- ------------------------------------ end of seconkpad column                -->
 
 
 
@@ -647,10 +647,10 @@ of this plot type on the previous page.
 
 The interaction between **temperature and hour of the day** is the strongest
 two-way interaction. The plot shows that the main effect (peaks at rush hour) 
-is only valid for temperatures above approx. $0°$C. This also applies for 
+is only valid for temperatures above approx. $0°C$. This also applies for 
 the interaction between **temperature and relative humidity**: 
 The number of predicted bike rides drops with increasing relative humidity 
-only for temperatures above $0°$C. For lower temperatures, 
+only for temperatures above $0°C$. For lower temperatures, 
 there are hardly any rides at all.
 
 ## Findings: Interactions
@@ -676,7 +676,7 @@ of atmospheric pressure on numer of bike rides.
 (with hour of the day). 
 
 * In the morning, number of bike rides increase when atmospheric 
-pressure is above $100$ kPa. 
+pressure is above $100\:kPa$. 
 
 * In the afternoon, the increase in bike rides seems to happen at a slightly
 lower atmospheric pressure. 
