@@ -449,7 +449,7 @@ identical to the true values, i.e., all points would be on the $45°$ diagonal.
 This model is relatively close.
 <p>
 
-</div><!-- ------------------------------------ end of seconkpad column                -->
+</div><!-- ------------------------------------ end of second column                -->
 
 
 
@@ -672,22 +672,26 @@ of atmospheric pressure on numer of bike rides.
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-* Atmospheric pressure: no main effect, but second-most important interaction 
-(with hour of the day). 
-
-* In the morning, number of bike rides increase when atmospheric 
-pressure is above $100\:kPa$. 
-
-* In the afternoon, the increase in bike rides seems to happen at a slightly
+**Atmospheric pressure** has almost no visible main effect (see figure on the
+bottom), but it turned out to be the second-most important interaction 
+(with hour of the day). This interaction is depicted in the figure on the right: 
+In the morning, number of bike rides increase when atmospheric 
+pressure is above about $100\:kPa$, but in  the afternoon, 
+the increase in bike rides seems to happen at a slightly
 lower atmospheric pressure. 
 
 
 </div><!-- ------------------------------------ end of first column                 -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column ----------------- -->
-<div style="float: left; width: 43%; margin-top: -15%"><!-- ---- start of second column              --> 
+<div style="float: left; width: 43%; margin-top: -11%"><!-- ---- start of second column              --> 
 <img src="img/mod_gb_pdp-interact---Qhr_of_day--QStnPresskPa.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 <p style="font-size: 12px; margin-top: 2%">
-**Figure**: 
+**Figure**: Partial dependence plots (PDPs) [@pdp_plots; @ice_plots] 
+for atmospheric pressure and hourh of the day. 
+The number of predicted
+hourly bike rides is coded as the color in the plot.
+For a more detailed explanation, see first occurence 
+of this plot type on one of the previous pages.
 <p>
 
 
