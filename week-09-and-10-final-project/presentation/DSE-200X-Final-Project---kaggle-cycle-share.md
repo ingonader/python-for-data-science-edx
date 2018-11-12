@@ -112,11 +112,11 @@ MathJax.Hub.Config({
 * ~~Features: continuous, not categorical (!) -- in data prep slide!~~
 * ~~Link to github repo (full analysis, notebook synopsis)~~
 * ~~remove NA from table: either use "--", or calculate values~~
-* make text bold in all slides
-* rerun ipython notebook and make pdf or html of notebook 
-  and link it into presentation
-* References: Accessed at?
-* move stuff to css file and bibtex file
+* ~~make text bold in all slides~~
+* ~~rerun ipython notebook and make pdf or html of notebook 
+  and link it into presentation~~
+* ~~move stuff to css file and bibtex file~~
+* (not) ~~References: Accessed at?~~
 
 
 ## Abstract
@@ -140,7 +140,8 @@ with temperature, but only if relative humidity is not too high.
 
 The full analysis is available in multiple python files on github:  [kgl-cycle-share-main-file.py](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/kgl-cycle-share-main-file.py).
 <br>
-A synopsis is available as an ipython notebook [cycle-share-analysis-synopsis.ipynb](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/cycle-share-analysis-synopsis.ipynb).
+A synopsis is available as an ipython notebook [cycle-share-analysis-synopsis.ipynb](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/cycle-share-analysis-synopsis.ipynb), or as [html](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/cycle-share-analysis-synopsis.html) to download.
+
 
 ## Motivation
 
