@@ -2,7 +2,7 @@
 title: "Weather and Bike Rentals"
 subtitle: "What are the influening factors and <br>how well can they predict the number of rented bikes?"
 author: "Ingo Nader"
-date: "Oct 2018"
+date: "Nov 2018"
 #output: html_document
 output: 
   ioslides_presentation:
