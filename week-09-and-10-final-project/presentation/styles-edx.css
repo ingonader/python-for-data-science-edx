@@ -5,11 +5,73 @@
 /* Date: Oct 2016                                                  */
 /* *************************************************************** */
 
+
+/* =============================================================== */
+/* Normal Text */
+/* =============================================================== */
+
 /* standard presentation font (when using smaller: true ?) */
 article {
     font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
     font-size: 17pt;
 }
+
+/* standard presentation font (when using smaller: true ?) */
+.smaller {
+    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+
+.tiny {
+    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-size: 60%;
+}
+
+/* rotate text; usage: id="rot" in htmltag  */
+/* (not necessary, as style="transform: rotate(90deg)" can be used) */ 
+#rot
+{
+   -webkit-transform: rotate(-90deg); /* safari */
+   -moz-transform: rotate(-90deg);    /* firefox */
+   -ms-transform: rotate(-90deg); /* internet explorer */
+   -o-transform: rotate(-90deg); /* opera */
+   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* internet explorer */
+   /* width: 100px; */
+}
+
+
+/* =============================================================== */
+/* Bullet Points and Enumerations */
+/* =============================================================== */
+
+/* unordered list, first level */
+ul > li:before {
+    /* content: '*'; /* '\2022';  '*'; */
+    /* content: '\220e';  /* qed. (tombstone) */
+    /* content: '\2598'; /* quadrant upper left */
+    /* content: '\259d'; /* quadrant upper right */
+    /* content: '\259a'; /* quadrant upper left and lower right */
+    /* content: '\25a0';  /* black square */
+    content: '\25aa'; /* small black square */
+    color: "black";
+    font-weight: bold;
+    /* font-size: 130%; */
+    /* margin-left: -0.8em; */
+    /* margin-top: -0.3rem; /*needed when using bigger font, except with asterisk */
+}
+
+/* unordered list, second and further level */
+ul li ul li:before {
+    content: '\25E6';
+    font-weight: 600;
+    font-size: 100%;
+    margin-left: -0.8em;
+    margin-top: 0em;
+}
+
+
+/* =============================================================== */
+/* Titles and Headers */
+/* =============================================================== */
 
 /* header colors */
 .title-slide hgroup h1 {
@@ -31,20 +93,9 @@ h1, h2, h3 {
   color: "black";
 }
 
-/* standard presentation font (when using smaller: true ?) */
-.smaller {
-    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-}
-
-.tiny {
-    font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-    font-size: 60%;
-}
-
-/* font for latex formulas: */
-/* .MathJax * { */
-/* font-size: 24px; */
-/*} */  /* does not work for font-family; use <script> in html document instead */
+/* =============================================================== */
+/* HTML Tables */
+/* =============================================================== */
 
 /* table formating: header */
 table.rmdtable th { 
@@ -65,7 +116,21 @@ table.rmdtable tr td {
 }
 
 
-/* overall style of code and results(not inline in text)*/
+/* =============================================================== */
+/* LaTeX Formulas */
+/* =============================================================== */
+
+/* font for latex formulas: */
+/* .MathJax * { */
+/* font-size: 24px; */
+/*} */  /* does not work for font-family; use <script> in html document instead */
+
+
+/* =============================================================== */
+/* Code Formatting */
+/* =============================================================== */
+
+/* overall style of code and results (not inline in text) */
 pre {
     font-size: 16px;
     line-height: 20px;
@@ -124,6 +189,18 @@ code {
 }
 */
 
+/* smaller code on {.smaller} slides */
+article.smaller pre {
+    font-size: 13px;
+    line-height: 15px;
+    letter-spacing: 0;
+}
+
+
+/* =============================================================== */
+/* various stuff */
+/* =============================================================== */
+
 /* the following stuff is kept in the main document, as it relates to logo size and placement:
 
 /* gdbar size (that contains logo) on title page   * /
@@ -161,6 +238,9 @@ slides > slide:not(.nobackground):before {
 */
 
 
+
+
+
 /* for slides with red background (only works for normal text, not whole slide) {.bgred} */
 .bgred,
 .bgred div,
@@ -185,46 +265,5 @@ slides > slide:not(.nobackground):before {
 /*  background:#ffaaaa;   */
 /*}   */
 
-/* smaller code on {.smaller} slides */
-article.smaller pre {
-    font-size: 13px;
-    line-height: 15px;
-    letter-spacing: 0;
-}
 
-/* unordered list, first level */
-ul > li:before {
-    /* content: '*'; /* '\2022';  '*'; */
-    /* content: '\220e';  /* qed. (tombstone) */
-    /* content: '\2598'; /* quadrant upper left */
-    /* content: '\259d'; /* quadrant upper right */
-    /* content: '\259a'; /* quadrant upper left and lower right */
-    /* content: '\25a0';  /* black square */
-    content: '\25aa'; /* small black square */
-    color: "black";
-    font-weight: bold;
-    /* font-size: 130%; */
-    /* margin-left: -0.8em; */
-    /* margin-top: -0.3rem; /*needed when using bigger font, except with asterisk */
-}
 
-/* unordered list, second and further level */
-ul li ul li:before {
-    content: '\25E6';
-    font-weight: 600;
-    font-size: 100%;
-    margin-left: -0.8em;
-    margin-top: 0em;
-}
-
-/* rotate text; usage: id="rot" in htmltag  */
-/* (not necessary, as style="transform: rotate(90deg)" can be used) */ 
-#rot
-{
-   -webkit-transform: rotate(-90deg); /* safari */
-   -moz-transform: rotate(-90deg);    /* firefox */
-   -ms-transform: rotate(-90deg); /* internet explorer */
-   -o-transform: rotate(-90deg); /* opera */
-   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* internet explorer */
-   /* width: 100px; */
-}
