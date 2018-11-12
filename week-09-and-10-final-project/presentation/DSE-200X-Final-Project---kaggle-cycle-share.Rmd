@@ -109,19 +109,6 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE)
 ```
 
 
-## [[todo]]
-
-* ~~Figure and Table numbering? --> rather not.~~
-* ~~Features: continuous, not categorical (!) -- in data prep slide!~~
-* ~~Link to github repo (full analysis, notebook synopsis)~~
-* ~~remove NA from table: either use "--", or calculate values~~
-* ~~make text bold in all slides~~
-* ~~rerun ipython notebook and make pdf or html of notebook 
-  and link it into presentation~~
-* ~~move stuff to css file and bibtex file~~
-* (not) ~~References: Accessed at?~~
-
-
 ## Abstract
 
 This piece of work investigates **to what extent** and 
@@ -772,8 +759,5 @@ In summary, the analysis confirmed obvious assumptions. Probably the biggest
 surprise was how well the model was able to predict the number of bike rides.
 
 
-## Acknowledgements
 
-Where did you get your data? Did you use other informal analysis to inform your work? Did you get feedback on your work by friends or colleagues? Etc. If you had no one give you feedback and you collected the data yourself, say so.
- 
 ## References {.columns-2 .tiny}
