@@ -10,6 +10,11 @@
 /* Normal Text */
 /* =============================================================== */
 
+/* justify text: */
+body {
+  text-align: justify
+}
+
 /* standard presentation font (when using smaller: true ?) */
 article {
     font-family: "Arial", "Lucida Grande", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
@@ -93,6 +98,38 @@ h1, h2, h3 {
   color: "black";
 }
 
+
+/* =============================================================== */
+/* Logo position in title slide and on slides */
+/* =============================================================== */
+
+/* gdbar size (that contains logo) on title page */
+/* needs to have greater height than logo image, other stuff is irrelevant */
+.gdbar {
+  position:absolute !important;
+  top: 50px !important; left: auto; right: 0px !important; width: 0px !important;
+  height: 500px !important;  /* modify if logo is larger than this in height */
+}
+
+/* logo size on title page */
+.gdbar img {
+  position: absolute; 
+  top: 0px;
+  left: 50px;
+  width: 154px !important;
+  height: 127px !important;
+}
+
+/* logo size on slides */
+slides > slide:not(.nobackground):before {
+  width: 77px; height: 64px; /* modify width and height (twice) */
+  background-size: 77px 64px;
+  position: absolute; left: auto;
+  right: -30px;  /* modify position */
+  top: 10px;
+}
+
+
 /* =============================================================== */
 /* HTML Tables */
 /* =============================================================== */
@@ -123,7 +160,9 @@ table.rmdtable tr td {
 /* font for latex formulas: */
 /* .MathJax * { */
 /* font-size: 24px; */
-/*} */  /* does not work for font-family; use <script> in html document instead */
+/*} */  
+
+/* does not work for font-family; use <script> in html/Rmd document instead */
 
 
 /* =============================================================== */
@@ -201,46 +240,6 @@ article.smaller pre {
 /* various stuff */
 /* =============================================================== */
 
-/* the following stuff is kept in the main document, as it relates to logo size and placement:
-
-/* gdbar size (that contains logo) on title page   * /
-/* needs to have greater height than logo image, other stuff is irrelevant  * /
-.gdbar {
-  position:absolute !important;
-  top: 50px !important;
-  left: auto;
-  right: 0px !important;
-  width: 0px !important;
-  height: 500px !important;
-}
-
-/* logo size on title page * /
-.gdbar img {
-  position: absolute;
-  top: 0px;
-  left: 50px;
-  /*left: auto;
-  right: 300px; * /
-  width: 260px !important;
-  height: 126px !important;
-}
-
-/* logo size on slides * /
-slides > slide:not(.nobackground):before {
-  width: 130px;
-  height: 63px;
-  background-size: 130px 63px;
-  position: absolute;
-  left: auto;
-  right: -30px;
-  top: 10px;
-}
-*/
-
-
-
-
-
 /* for slides with red background (only works for normal text, not whole slide) {.bgred} */
 .bgred,
 .bgred div,
@@ -264,6 +263,5 @@ slides > slide:not(.nobackground):before {
 /*  background-color:#ffaaaa;   */
 /*  background:#ffaaaa;   */
 /*}   */
-
 
 

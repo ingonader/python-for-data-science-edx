@@ -87,45 +87,10 @@ http://www.w3schools.com/css/css_font.asp
 http://www.cssfontstack.com/Helvetica
 )
 
-<style>
-/* justify text: */
-body {
-  text-align: justify
-}
-
-/* gdbar size (that contains logo) on title page */
-/* needs to have greater height than logo image, other stuff is irrelevant */
-.gdbar {
-  position:absolute !important;
-  top: 50px !important; left: auto; right: 0px !important; width: 0px !important;
-  height: 500px !important;  /* modify if logo is larger than this in height */
-}
-
-/* logo size on title page */
-.gdbar img {
-  position: absolute; 
-  top: 0px;
-  left: 50px;
-  width: 154px !important;
-  height: 127px !important;
-}
-
-/* logo size on slides */
-slides > slide:not(.nobackground):before {
-  width: 77px; height: 64px; /* modify width and height (twice) */
-  background-size: 77px 64px;
-  position: absolute; left: auto;
-  right: -30px;  /* modify position */
-  top: 10px;
-}
-
-/*slides > slide.backdrop {   */
-/*  background-color:#ffaaaa;   */
-/*  background:#ffaaaa;   */
-/*}   */
+<style>  <!-- put CSS here to test quickly -->
 </style>
 
-<script type="text/x-mathjax-config">
+<script type="text/x-mathjax-config">  <!-- LaTeX formula config -->
 MathJax.Hub.Config({
   jax: ["input/TeX", "output/HTML-CSS"],
   "HTML-CSS": { 
