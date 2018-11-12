@@ -163,7 +163,7 @@ This piece of work investigates **to what extent** and
 **how weather and time of day influence bike rentals** 
 in a public bike sharing system in Montreal.
 Public data obtained from the Canadian government’s past weather and 
-climate service as well as bike sharing data available from kaggle are
+climate service, as well as bike sharing data available from Kaggle are
 analyzed via a simple baseline model (moving average) and a more complex 
 machine learning model (gradient boosting regression). Partial dependence
 plots (PDP) and individual conditional expectation plots (ICE) are used
@@ -182,8 +182,8 @@ A synopsis is available as an ipython notebook [cycle-share-analysis-synopsis.ip
 
 ## Motivation
 
-There are quite a few analyses that investigate bike sharing in relation
-to weather, and also some freely available and easily retrievable datasets. 
+There are quite a few analyses that **investigate bike sharing in relation
+to weather**, and also some freely available and easily retrievable datasets. 
 But they often use daily aggregates (e.g., the 
 [UCI machine learning dataset on bike sharing](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset)), 
 or they only have a relatively small sample size (e.g., 
@@ -192,8 +192,10 @@ As I use my bike on a daily basis for (parts of) my commute, I found these
 investigations very interesting. However, I always thought that daily 
 aggregate data is not enough to understand the phenomenon. Personally, 
 I don't decide on the weather of the whole day if I'll be using the bike. 
-Rather, I just decide if I can use the bike right now. Hence, I wanted to do
-a similar analysis myself, but on a more fine-grained level, i.e., on 
+Rather, I just decide if I can use the bike right now. 
+
+Hence, I wanted to do
+a **similar analysis myself, but on a more fine-grained level**, i.e., on 
 hourly data, with a big enough sample size to try out some machine
 learning models.
 
@@ -208,7 +210,7 @@ Two datasets were used: **Bike sharing data**...
 
 * **BIXI Montreal public bicycle sharing system**, North America's first 
   large-scale bike sharing system
-* Available via kaggle from<br> [https://www.kaggle.com/aubertsigouin/biximtl/home](https://www.kaggle.com/aubertsigouin/biximtl/home)
+* Available via Kaggle from<br> [https://www.kaggle.com/aubertsigouin/biximtl/home](https://www.kaggle.com/aubertsigouin/biximtl/home)
 * For years $2014$ to $2017$
 * Contains **individual records of bike trips**: timestamp and station code for 
   start and end of trip, duration
@@ -241,7 +243,7 @@ Two datasets were used: **Bike sharing data**...
 <div style="float: left; width: 48%;"><!-- ---- start of first column ---- -->
 
 * First, **data download** was performed manually for the bike share data 
-  from kaggle (as only available after login), and via a Python script 
+  from Kaggle (as only available after login), and via a Python script 
   for the weather data (bulk download).
 * For the weather data, the **weather station** that was most central to the
   locations of the bike rides was picked (see data exploration).
@@ -249,7 +251,7 @@ Two datasets were used: **Bike sharing data**...
   each for individual bike rides and hourly weather data.
 * The next step was **calculating the variable of interest: Hourly bike rides**. 
   This was done by aggregating individual bike trips to hourly counts of 
-  trips (how many trips in each hour), using the starting time of the trip.
+  trips (number of trips in each hour), using the starting time of the trip.
 * Then, the **weather data was joined to the hourly bike ride data**, 
   using the common timestamp as join key.
 
@@ -280,8 +282,9 @@ Two datasets were used: **Bike sharing data**...
 
 The research questions that I wanted to answer with my analysis were:
 
-* **To what extent do** the number of **bike rides depend on the current 
-  weather conditions**? That is, how well can the number of bike rides 
+* **To what extent do** the number of 
+  **bike rides depend on the current weather conditions**? That is, 
+  how well can the number of bike rides 
   be predicted from weather data (and time of year, time of day)?
 * What are the **most important factors** that influence the number 
   of bike rides?
@@ -298,7 +301,7 @@ investigated time span. Also, the interrelation of features was investigated
 by means of a correlation heatmap.
 
 In order to find out how well the number of bike rides can be predicted 
-from the data, different models were used As a **baseline model**, a moving
+from the data, different models were used. As a **baseline model**, a moving
 average was calculated to find out how this very simple model can explain the data.
 
 Then, after splitting the data into $90\%$ training and $10\%$ test set, 
@@ -355,15 +358,16 @@ The closest station in the center is the *MCTAVISH* weather station
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-To get a better understanding of the data, the number of hourly bike trips
-was visualized for the time span between $2014$ and $2017$. 
+To get a better understanding of the data, the 
+**number of hourly bike trips was visualized** 
+for the time span between $2014$ and $2017$. 
 
-The moving average that is shown in the plot (red line) can 
-be interpreted as a *baseline model*, i.e., 
+The **moving average** that is shown in the plot (red line) can 
+be interpreted as a **baseline model**, i.e., 
 the simplest possible model to describe the hourly number of bike rides. 
 
 This baseline model explains $38.8\%$ of the variance $(r^2 = 0.388)$ and has
-a mean absolute error of $MAE = 316.2$, which means that on average, the "prediction" 
+a mean absolute error of $MAE = 316.2$, which means that on average, the prediction
 for the number of hourly bike rides is wrong by this many bike rides. 
 This includes also winter months with no rides. For a more realistic estimation
 of model quality, these numbers drop to $r^2 = .079$ and $MAE = 510.7$ when only 
@@ -418,6 +422,17 @@ knitr::include_graphics("img/expl-corr-heatmap.jpg")
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
+The explained variance of the different models tried ranged from 
+$r_{test}^2 = 0.865$ to $r_{test}^2 = 0.941$ for the final model 
+(all in the test set; see table).
+The hyperparameters for the final model (gradient boosting via scikit-learn) 
+were selected via randomized search using $4$-fold cross validation 
+(using only the training set). 
+
+The **final model fits the data very well**, explaining $94.1\%$ of the variance and 
+exhibiting an average error of $85.4$ rides over all hourly predictions. 
+This error increases only slightly (to $105.4$) when only summer months are considered. 
+
 <p style="font-size: 12px">
 **Table**: Model performance measures for different models. $r^2$ is the amount 
 of variance explained, $MAE$ stands for mean absolute error. $train$ and $test$ 
@@ -433,17 +448,6 @@ measures were also re-computed for using only the summer months of the test set
 |Random Forest                |        $0.913$|        $0.894$|             $0.880$|      $111.2$|             $139.9$|
 |Gradient Boosting (sklearn)  |        $0.997$|        $0.941$|             $0.933$|       $85.4$|             $105.4$|
 </p>
-
-The explained variance of the different models tried ranged from 
-$r_{test}^2 = 0.865$ to $r_{test}^2 = 0.941$ for the final model 
-(all in the test set; see table).
-The hyperparameters for the final model (gradient boosting via scikit-learn) 
-were selected via randomized search using $4$-fold cross validation 
-(using only the training set). 
-
-The final model fits the data very well, explaining $94.1\%$ of the variance and 
-exhibiting an average error of $85.4$ rides over all hourly predictions. 
-This error increases only slightly (to $105.4$) when only summer months are considered. 
 
 
 </div><!-- ------------------------------------ end of first column                 -->
@@ -494,17 +498,17 @@ This model is relatively close.
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-The most important features that influenced the prediciton of hourly bike 
-rides were temperature and atmospheric pressure. While the former is easily 
+The **most important features** that influence the prediciton of hourly bike 
+rides were **temperature** and **atmospheric pressure**. While the former is easily 
 comprehensible, the latter is probably best understood as a proxy for precipitation,
 which was not available from the weather data: low pressure is commonly
-related to rainy weather [@pressure_and_rain]. While relative humidity is 
+related to rainy weather [@pressure_and_rain]. While **relative humidity** is 
 not as tightly connected to rain [@humidity_and_rain], it interacts with 
 temperature, e.g., it influences how (high) temperatures are perceived 
 [@humidity_and_temp]. 
 
-Further important predictors are the hour of the day and the day of the week,
-as well as wind direction and speed. How these features influence the 
+Further important predictors are the **hour of the day** and the **day of the week**,
+as well as **wind direction and speed**. How these features influence the 
 predicted number of bike trips is best detailed by specific plots, so-called
 *partial dependence plots* (*PDP*) [@pdp_plots] and 
 *individual conditional expectation* (*ICE*)
@@ -517,10 +521,10 @@ plots [@ice_plots].
 knitr::include_graphics("img/mod_gb_plot-variable-importance.jpg")
 ```
 <p style="font-size: 12px">
-**Figure**: Most important features in the best-fitting model, gradient
-boosting via scikit-learn. The plot show the most important features and 
+**Figure**: Most important features in the best-fitting model (gradient
+boosting via scikit-learn). The plot shows the most important features and 
 their relative importance for predicting the hourly number of bike trips.
-The importance is indicating how well a feature performs in order to reduce
+The importance value indicates how well a feature performs in order to reduce
 the mean squared error for predicting the outcome, averaged over all trees
 in the ensemble. Values are normed and cannot be interpreted on an
 absolute scale [@gbr_feat_imp].
@@ -535,7 +539,7 @@ absolute scale [@gbr_feat_imp].
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
 Regarding **hour of the day**, rush hours are clearly associated with higher
-number of hourly bike rides. There is a peak at  at eight o'clock 
+number of hourly bike rides. There is a peak at eight o'clock 
 in the morning and a (less pronounced) one in the afternoon. It is also visible
 that hour of the day interacts with other variables. First, the average PDP line
 is misleading, as there is a dense area of parallel lines indicating higher bike
@@ -554,16 +558,16 @@ knitr::include_graphics("img/mod_gb_ice-main-standard---Qhr_of_day.jpg")
 ```
 <p style="font-size: 12px; margin-top: 2%">
 **Figure**: 
-*Partial dependence plots* (*PDP*) [[@pdp_plots; @ice_plots] show the influence of a 
-feature by detailing the effect on the target value ($y$-axis) over the 
-whole range of the feature ($x$-axis). That is, the 
+***Partial dependence plots*** (*PDP*) [@pdp_plots; @ice_plots] show the influence 
+of a feature over its whole range ($x$-axis). The predicted outcome is
+visualized on the $y$-axis. That is, the 
 **thick, dark blue line** in the 
 plot shows the main effect of a feature.
 <br>
-In addition, *individual conditional expectation* (*ICE*) plots [@ice_plots] 
+In addition, ***individual conditional expectation*** (*ICE*) plots [@ice_plots] 
 quantify the extent of interactions that exist with other variables. The
 **fine, light blue lines** in the plot show predictions at different levels of the feature
-in question. If they are parallel, there are no interactions 
+in question. If they these lines are parallel, there are no interactions 
 with other features. If they are not and show varying slopes compared to the
 main affect, the feature interacts with other features.
 <br>
@@ -583,9 +587,9 @@ sparse data for other features.
 <div></div><!-- ------------------------------- needed, but don't put anything here -->
 <div style="float: left; width: 53%"><!-- ---- start of first column               -->
 
-Bike rides also rise with the **temperature**, the most important feature, once
+Bike rides also increase with the **temperature** (the most important feature), once
 it has reached a certain treshold of about two or three degrees celcius. The
-rise is relatively steady up to a temperature or about 25 degrees celcius, 
+increase is relatively steady up to a temperature or about 25 degrees celcius, 
 where the number of hourly rides starts to level off and then to slightly
 decline. It is also visible (from the spread of the ICE plot lines) that
 there are massive interactions of temperature with other features.
@@ -626,8 +630,8 @@ the strongest interaction in this model (see note on the side),
 but it serves well to describe the
 two-feature partial dependence plots (for details, see figure caption). 
 It is clearly visible that during week days ($0$-$4$), there are 
-peaks in the number of predicted hourly bike rides between 
-$7$ and $8$ o'clock in the morning, as well as an even more 
+peaks in the number of predicted hourly bike rides at 
+$8$ o'clock in the morning, as well as an even more 
 pronounced peak in the afternoon (higher predicted
 numbers, as well as a broader peak). The number or predicted bike rides
 is slightly lower on Monday mornings.
@@ -644,17 +648,19 @@ are more bike rides during the night, as compared to weekdays.
 knitr::include_graphics("img/mod_gb_pdp-interact---Qhr_of_day--Qday_of_week.jpg")
 ```
 <p style="font-size: 12px; margin-top: 2%">
-**Figure**: Partial dependence plots (PDPs) [@pdp_plots; @ice_plots] for two features. 
-These plots show the two-way interactions of features (as the number of predicted
-hourly bike rides, coded as the color in the plot) as a function of 
-the features, in this case day of the week and hour of the day.
+**Figure**: Partial dependence plots (PDPs) [@pdp_plots; @ice_plots] for
+two-way interactions. These plots show the the effect of two variables on
+the predicted outcome (number of predicted
+hourly bike rides, coded as the color in the plot). The two features, 
+in this case, are the day of the week and hour of the day.
 These plots do not show further, higher-order interactions with other features.
 <p>
 
 <p style="font-size: 12px; margin-top: -2%">
 **Note**: The strength of two-way interactions was determined by estimating a
 gradient boosting regression model similar to the model described before,
-but with using main effects and two-way interactions as distinct features.
+but with using main effects and two-way interactions as distinct features and
+then calculating the variable importance.
 <p>
 
 </div><!-- ------------------------------------ end of second column                -->
@@ -757,16 +763,17 @@ There are a few methodological issues that might merrit discussion. First,
 the gradient boosting model might have slightly overfitted the training data,
 but still the results in the test that were quite okay. Also, the decision to
 treat day of the week and time of day as continuous variables (and not
-categorical) might be worth revisiting.
+categorical) might be worth revisiting (even given that the predictive power
+was better this way).
 
 Regarding the data used, it might have been beneficial to use precipitation 
 (rain, snow) as additional predictor. Unfortunately, this feature was not
 available for the given weather station. Moreover, it might also be worth
-using not actual weather, but weather predictions as additional features,
-as this could also be a good predictor.
+using not actual weather, but weather predictions as additional features. 
+However, this was beyond the scope of this project.
 
-The results identified in this analysis might also be applicable for other,
-comparable cities, but only as long as the climate is somewhat comparable.
+The results identified in this analysis might also be applicable for other 
+cities, but only as long as the climate is somewhat comparable.
 Probably the biggest limitation of this analysis is that it only considers 
 influences within the bike sharing system (i.e., how many of the available 
 bikes are rented). It does not consider outside influences like traffic,
