@@ -21,6 +21,13 @@ import pandas as pd
 from plotnine import *
 import matplotlib.pyplot as plt
 
+## ========================================================================= ##
+## global variables and options
+## ========================================================================= ##
+
+#path_raw = '/Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx'
+path_raw = '/Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx/week-06-mini-project'
+path_dat = os.path.join(path_raw, 'data')
 
 ## ========================================================================= ##
 ## download and extract zip
@@ -30,7 +37,6 @@ import matplotlib.pyplot as plt
 url_base = 'http://files.grouplens.org/datasets/movielens/'
 filename = 'ml-20m.zip'
 url = urllib.parse.urljoin(url_base, filename)
-path_dat = './data'
 
 # ## download (commented out in order not to repeat it every time):
 # r = requests.get(url, allow_redirects=True)
@@ -282,6 +288,7 @@ genre_dict
 ## mean ratings:
 
 ## check mean ratings (histogram):
+%matplotlib inline
 ggplot(dat_raw, aes(x = 'rating_mean')) + \
   geom_histogram(bins = 40, color = 'blue', fill = 'blue')
 
@@ -309,7 +316,7 @@ ax.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
 ##GD ax.hist(dat_raw['rating_mean'], 10, normed=False, facecolor='green')
 
 ## complexity:
-
+%matplotlib inline
 ggplot(dat_raw, aes(x = 'complexity')) + \
   geom_bar(color = 'blue', fill = 'blue')
 
