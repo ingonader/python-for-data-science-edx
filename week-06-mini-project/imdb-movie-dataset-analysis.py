@@ -602,6 +602,9 @@ mean_squared_error(dat_test_y, dat_test_pred)    # MSE in test set
 r2_score(dat_train_y, dat_train_pred)            # R^2 (r squared) in test set
 r2_score(dat_test_y, dat_test_pred)              # R^2 (r squared) in test set
 
+type(dat_test_y)       ## pandas.core.series.Series
+type(dat_test_pred)    ## numpy.ndarray
+
 ## VIF:
 ## For each X, calculate VIF and save in dataframe
 vif = pd.DataFrame()
