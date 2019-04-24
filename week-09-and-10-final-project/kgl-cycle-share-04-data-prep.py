@@ -116,6 +116,18 @@ pd.crosstab(dat_hr_all['trip_cnt'] == 0,
 
 ## [[todo]]
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## write raw data to disk using feather
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+import feather
+
+feather.write_dataframe(
+    dat_hr_all,
+    os.path.join(path_dat, 'dat_hr_all.feather')
+)
+
+
 
 
 
