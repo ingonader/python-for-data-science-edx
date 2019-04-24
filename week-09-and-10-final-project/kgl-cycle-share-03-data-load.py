@@ -30,16 +30,16 @@ import pandas as pd
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 ## inspect trip data:
-tmp = pd.read_csv('./data/OD_2014.csv').head()
+tmp = pd.read_csv(os.path.join(path_dat, 'OD_2014.csv')).head()
 tmp.head()
 tmp.dtypes
 
 ## inspect stations data:
-pd.read_csv('./data/Stations_2014.csv').head()
-pd.read_csv('./data/Stations_2015.csv').head()
-pd.read_csv('./data/Stations_2016.csv').head()
-pd.read_csv('./data/Stations_2017.csv').head()
-pd.read_csv('./data/Stations_2014.csv').head().dtypes
+pd.read_csv(os.path.join(path_dat, 'Stations_2014.csv')).head()
+pd.read_csv(os.path.join(path_dat, 'Stations_2015.csv')).head()
+pd.read_csv(os.path.join(path_dat, 'Stations_2016.csv')).head()
+pd.read_csv(os.path.join(path_dat, 'Stations_2017.csv')).head()
+pd.read_csv(os.path.join(path_dat, 'Stations_2014.csv')).head().dtypes
 
 # ## data for these years:
 # dat_years = [2014, 2015, 2016, 2017]
@@ -185,5 +185,15 @@ dat_weather_raw =     pd.concat(dat_weather_raw_list, axis = 0)
 dat_weather_raw.info()
 
 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## write raw data to disk using feather
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+import feather
+
+feather.write_dataframe(
+    dat_weather_raw,
+    os.path.join(path_dat, 'dat_weather_raw.feather')
+)
 
 

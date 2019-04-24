@@ -12,6 +12,20 @@
 ## [[todo]]
 ## * clean up file (remove unnecessary code / comments)
 
+## ========================================================================= ## 
+## virtual environmen
+## ========================================================================= ## 
+
+## setup:
+
+# python3.7 -m pip install virtualenv
+
+# cd /Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx
+# python3.7 -m virtualenv venv
+# source venv/bin/activate
+# ## ... 
+# deactivate
+
 
 ## ========================================================================= ## 
 ## import libraries
@@ -38,8 +52,8 @@ import folium
 ## global variables and options
 ## ========================================================================= ##
 
-path_dat = './data'
-path_out = './output'
+path_dat = '/Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx/week-09-and-10-final-project/data'
+path_out = '/Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx/week-09-and-10-final-project/output'
 
 pd.set_option('display.max_columns', 50)
 
