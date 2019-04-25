@@ -357,6 +357,7 @@ bmr_full <- benchmark(
 toc()
 bmr_full
 
+save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
 parallelStop()
 
 
