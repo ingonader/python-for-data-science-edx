@@ -18,6 +18,7 @@ library(tidyverse)
 library(ggplot2)
 library(mlr)
 library(feather)
+library(tictoc)
 
 ## ========================================================================= ##
 ## global variables and options
@@ -78,7 +79,7 @@ dat_hr_mod <- na.omit(dat_hr_all[varnames_model])
 dim(dat_hr_mod)
 
 ## train and test set (indices):
-idx_train <- sample(1:nrow(dat_hr_mod), size = 1000, replace = FALSE) ## size = 26168 ## 10000 for testing
+idx_train <- sample(1:nrow(dat_hr_mod), size = 26168, replace = FALSE) ## size = 26168 ## 10000 for testing
 idx_test <- setdiff(1:nrow(dat_hr_mod), idx_train)
 length(idx_train)
 
@@ -90,7 +91,7 @@ length(idx_train)
 ## don't save any objects until here:
 obj_notsave <- ls()
 
-# load(file = file.path(path_dat, "kgl-mlr-trials_v001.Rdata"))
+# load(file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
 
 ## ========================================================================= ##
 ## define task
@@ -110,12 +111,12 @@ task <- subsetTask(task = task_full, subset = idx_train)
 ## enable parallel execution
 library(parallelMap)
 parallelGetRegisteredLevels()
-parallelStartMulticore(cpus = 3, level = "mlr.resample")
+parallelStartMulticore(cpus = 4, level = "mlr.resample")
 
 ## set random seed, also valid for parallel execution:
 set.seed(4271, "L'Ecuyer")
 
-## choose resampling strategy:
+## choose resampling strategy for parameter tuning:
 rdesc <- makeResampleDesc(predict = "both", 
                           method = "CV", iters = 3)
 #method = "RepCV", reps = 3, folds = 5)
@@ -125,6 +126,7 @@ ctrl <- makeTuneControlRandom(maxit = 40)
 tune_measures <- list(rmse, mae, rsq, timetrain, timepredict)
 
 ## standard random forest implementation:
+tic("time: tuning rf")
 tune_results_rf <- tuneParams(
   "regr.randomForest", 
   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
@@ -134,10 +136,12 @@ tune_results_rf <- tuneParams(
     makeIntegerParam("ntree", lower = 100, upper = 500)
   )
 )
+toc()
 tune_results_rf
 tune_results_rf$x
 
 ## faster random forest implementation:
+tic("time: tuning ranger")
 tune_results_ranger <- tuneParams(
   "regr.ranger", 
   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
@@ -147,9 +151,11 @@ tune_results_ranger <- tuneParams(
     makeIntegerParam("num.trees", lower = 100, upper = 500)
   )
 )
+toc()
 tune_results_ranger
 
 ## gradient boosting
+tic("time: tuning gbm")
 tune_results_gbm <- tuneParams(
   "regr.gbm", 
   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
@@ -159,10 +165,12 @@ tune_results_gbm <- tuneParams(
     makeIntegerParam("n.trees", lower = 100, upper = 1000)
   )
 )
+toc()
 tune_results_gbm
 #getParamSet("regr.gbm")
 
 ## gradient boosting using xgboost:
+tic("time: tuning xgboost")
 tune_results_xgboost <- tuneParams(
   "regr.xgboost", 
   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
@@ -172,6 +180,7 @@ tune_results_xgboost <- tuneParams(
     
   )
 )
+toc()
 tune_results_xgboost
 #getParamSet("regr.xgboost")
 
@@ -182,14 +191,11 @@ parallelStop()
 ## ========================================================================= ##
 
 ## start parallelization on benchmark level:
-#parallelStartMulticore(cpus = 3, level = "mlr.benchmark")
-parallelStartMulticore(cpus = 3, level = "mlr.resample")
+#parallelStartMulticore(cpus = 4, level = "mlr.benchmark")
+parallelStartMulticore(cpus = 4, level = "mlr.resample")
 
 ## set random seed, also valid for parallel execution:
-set.seed(4271, "L'Ecuyer")
-
-rdesc_bm <- makeResampleDesc(predict = "both", 
-                             method = "RepCV", reps = 3, folds = 4)
+set.seed(427121, "L'Ecuyer")
 
 lrns_tuned <- list(
   makeLearner("regr.randomForest",  par.vals = tune_results_rf$x),
@@ -203,7 +209,12 @@ rmse.train.mean <- setAggregation(rmse, train.mean)
 mae.train.mean <- setAggregation(mae, train.mean)
 rsq.train.mean <- setAggregation(rsq, train.mean)
 
-## refit models on complete training data, validate on test data:
+## set resampling strategy for benchmarking:
+rdesc_bm <- makeResampleDesc(predict = "both", 
+                             method = "RepCV", reps = 3, folds = 4)
+
+## refit tuned models on complete training data:
+tic("time: refit tuned models on training data")
 bmr_train <- benchmark(
   lrns_tuned, task, rdesc_bm,
   measures = list(rmse, #rmse.train.mean,
@@ -211,19 +222,22 @@ bmr_train <- benchmark(
                   rsq, #rsq.train.mean,
                   timetrain, timepredict)
 )
+toc()
 bmr_train
+
+## visualizing benchmark results:
+plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
+  aes(fill = learner.id) + geom_point(alpha = .5)
 
 
 ## ========================================================================= ##
 ## use tuning wrappers in benchmark itself
 ## ========================================================================= ##
 
-## also makes it possible to combine with different preprocessing
-
-## [[here]] 
+## also makes it possible to combine with different preprocessing...
 
 ## set random seed, also valid for parallel execution:
-set.seed(4271, "L'Ecuyer")
+set.seed(427124, "L'Ecuyer")
 
 ## parameters for parameter tuning (search strategy and iterations):
 ctrl <- makeTuneControlRandom(maxit = 40)
@@ -292,10 +306,12 @@ lrns_tunewrap <- list(
 ## warning produced by:
 #mlr::makeLearner("regr.xgboost")
 
+## resamplnig strategy for benchmarking:
 rdesc_bm <- mlr::makeResampleDesc(predict = "both", 
                                method = "RepCV", reps = 3, folds = 4)
 
 #mlr::listMeasures(task)
+tic("time: tuning and fitting to training data using wrappers")
 bmr_tunewrap <- benchmark(
   lrns_tunewrap, task, rdesc_bm,
   # measures = list(rmse, mae, rsq)
@@ -304,20 +320,16 @@ bmr_tunewrap <- benchmark(
                   rsq, #rsq.train.mean)
                   timetrain, timepredict)
 )
+toc()
 bmr_tunewrap
 
 
 ## save everything except data and path
 obj <- setdiff(ls(), obj_notsave)
-#save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001.Rdata"))
+save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
 
-## ========================================================================= ##
-## visualizing benchmark results
-## ========================================================================= ##
 
-plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
-  aes(fill = learner.id) + geom_point(alpha = .5)
-
+## visualizing benchmark results:
 plotBMRBoxplots(bmr_tunewrap, measure = mae, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
 
@@ -333,6 +345,7 @@ rdesc_bmf <- makeFixedHoldoutInstance(train.inds = idx_train,
 rdesc_bmf
 
 ## refit models on complete training data, validate on test data:
+tic("time: refit models on complete training data, validate on test data")
 bmr_full <- benchmark(
   lrns_tuned, task_full, rdesc_bmf,
   # measures = list(rmse, mae, rsq)
@@ -341,6 +354,7 @@ bmr_full <- benchmark(
                   rsq, #rsq.train.mean,
                   timetrain, timepredict)
 )
+toc()
 bmr_full
 
 parallelStop()
