@@ -3,11 +3,17 @@
 ## with R's mlr package
 ## ######################################################################### ##
 
-# parallelStop(); rm(list = ls(), inherits = TRUE); rstudioapi::restartSession()
+# parallelStop()
+# rm(list = ls(), inherits = TRUE); rstudioapi::restartSession()
 
 ## [[todo]]
 ## * on.learner.error option
-## * parameter tuning in outer tuning loop + inner loop
+## * use 4-fold CV in parameter tuning for comparison reasons (with python code)
+## * save ggplot plots as files
+## * create presentation
+## * inspect model using pdp package (and maye ICEbox) (if needed)
+
+
 
 ## ========================================================================= ##
 ## load packages 
@@ -137,6 +143,8 @@ tune_results_rf <- tuneParams(
   )
 )
 toc()
+## time: tuning rf: 2275.833 sec elapsed (about 38 mins)
+
 tune_results_rf
 tune_results_rf$x
 
@@ -152,6 +160,7 @@ tune_results_ranger <- tuneParams(
   )
 )
 toc()
+## time: tuning ranger: 508.617 sec elapsed (about 9 mins)
 tune_results_ranger
 
 ## gradient boosting
@@ -166,6 +175,8 @@ tune_results_gbm <- tuneParams(
   )
 )
 toc()
+## time: tuning gbm: 309.933 sec elapsed (about 5 mins)
+
 tune_results_gbm
 #getParamSet("regr.gbm")
 
@@ -181,6 +192,7 @@ tune_results_xgboost <- tuneParams(
   )
 )
 toc()
+## time: tuning xgboost: 666.536 sec elapsed (about 11 mins)
 tune_results_xgboost
 #getParamSet("regr.xgboost")
 
@@ -223,6 +235,7 @@ bmr_train <- benchmark(
                   timetrain, timepredict)
 )
 toc()
+## time: refit tuned models on training data: 890.584 sec elapsed (about 15 mins)
 bmr_train
 
 ## visualizing benchmark results:
@@ -321,8 +334,9 @@ bmr_tunewrap <- benchmark(
                   timetrain, timepredict)
 )
 toc()
+## time: tuning and fitting to training data using wrappers: 22206.947 sec elapsed (about 370 mins = 6.2 hrs)
+## note: individual tuning + refitting with RepCV: 2275 + 508 + 309 + 666 + 890 = 4648 secs
 bmr_tunewrap
-
 
 ## save everything except data and path
 obj <- setdiff(ls(), obj_notsave)
@@ -355,6 +369,7 @@ bmr_full <- benchmark(
                   timetrain, timepredict)
 )
 toc()
+## time: refit models on complete training data, validate on test data: 191.371 sec elapsed (about 3.2 mins)
 bmr_full
 
 save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
