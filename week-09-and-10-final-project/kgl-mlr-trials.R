@@ -3,7 +3,7 @@
 ## with R's mlr package
 ## ######################################################################### ##
 
-# parallelStop()
+# parallelMap::parallelStop()
 # rm(list = ls(), inherits = TRUE); rstudioapi::restartSession()
 
 ## [[todo]]
@@ -35,6 +35,13 @@ filename <- "dat_hr_all.feather"
 
 options(tibble.width = Inf)
 
+## define var for number of cpus and CV interations for parameter tuning:
+## (benchmarking handled differently)
+n_cpus <- 4
+n_cv_iters_tuning <- 4
+
+## decide what to do on learner errors (mlr package):
+mlr::configureMlr(on.learner.error = "warn")
 
 ## ========================================================================= ##
 ## read data (preprocessed with python)
@@ -85,24 +92,24 @@ dat_hr_mod <- na.omit(dat_hr_all[varnames_model])
 dim(dat_hr_mod)
 
 ## train and test set (indices):
-idx_train <- sample(1:nrow(dat_hr_mod), size = 26168, replace = FALSE) ## size = 26168 ## 10000 for testing
+set.seed(452)
+idx_train <- sample(1:nrow(dat_hr_mod), size = 26168, replace = FALSE) ## size = 26168 ## 1000 for testing
 idx_test <- setdiff(1:nrow(dat_hr_mod), idx_train)
 length(idx_train)
 
+## don't save any objects until here:
+obj_notsave <- ls()
 
 ## ========================================================================= ##
 ## restore everything from disk
 ## ========================================================================= ##
 
-## don't save any objects until here:
-obj_notsave <- ls()
-
+# load(file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
 # load(file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
 
 ## ========================================================================= ##
 ## define task
 ## ========================================================================= ##
-
 
 ## create a task: (= data + meta-information)
 task_full <- makeRegrTask(id = "trip_cnt_mod", 
@@ -117,14 +124,14 @@ task <- subsetTask(task = task_full, subset = idx_train)
 ## enable parallel execution
 library(parallelMap)
 parallelGetRegisteredLevels()
-parallelStartMulticore(cpus = 4, level = "mlr.resample")
+parallelStartMulticore(cpus = n_cpus, level = "mlr.resample")
 
 ## set random seed, also valid for parallel execution:
 set.seed(4271, "L'Ecuyer")
 
 ## choose resampling strategy for parameter tuning:
 rdesc <- makeResampleDesc(predict = "both", 
-                          method = "CV", iters = 3)
+                          method = "CV", iters = n_cv_iters_tuning)
 #method = "RepCV", reps = 3, folds = 5)
 
 ## parameters for parameter tuning:
@@ -203,8 +210,8 @@ parallelStop()
 ## ========================================================================= ##
 
 ## start parallelization on benchmark level:
-#parallelStartMulticore(cpus = 4, level = "mlr.benchmark")
-parallelStartMulticore(cpus = 4, level = "mlr.resample")
+#parallelStartMulticore(cpus = n_cpus, level = "mlr.benchmark")
+parallelStartMulticore(cpus = n_cpus, level = "mlr.resample")
 
 ## set random seed, also valid for parallel execution:
 set.seed(427121, "L'Ecuyer")
@@ -241,7 +248,17 @@ bmr_train
 ## visualizing benchmark results:
 plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
+plotBMRBoxplots(bmr_train, measure = timetrain, style = "violin") +
+  aes(fill = learner.id) + geom_point(alpha = .5)
 
+
+## ========================================================================= ##
+## save snapshot to disk
+## ========================================================================= ##
+
+## save everything except data and path
+obj <- setdiff(ls(), obj_notsave)
+save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
 
 ## ========================================================================= ##
 ## use tuning wrappers in benchmark itself
@@ -258,7 +275,7 @@ tune_measures <- list(rmse, mae, rsq, timetrain, timepredict)
 
 ## choose resampling strategy for parameter tuning:
 rdesc_tune <- makeResampleDesc(predict = "both", 
-                               method = "CV", iters = 3)
+                               method = "CV", iters = n_cv_iters_tuning)
 #method = "RepCV", reps = 3, folds = 5)
 
 ## make tuning wrapper for learner, 
@@ -337,10 +354,6 @@ toc()
 ## time: tuning and fitting to training data using wrappers: 22206.947 sec elapsed (about 370 mins = 6.2 hrs)
 ## note: individual tuning + refitting with RepCV: 2275 + 508 + 309 + 666 + 890 = 4648 secs
 bmr_tunewrap
-
-## save everything except data and path
-obj <- setdiff(ls(), obj_notsave)
-save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
 
 
 ## visualizing benchmark results:
