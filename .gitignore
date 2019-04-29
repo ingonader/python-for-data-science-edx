@@ -37,3 +37,4 @@ old/*
 
 # End of https://www.gitignore.io/api/jupyternotebook
 
+.Rproj.user
