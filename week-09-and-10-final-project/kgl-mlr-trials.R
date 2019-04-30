@@ -9,11 +9,7 @@
 ## [[todo]]
 ## * on.learner.error option
 ## * use 4-fold CV in parameter tuning for comparison reasons (with python code)
-## * save ggplot plots as files
-## * create presentation
-## * inspect model using pdp package (and maye ICEbox) (if needed)
-
-
+## * add timing information to presentation
 
 ## ========================================================================= ##
 ## load packages 
@@ -50,9 +46,9 @@ mlr::configureMlr(on.learner.error = "warn")
 ## ========================================================================= ##
 
 ## customized ggsave function to avoid retyping all parameters:
-ggsave_cust <- function(fname) 
+ggsave_cust <- function(fname, ...) 
   ggsave(filename = file.path(path_img, fname), 
-         width = 8, height = 4, dpi = 200)
+         width = 8, height = 4, dpi = 200, ...)
 
 ## ========================================================================= ##
 ## read data (preprocessed with python)
@@ -246,15 +242,16 @@ toc()
 ## time: tuning ranger: 960.068 sec elapsed with 4-fold CV (about 16 mins) with lots of other apps open
 tune_results_ranger
 
-## gradient boosting
+## gradient boosting via gbm
 tic("time: tuning gbm")
 tune_results_gbm <- tuneParams(
   "regr.gbm", 
   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
   par.set = makeParamSet(
-    makeIntegerParam("interaction.depth", lower = 1, upper = 9),
-    makeIntegerParam("n.minobsinnode", lower = 10, upper = 50),
-    makeIntegerParam("n.trees", lower = 100, upper = 1000)
+    makeNumericParam("shrinkage", lower = 0.001, upper = .2),
+    makeIntegerParam("interaction.depth", lower = 1, upper = 25),
+    makeIntegerParam("n.minobsinnode", lower = 10, upper = 100),
+    makeIntegerParam("n.trees", lower = 500, upper = 10000)
   )
 )
 toc()
@@ -281,6 +278,48 @@ toc()
 
 tune_results_xgboost
 #getParamSet("regr.xgboost")
+
+
+# ## gradient boosting via bst
+# tic("time: tuning bst")
+# tune_results_bst <- tuneParams(
+#   "regr.bst", 
+#   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
+#   #par.vals = list(xval = 4),
+#   par.set = makeParamSet(
+#     makeIntegerParam("xval", lower = 4, upper = 4),  ## internal cross-validation
+#     makeIntegerParam("mstop", lower = 50, upper = 201), ## number of boosting interations
+#     makeNumericParam("nu", lower = .05, upper = .2),    ## step size or shrinkage parameter [[?]]
+#     makeIntegerParam("minbucket", lower = 30, upper = 60),
+#     makeIntegerParam("maxdepth", lower = 4, upper = 21)
+#   )
+# )
+# toc()
+# ## time: tuning bst: 267.062 sec elapsed with 4-fold CV (about 5 mins) with lots of other apps open
+# ## note: sucks on small sample sizes; and on larger sample sizes as well?
+# 
+# tune_results_bst
+# #getParamSet("regr.bst")
+# 
+# ## gradient boosting via glmboost
+# tic("time: tuning glmboost")
+# tune_results_glmboost <- tuneParams(
+#   "regr.glmboost",
+#   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
+#   par.set = makeParamSet(
+#     makeDiscreteParam("family", c("Gaussian", "Huber", "Poisson")),
+#     makeLogicalParam("center", TRUE),
+#     makeIntegerParam("mstop", lower = 50, upper = 201), ## number of boosting interations [[?]]
+#     makeNumericParam("nu", lower = .05, upper = .2)    ## step size or shrinkage parameter [[?]]
+#   )
+# )
+# toc()
+# ##time: tuning glmboost: 55.027 sec elapsed with 4-fold CV with lots of other apps open
+# ## note: sucks on small sample sizes; and on larger sample sizes as well?
+# 
+# tune_results_glmboost
+# #getParamSet("regr.glmboost")
+
 
 parallelStop()
 
@@ -329,7 +368,7 @@ bmr_train
 ## visualizing benchmark results:
 plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
-ggsave_cust("plot-bmr-boxplot-mae.jpg")
+ggsave_cust("plot-bmr-boxplot-mae.jpg", scale = .75)
 
 plotBMRBoxplots(bmr_train, measure = timetrain, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
@@ -341,7 +380,7 @@ plotBMRBoxplots(bmr_train, measure = timetrain, style = "violin") +
 
 ## save everything except data and path
 obj <- setdiff(ls(), obj_notsave)
-save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
+save(list = obj, file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
 
 ## ========================================================================= ##
 ## use tuning wrappers in benchmark itself
@@ -483,7 +522,7 @@ parallelStop()
 
 ## save everything except data and path
 obj <- setdiff(ls(), obj_notsave)
-save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
+save(list = obj, file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
 
 ## ========================================================================= ##
 ## inspect best model predictions
@@ -558,36 +597,55 @@ predictor_xgboost <- Predictor$new(
 ## "choose" a standard predictor to be used below:
 predictor <- predictor_xgboost
 
+varimp_scale <- .8
+
 ## most important features:
-imp <- FeatureImp$new(predictor, loss = "mae")
-plot(imp)
+imp_xgboost <- FeatureImp$new(predictor_xgboost, loss = "mae")
+plot(imp_xgboost)
+ggsave_cust("plot-varimp-xgboost.jpg", scale = varimp_scale)
+
+imp_rf <- FeatureImp$new(predictor_rf, loss = "mae")
+plot(imp_rf)
+ggsave_cust("plot-varimp-rf.jpg", scale = varimp_scale)
 
 
 ## most important interactions:
 ## plots how much of the variance of f(x) is explained by the interaction. 
 ## The measure is between 0 (no interaction) and 1 (= 100% of variance of f(x) 
 ## due to interactions)
-interact <- Interaction$new(predictor)
-plot(interact)
+interact_xgboost <- Interaction$new(predictor_xgboost)
+plot(interact_xgboost)
+ggsave_cust("plot-varimp-interact-xgboost.jpg", scale = varimp_scale)
+
+interact_rf <- Interaction$new(predictor_rf)
+plot(interact_rf)
+ggsave_cust("plot-varimp-interact-rf.jpg", scale = varimp_scale)
 
 ## most important interactions:
 interact_hr_of_day <- Interaction$new(predictor, feature = "hr_of_day")
 plot(interact_hr_of_day)
+ggsave_cust("plot-varimp-interact-xgboost-hr_of_day.jpg", scale = varimp_scale)
 interact_temp <- Interaction$new(predictor, feature = "temp")
 plot(interact_temp)
+ggsave_cust("plot-varimp-interact-xgboost-temp.jpg", scale = varimp_scale)
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## feature effects (with iml)
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
+
+eff_scale <- .8
+
 # ## accumulated local effects (ALE) for specific feature:
 # # (similar to partial dependence plots):
 effs <- FeatureEffect$new(predictor, feature = "temp")
 plot(effs)
+ggsave_cust("plot-effects-temp-ale.jpg", scale = eff_scale)
 
 ## partial dependence plot with ice plot:
 effs <- FeatureEffect$new(predictor, feature = "temp", method = "pdp+ice")
 plot(effs)
+ggsave_cust("plot-effects-temp-ice.jpg", scale = eff_scale)
 
 # ## accumulated local effects for all features (quartz device):
 # # (similar to partial dependence plots):
