@@ -129,6 +129,63 @@ task_full <- makeRegrTask(id = "trip_cnt_mod",
 task <- subsetTask(task = task_full, subset = idx_train)
 
 ## ========================================================================= ##
+## single learner without tuning (not used any further)
+## ========================================================================= ##
+
+## define learner without basic parameters:
+learner_rf <- makeLearner("regr.randomForest", 
+                          par.vals = list(
+                            ntree = 500)
+                          )
+getParamSet("regr.randomForest")
+getParamSet(learner_rf)
+
+## get list of learners:
+listLearners(warn.missing.packages = FALSE)
+listLearners("regr", warn.missing.packages = FALSE)
+listLearners("regr", properties = c("missings", "weights", "ordered"))
+
+## see also:
+## https://mlr.mlr-org.com/articles/tutorial/integrated_learners.html
+
+## train learner:
+model <- train(learner = learner_rf, task = task_full, subset = idx_train)
+model
+
+getLearnerModel(model) %>% class()
+getLearnerModel(model)
+
+## predict with learner:
+pred <- predict(model, newdata = dat_hr_mod, subset = idx_test)
+pred
+
+
+## inspect predictions on a small subset
+set.seed(1548)
+task_small_prelim <- subsetTask(
+  task = task_full, 
+  subset = sample(idx_test, size = 1000)
+)
+plotLearnerPrediction(
+  learner_rf, task = task_small_prelim, 
+  features = "temp"
+)
+ggsave_cust("plot-learner-pred-1d.jpg")
+plotLearnerPrediction(
+  learner_rf,
+  task = task_small_prelim, features = c("temp", "rel_hum")
+)
+ggsave_cust("plot-learner-pred-2d.jpg")
+
+## assess performance of learner:
+performance(pred, measures = list(mse, mae, rsq))
+
+## list of suitable measures:
+listMeasures()
+listMeasures("regr")
+listMeasures(task)  ## for a specific task
+
+## ========================================================================= ##
 ## create a single learner with random parameter search and CV
 ## ========================================================================= ##
 
@@ -144,6 +201,11 @@ set.seed(4271, "L'Ecuyer")
 rdesc <- makeResampleDesc(predict = "both", 
                           method = "CV", iters = n_cv_iters_tuning)
 #method = "RepCV", reps = 3, folds = 5)
+
+## not needed: estimating performance using resampling:
+res <- resample(learner = "regr.ranger", task = task, 
+                resampling = rdesc,
+                measures = list(mse, mae, rsq))
 
 ## parameters for parameter tuning:
 ctrl <- makeTuneControlRandom(maxit = 40)
