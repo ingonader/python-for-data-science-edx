@@ -30,7 +30,9 @@ library(tictoc)
 ## global variables and options
 ## ========================================================================= ##
 
-path_dat <- "/Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx/week-09-and-10-final-project/data"
+path_raw <- "/Users/ingonader/data-um-sync/training/coursera-work/python-for-data-science-edx/week-09-and-10-final-project"
+path_dat <- file.path(path_raw, "data")
+path_img <- file.path(path_raw, "presentation/img")
 filename <- "dat_hr_all.feather"
 
 options(tibble.width = Inf)
@@ -42,6 +44,15 @@ n_cv_iters_tuning <- 4
 
 ## decide what to do on learner errors (mlr package):
 mlr::configureMlr(on.learner.error = "warn")
+
+## ========================================================================= ##
+## function definitions
+## ========================================================================= ##
+
+## customized ggsave function to avoid retyping all parameters:
+ggsave_cust <- function(fname) 
+  ggsave(filename = file.path(path_img, fname), 
+         width = 8, height = 4, dpi = 200)
 
 ## ========================================================================= ##
 ## read data (preprocessed with python)
