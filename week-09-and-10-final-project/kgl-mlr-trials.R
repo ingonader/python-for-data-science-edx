@@ -223,8 +223,10 @@ tune_results_rf <- tuneParams(
   )
 )
 toc()
-## time: tuning rf: 2275.833 sec elapsed (about 38 mins)
+## time: tuning rf: 2275.833 sec elapsed with 3-fold CV (about 38 mins)
+## time: tuning rf: 2861.12 sec elapsed with 4-fold CV (about 48 mins) with lots of other apps open
 
+getParamSet("regr.randomForest")
 tune_results_rf
 tune_results_rf$x
 
@@ -240,7 +242,8 @@ tune_results_ranger <- tuneParams(
   )
 )
 toc()
-## time: tuning ranger: 508.617 sec elapsed (about 9 mins)
+## time: tuning ranger: 508.617 sec elapsed with 3-fold CV (about 9 mins)
+## time: tuning ranger: 960.068 sec elapsed with 4-fold CV (about 16 mins) with lots of other apps open
 tune_results_ranger
 
 ## gradient boosting
@@ -255,7 +258,8 @@ tune_results_gbm <- tuneParams(
   )
 )
 toc()
-## time: tuning gbm: 309.933 sec elapsed (about 5 mins)
+## time: tuning gbm: 309.933 sec elapsed with 3-fold CV (about 5 mins)
+## time: tuning gbm: 587.238 sec elapsed with 4-fold CV (about 10 mins) with lots of other apps open
 
 tune_results_gbm
 #getParamSet("regr.gbm")
@@ -272,7 +276,9 @@ tune_results_xgboost <- tuneParams(
   )
 )
 toc()
-## time: tuning xgboost: 666.536 sec elapsed (about 11 mins)
+## time: tuning xgboost: 666.536 sec elapsed with 3-fold CV (about 11 mins)
+## time: tuning xgboost: 738.054 sec elapsed with 4-fold CV (about 12 mins) with lots of other apps open
+
 tune_results_xgboost
 #getParamSet("regr.xgboost")
 
@@ -316,11 +322,15 @@ bmr_train <- benchmark(
 )
 toc()
 ## time: refit tuned models on training data: 890.584 sec elapsed (about 15 mins)
+## time: refit tuned models on training data: 954.877 sec elapsed (about 16 mins)
+
 bmr_train
 
 ## visualizing benchmark results:
 plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
+ggsave_cust("plot-bmr-boxplot-mae.jpg")
+
 plotBMRBoxplots(bmr_train, measure = timetrain, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
 
@@ -425,7 +435,10 @@ bmr_tunewrap <- benchmark(
 )
 toc()
 ## time: tuning and fitting to training data using wrappers: 22206.947 sec elapsed (about 370 mins = 6.2 hrs)
-## note: individual tuning + refitting with RepCV: 2275 + 508 + 309 + 666 + 890 = 4648 secs
+##       note: individual tuning + refitting with RepCV: 2275 + 508 + 309 + 666 + 890 = 4648 secs
+## time: tuning and fitting to training data using wrappers: 31991.86 sec elapsed (about 8.9 hrs)
+##       (but not finished yet ... cancelled by user)
+
 bmr_tunewrap
 
 
@@ -456,10 +469,226 @@ bmr_full <- benchmark(
 )
 toc()
 ## time: refit models on complete training data, validate on test data: 191.371 sec elapsed (about 3.2 mins)
+## time: refit models on complete training data, validate on test data: 238.926 sec elapsed (about 4 mins)
+
 bmr_full
 
-save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
 parallelStop()
 
+
+
+## ========================================================================= ##
+## save snapshot to disk
+## ========================================================================= ##
+
+## save everything except data and path
+obj <- setdiff(ls(), obj_notsave)
+save(obj, file = file.path(path_dat, "kgl-mlr-trials_v001b.Rdata"))
+
+## ========================================================================= ##
+## inspect best model predictions
+## ========================================================================= ##
+
+# bmr_full$results$trip_cnt_mod$regr.xgboost %>% str(max.level = 1)
+# getBMRPredictions(bmr_full)$trip_cnt_mod$regr.xgboost
+# varnames_features
+
+
+# ## get learner:
+# getBMRLearners(bmr_full)$regr.xgboost
+
+# ## get model:
+# getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]]$learner.model
+
+## make smaller task (data subset) 
+## for faster inspection:
+set.seed(1548)
+task_small <- subsetTask(task = task_full, 
+                         subset = sample(idx_test, size = 1000))
+
+plotLearnerPrediction(
+  getBMRLearners(bmr_full)$regr.xgboost,
+  task = task_small, features = "temp"
+)
+
+plotLearnerPrediction(
+  getBMRLearners(bmr_full)$regr.xgboost,
+  task = task_small, features = c("temp", "rel_hum")
+)
+
+## access models of original packages:
+getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]]$learner.model
+getBMRModels(bmr_full)$trip_cnt_mod$regr.randomForest[[1]]$learner.model
+
+## acces model wrappers (mlr wrappers):
+getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]]
+getBMRModels(bmr_full)$trip_cnt_mod$regr.randomForest[[1]]
+
+## ========================================================================= ##
+## inspect best model using iml package
+## ========================================================================= ##
+
+library(iml)
+
+## take sample for quicker model exploration:
+set.seed(442)
+dat_iml <- dat_hr_mod[idx_test, ] %>% sample_n(500)
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## feature importance: main effects and interactions
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+## create a predictor container(s):
+predictor_rf <- Predictor$new(
+  model = getBMRModels(bmr_full)$trip_cnt_mod$regr.randomForest[[1]],
+  data = dat_iml[varnames_features],  y = dat_iml[varnames_target]
+)
+predictor_ranger <- Predictor$new(
+  model = getBMRModels(bmr_full)$trip_cnt_mod$regr.ranger[[1]],
+  data = dat_iml[varnames_features],  y = dat_iml[varnames_target]
+)
+predictor_gbm <- Predictor$new(
+  model = getBMRModels(bmr_full)$trip_cnt_mod$regr.gbm[[1]],
+  data = dat_iml[varnames_features],  y = dat_iml[varnames_target]
+)
+predictor_xgboost <- Predictor$new(
+  model = getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]],
+  data = dat_iml[varnames_features],  y = dat_iml[varnames_target]
+)
+## "choose" a standard predictor to be used below:
+predictor <- predictor_xgboost
+
+## most important features:
+imp <- FeatureImp$new(predictor, loss = "mae")
+plot(imp)
+
+
+## most important interactions:
+## plots how much of the variance of f(x) is explained by the interaction. 
+## The measure is between 0 (no interaction) and 1 (= 100% of variance of f(x) 
+## due to interactions)
+interact <- Interaction$new(predictor)
+plot(interact)
+
+## most important interactions:
+interact_hr_of_day <- Interaction$new(predictor, feature = "hr_of_day")
+plot(interact_hr_of_day)
+interact_temp <- Interaction$new(predictor, feature = "temp")
+plot(interact_temp)
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## feature effects (with iml)
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+# ## accumulated local effects (ALE) for specific feature:
+# # (similar to partial dependence plots):
+effs <- FeatureEffect$new(predictor, feature = "temp")
+plot(effs)
+
+## partial dependence plot with ice plot:
+effs <- FeatureEffect$new(predictor, feature = "temp", method = "pdp+ice")
+plot(effs)
+
+# ## accumulated local effects for all features (quartz device):
+# # (similar to partial dependence plots):
+# effs <- FeatureEffects$new(predictor)
+# plot(effs)
+# 
+# ## partial dependence and ice plots for all features (quartz device):
+# effs <- FeatureEffects$new(predictor, method = "pdp+ice")
+# plot(effs)
+
+## pdp of interactions
+tic("time: feature interaction plot")
+effs_int <- FeatureEffect$new(predictor, 
+                              feature = c("temp", "hr_of_day"), 
+                              method = "pdp", grid.size = 40)  ## use "ale"?
+toc()
+## time: feature interaction plot:    0.79 sec elapsed (method = "ale", grid.size = 40, sample_n(500))
+## time: feature interaction plot: 179.153 sec elapsed (method = "pdp", grid.size = 40, sample_n(500))
+plot(effs_int)
+
+effs_int <- FeatureEffect$new(predictor, 
+                              feature = c("hr_of_day", "day_of_week"), 
+                              method = "pdp", grid.size = 40)  ## use "ale"?
+plot(effs_int)
+
+## ========================================================================= ##
+## inspect model using pdp package (and maye ICEbox)
+## ========================================================================= ##
+
+library(pdp)
+
+## ice object for ice plot (single continuous variable):
+tic("time: ice object")
+ice_object <- pdp::partial(
+  object = getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]], 
+  train = dat_iml[varnames_model] %>% as.data.frame(),
+  type = "regression",
+  ice = TRUE,
+  pred.var = "temp",
+  pred.fun = function(object, newdata) {
+    pred_mlr <- predict(
+      getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]], 
+      newdata = newdata)
+    ret <- getPredictionResponse(pred_mlr)
+    return(ret)
+  },
+  grid.resolution = 20
+)
+toc()
+## time: ice object: 3.432 sec elapsed (grid.resolution = 20, n_sample(500))
+## individual conditional independent expectations (ice):
+autoplot(
+  ice_object, alpha = .2, rug = TRUE,
+  train = dat_iml, size = .5, color = "grey"
+)
+
+## ice object for pdp intraction plot (2 cont. variables):
+tic("time: ice object for pdp intraction")
+ice_object_int <- partial(
+  object = getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]], 
+  train = dat_iml[varnames_model] %>% as.data.frame(),
+  #type = "regression",
+  chull = TRUE,
+  #pred.var = c("temp", "rel_hum"),
+  pred.var = c("hr_of_day", "day_of_week"),
+  pred.fun = function(object, newdata) {
+    pred_mlr <- predict(
+      getBMRModels(bmr_full)$trip_cnt_mod$regr.xgboost[[1]],
+      newdata = newdata)
+    ret <- getPredictionResponse(pred_mlr)
+    return(ret)
+  },
+  grid.resolution = 40
+)
+toc()
+## time: ice object for pdp intraction: 26.518 sec elapsed (grid.resolution = 20, n_sample(500))
+
+## [[note]]
+## for some reason, specifying the prediction function always returns an 
+## ice object (class c("data.frame", "ice")), which has an predictions for
+## each case (and an yhat.id column).-
+## to plot partial dependence polts in 2D, this class should be 
+## c("data.frame", "partial"), and that column has to be removed (average).
+class(ice_object_int)
+head(ice_object_int)
+dim(ice_object_int)
+
+## some manual tweaking:
+ice_object_int <- ice_object_int %>% group_by_at(c(1, 2)) %>% summarize(yhat = mean(yhat)) %>% as.data.frame()
+class(ice_object_int) <- c("data.frame", "partial")
+
+## plot:
+#rwb <- colorRampPalette(c("red", "white", "blue"))
+pdp::plotPartial(
+  ice_object_int, levelplot = TRUE, contour = TRUE, chull = TRUE,
+  train = dat_iml[varnames_model] %>% as.data.frame() ## (convec hull needs training data)
+  #col.regions = rwb
+)
+#pdp::plotPartial(ice_object_int)
+
+## with ggplot:
+autoplot(ice_object_int, contour = TRUE, legend.title = "Partial\ndependence")
 
 
