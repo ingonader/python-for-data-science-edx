@@ -1,6 +1,6 @@
 ---
 title: "R's `mlr` package <br> as common modeling interface"
-subtitle: "And some fuel for the R/Python war (i.e., R/Python comparision) <br> on Kaggle Bike Sharing and Weather Data"
+subtitle: "And maybe some Python discussions <br >On Kaggle bike sharing and weather data"
 author: "Ingo Nader"
 date: "Apr/May 2019"
 #output: html_document
@@ -106,14 +106,9 @@ MathJax.Hub.Config({
 
 
 
-## Agenda
-
-* Some background
-* [[todo]]
-
 ## Background and Overview 
 
-* Based on work for EdX-Course [Python for Data Science](https://courses.edx.org/courses/course-v1:UCSanDiegoX+DSE200x+2T2017/course/)
+* Based on work for edX-Course [Python for Data Science](https://courses.edx.org/courses/course-v1:UCSanDiegoX+DSE200x+2T2017/course/)
 * investigates **to what extent** and 
 **how weather and time of day** influence **bike rentals** 
 in a public bike sharing system in Montreal.
@@ -123,7 +118,7 @@ in a public bike sharing system in Montreal.
   * `mlr` package as a common interface for machine learning in R
   * `iml` package for model interpretation ([Pointed out by Andreas/Slack](https://www.inovex.de/blog/machine-learning-interpretability/))
 
-*Disclaimer**: Only parts of each package can be covered here!
+**Note**: Only parts of each package can be covered here! No model interpretation due to time constraints (in preparing the presentation).
 
 <p style="font-size: 16px; margin-top: 1%">
 The full analysis is available in multiple python files on github:  [kgl-cycle-share-main-file.py](https://github.com/ingonader/python-for-data-science-edx/blob/master/week-09-and-10-final-project/kgl-cycle-share-main-file.py).
@@ -224,6 +219,36 @@ The research questions that I wanted to answer with my analysis were:
   them?
 
 
+## Findings: Data Exploration
+
+<div></div><!-- ------------------------------- needed, but don't put anything here -->
+<div style="float: left; width: 53%"><!-- ---- start of first column               -->
+
+* Context: **number of hourly bike trips** visualized for the time span between $2014$ and $2017$. 
+* Baseline model: 
+  * **Moving average**  (red line) 
+  * $38.8\%$ variance explained $(r^2 = 0.388)$
+  * Mean absolute error of $MAE = 316.2$
+
+**Note**: 
+
+* All data prep and exploration done in Python
+* Data stored in `feather` format 
+  (fast data exchange between R and Python)
+
+</div><!-- ------------------------------------ end of first column                 -->
+
+<div style="float: left; width: 2%"><br></div><!-- spacing column ----------------- -->
+<div style="float: left; width: 45%; margin-top: -3%"><!-- ---- start of second column              --> 
+<img src="img/expl-trips-per-hour-2014-2017.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
+<p style="font-size: 12px">
+**Figure**: Number of hourly rides from $2014$ to $2017$. Each dot represents the 
+number of trips in one specifc hour. Red line represents a 
+moving average using a window of $14$ days.
+<p>
+</div><!-- ------------------------------------ end of second column                -->
+
+
 ## Methods
 
 * $90\%$ training and $10\%$ test set 
@@ -232,26 +257,23 @@ The research questions that I wanted to answer with my analysis were:
   * gradient boosting regression (`scikit-learn` / `gbm`)
   * gradient boosting regression via `xgboost` (Python and R)
 
-* Hyperparameter tuning: randomized $4$-fold cross-validation ($40$ iterations)
-* Interpretation via  
-  * Variable importance (`scikit-learn` / `iml`)
-  * *Partial dependence plots* (*PDP*) plots [@pdp_plots] 
-  * *Individual conditional expectation* (*ICE*) plots [@ice_plots] (`pdpbox` / `iml`)
+* Hyperparameter tuning: randomized search with $4$-fold CV ($40$ iterations)
+* Interpretation not part of this presentation  
 
 
 ## R package `mlr`: Overview
 
-* Standardized interface for R's machine learning algorithms
+* **Standardized interface** for R's machine learning algorithms
 * Infrastructure to:
-  * Resample your models (cross validation, etc.)
-  * Select features
-  * Cope with pre- and post-processing of data 
-  * Optimize hyperparameters (of models and also preprocessing)
-  * Compare models in a statistically meaningful way
+  * **Resample** your models (cross validation, etc.)
+  * **Select features**
+  * Cope with **pre- and post-processing** of data 
+  * **Optimize hyperparameters** (of models and also preprocessing)
+  * **Compare models** in a statistically meaningful way
 * Classification (including multilabel), regression, clustering, survival analysis
-* Offers parallelization out of the box
+* Offers **parallelization** out of the box
 
-Only covering some parts of regression with hyperparameter tuning here.
+**Note**: Only some parts of regression with hyperparameter tuning covered here.
 
 
 ## Building blocks
@@ -307,13 +329,18 @@ regr.task
 task_full <- makeRegrTask(id = "trip_cnt_mod", 
                      data = dat_hr_mod[varnames_model],
                      target = varnames_target)
+
 task <- subsetTask(task = task_full, subset = idx_train)
+
+task_small <- subsetTask(task = task_full, 
+                         subset = sample(idx_test, size = 1000))
 ```
 
 Cycling trip data example: 
 
 * One full task (for final model estimation with evaluation on a fixed test set)
 * Subtask for CV within the training set
+* Subtask with small sample size for plotting
 
 
 ## Learners
@@ -333,6 +360,8 @@ regr_lrn = makeLearner("regr.gbm",
                        )
 ```
 
+* Parameters like `predict.type` are standardized for all learners
+* Model-specific parameters passed in `par.vals` list
 
 ## Learners: Parameters
 
@@ -376,11 +405,11 @@ listLearners(warn.missing.packages = FALSE)
 
 ```
 ##                 class                               name  short.name      package    type installed numerics factors
-## 1         classif.ada                       ada Boosting         ada    ada,rpart classif     FALSE     TRUE    TRUE
+## 1         classif.ada                       ada Boosting         ada    ada,rpart classif      TRUE     TRUE    TRUE
 ## 2  classif.adaboostm1                    ada Boosting M1  adaboostm1        RWeka classif     FALSE     TRUE    TRUE
 ## 3 classif.bartMachine Bayesian Additive Regression Trees bartmachine  bartMachine classif     FALSE     TRUE    TRUE
 ## 4    classif.binomial                Binomial Regression    binomial        stats classif      TRUE     TRUE    TRUE
-## 5    classif.boosting                    Adabag Boosting      adabag adabag,rpart classif     FALSE     TRUE    TRUE
+## 5    classif.boosting                    Adabag Boosting      adabag adabag,rpart classif      TRUE     TRUE    TRUE
 ## 6         classif.bst                  Gradient Boosting         bst    bst,rpart classif      TRUE     TRUE   FALSE
 ##   ordered missings weights  prob oneclass twoclass multiclass class.weights featimp oobpreds functionals
 ## 1   FALSE    FALSE   FALSE  TRUE    FALSE     TRUE      FALSE         FALSE   FALSE    FALSE       FALSE
@@ -396,7 +425,7 @@ listLearners(warn.missing.packages = FALSE)
 ## 4             FALSE FALSE FALSE FALSE FALSE
 ## 5             FALSE FALSE FALSE FALSE FALSE
 ## 6             FALSE FALSE FALSE FALSE FALSE
-## ... (#rows: 165, #cols: 24)
+## ... (#rows: 167, #cols: 24)
 ```
 
 ## List of Learners with properties
@@ -409,11 +438,11 @@ listLearners("regr", properties = c("missings", "weights"), warn.missing.package
 
 ```
 ##                   class                                               name short.name         package type installed
-## 1          regr.cforest Random Forest Based on Conditional Inference Trees    cforest           party regr     FALSE
-## 2            regr.ctree                        Conditional Inference Trees      ctree           party regr     FALSE
+## 1          regr.cforest Random Forest Based on Conditional Inference Trees    cforest           party regr      TRUE
+## 2            regr.ctree                        Conditional Inference Trees      ctree           party regr      TRUE
 ## 3              regr.gbm                          Gradient Boosting Machine        gbm             gbm regr      TRUE
-## 4 regr.h2o.deeplearning                                   h2o.deeplearning     h2o.dl             h2o regr     FALSE
-## 5          regr.h2o.glm                                            h2o.glm    h2o.glm             h2o regr     FALSE
+## 4 regr.h2o.deeplearning                                   h2o.deeplearning     h2o.dl             h2o regr      TRUE
+## 5          regr.h2o.glm                                            h2o.glm    h2o.glm             h2o regr      TRUE
 ## 6  regr.randomForestSRC                                      Random Forest      rfsrc randomForestSRC regr      TRUE
 ##   numerics factors ordered missings weights  prob oneclass twoclass multiclass class.weights featimp oobpreds
 ## 1     TRUE    TRUE    TRUE     TRUE    TRUE FALSE    FALSE    FALSE      FALSE         FALSE    TRUE    FALSE
@@ -589,22 +618,29 @@ Aggregated Result: mse.test.mean=97776.6492433,mae.test.mean=185.9998496,rsq.tes
 
 ## Parallelism
 
+<div></div><!-- ------------------------------- needed as is before cols - -->
+<div style="float: left; width: 53%;"><!-- ---- start of first column ---- -->
 Supported backends for parallelism:
 
-* local multicore execution using parallel
-* socket and MPI clusters using snow
-* makeshift SSH-clusters using BatchJobs 
-* high performance computing clusters (managed by a scheduler like SLURM, Torque/PBS, SGE or LSF) also using BatchJobs.
+* local multicore execution using `parallel`
+* socket and MPI clusters using `snow`
+* makeshift SSH-clusters using `BatchJobs`
+* high performance computing clusters  
+  (managed by a scheduler like SLURM, Torque/PBS, SGE or LSF) also using BatchJobs.
+</div><!-- ------------------------------------ end of first column ------ -->
 
-<td style="padding-top: 2px;">...</td>
-
+<div style="float: left; width: 4%"><br></div><!-- spacing column -------- -->
+<div style="float: left; width: 43%;"><!-- ---- start of second column --- --> 
+<!-- <td style="padding-top: 2px;">...</td> -->
 
 ```r
 ## enable parallel execution on a multicore machine: 
 library(parallelMap)
-parallelStartMulticore(cpus = n_cpus, level = "mlr.resample")
+parallelStartMulticore(cpus = n_cpus, 
+                       level = "mlr.resample")
 ```
 
+<br>
 Parallelism can be set to different execution levels:
 
 
@@ -612,13 +648,19 @@ Parallelism can be set to different execution levels:
 ```r
 parallelGetRegisteredLevels()
 ```
+```
+mlr: mlr.benchmark, mlr.resample, mlr.selectFeatures, 
+     mlr.tuneParams, mlr.ensemble
+```
 
-```
-## mlr: mlr.benchmark, mlr.resample, mlr.selectFeatures, mlr.tuneParams, mlr.ensemble
-```
+</div><!-- ------------------------------------ end of second column ----- -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
+
 
 ## Parameter tuning
 
+<div></div><!-- ------------------------------- needed as is before cols - -->
+<div style="float: left; width: 68%;"><!-- ---- start of first column ---- -->
 
 ```r
 ## tuning strategy for parameter tuning:
@@ -640,19 +682,19 @@ tune_results_rf
 ```
 Tune result:
 Op. pars: mtry=6; nodesize=10; ntree=445
-rmse.test.rmse=182.8800473,mae.test.mean=96.1463276,rsq.test.mean=0.9188789,timetrain.test.mean=168.3022500,timepredict.test.mean=0.5545000
+rmse.test.rmse=182.8800473,mae.test.mean=96.1463276,rsq.test.mean=0.9188789,
+timetrain.test.mean=168.3022500,timepredict.test.mean=0.5545000
 ```
+</div><!-- ------------------------------------ end of first column ------ -->
 
-<div></div><!-- ------------------------------- needed as is before cols - -->
-<div style="float: left; width: 38%;"><!-- ---- start of first column ---- -->
+<div style="float: left; width: 8%"><br></div><!-- spacing column -------- -->
+<div style="float: left; width: 24%;"><!-- ---- start of second column --- --> 
+
 
 ```r
 ## access tuned parameters:
 tune_results_rf$x
 ```
-</div><!-- ------------------------------------ end of first column ------ -->
-<div style="float: left; width: 4%"><br></div><!-- spacing column -------- -->
-<div style="float: left; width: 58%;"><!-- ---- start of second column --- -->
 ```
 $mtry
 [1] 6
@@ -665,6 +707,8 @@ $ntree
 ```
 </div><!-- ------------------------------------ end of second column ----- -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
+
+
 
 
 ## Benchmark experiments
@@ -688,58 +732,146 @@ bmr_train <- benchmark(
   measures = list(rmse, mae, rsq,
                   timetrain, timepredict)
 )
+```
+
+```r
 bmr_train
 ```
+
 ```
-       task.id        learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
-1 trip_cnt_mod regr.randomForest       182.3199      95.83961     0.9193487           173.91842             0.8581667
-2 trip_cnt_mod       regr.ranger       184.2780      97.03380     0.9176057            24.94983             0.9504167
-3 trip_cnt_mod          regr.gbm       173.6462     101.79991     0.9268312            34.52008             0.2611667
-4 trip_cnt_mod      regr.xgboost       168.2828      93.37933     0.9312891            53.43458             4.5156667
+##        task.id        learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
+## 1 trip_cnt_mod regr.randomForest       306.4047      178.1144     0.7836792           0.6719167           0.012166667
+## 2 trip_cnt_mod       regr.ranger       305.2945      176.6672     0.7847848           0.4576667           0.034166667
+## 3 trip_cnt_mod          regr.gbm       311.6069      200.2793     0.7755389           0.1928333           0.006166667
+## 4 trip_cnt_mod      regr.xgboost       306.5771      181.4005     0.7813123           0.4819167           0.005750000
 ```
+
 
 ## Visualizing benchmark experiments
 
 
-```
+
+```r
 bmr_train
-       task.id        learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
-1 trip_cnt_mod regr.randomForest       182.3199      95.83961     0.9193487           173.91842             0.8581667
-2 trip_cnt_mod       regr.ranger       184.2780      97.03380     0.9176057            24.94983             0.9504167
-3 trip_cnt_mod          regr.gbm       173.6462     101.79991     0.9268312            34.52008             0.2611667
-4 trip_cnt_mod      regr.xgboost       168.2828      93.37933     0.9312891            53.43458             4.5156667
+```
+
+```
+##        task.id        learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
+## 1 trip_cnt_mod regr.randomForest       306.4047      178.1144     0.7836792           0.6719167           0.012166667
+## 2 trip_cnt_mod       regr.ranger       305.2945      176.6672     0.7847848           0.4576667           0.034166667
+## 3 trip_cnt_mod          regr.gbm       311.6069      200.2793     0.7755389           0.1928333           0.006166667
+## 4 trip_cnt_mod      regr.xgboost       306.5771      181.4005     0.7813123           0.4819167           0.005750000
 ```
 
 <div></div><!-- ------------------------------- needed as is before cols - -->
 <div style="float: left; width: 48%;"><!-- ---- start of first column ---- -->
+R and Python results:
+
+<p style="margin-top: -4%">
+|Model                                       |   $r^2_{test}$| $MAE_{test}$|
+|:----------------------------               |--------------:|------------:|
+|Gradient Boosting (Python/sklearn)          |        $0.941$|       $85.4$|
+|Gradient Boosting  (R/XGBoost)              |        $0.931$|       $93.4$|
+|Random Forest (R/randomForest)              |        $0.919$|       $95.8$|
+|Random Forest (R/ranger)                    |        $0.918$|       $97.0$|
+|Gradient Boosting  (R/gbm)                  |        $0.927$|      $101.8$|
+|Random Forest (Python/sklearn)              |        $0.894$|      $111.2$|
+|Gradient Boosting (Python/XGBoost)          |        $0.865$|      $155.3$|
+</p>
+
+</div><!-- ------------------------------------ end of first column ------ -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column -------- -->
+<div style="float: left; width: 48%;"><!-- ---- start of second column --- --> 
 
 ```r
 plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
   aes(fill = learner.id) + geom_point(alpha = .5)
 ```
-
-</div><!-- ------------------------------------ end of first column ------ -->
-<div style="float: left; width: 4%"><br></div><!-- spacing column -------- -->
-<div style="float: left; width: 48%;"><!-- ---- start of second column --- --> 
 <img src="img/plot-bmr-boxplot-mae.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 </div><!-- ------------------------------------ end of second column ----- -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
 
 
-## outline
+## Python Modeling Discussion
 
-* r code modeling
-* r code parallelization
-* r code benchmark + visualization
-* inspect predictions?
-* model comparisons
-* python code modeling
-* variable importance R code
-* variable importance side notes
-* pdp vs. ALE side notes
+Using `patsy` design matrices for formula interface:
 
 
-## Appendix 
+```python
+## formula as text for patsy: without interactions
+formula_txt = target + ' ~ ' + \
+    ' + '.join(features) + ' - 1'
+formula_txt
+```
+```
+"Q('trip_cnt') ~ Q('Month') + Q('Temp (°C)') + Q('Rel Hum (%)') + Q('Wind Dir (10s deg)') + 
+ Q('Wind Spd (km/h)') + Q('Stn Press (kPa)') + Q('hr_of_day') + Q('day_of_week') - 1"
+```
+
+```python
+## create design matrices using patsy (could directly be used for modeling):
+dat_y, dat_x = patsy.dmatrices(formula_txt, dat_hr_all, 
+                               NA_action = 'drop',
+                               return_type = 'dataframe')
+```
+
+## Python Modeling Discussion (cont'd)
+
+Train/test split and data type issues:
+
+
+```python
+## Split the data into training/testing sets (using patsy/dmatrices):
+dat_train_x, dat_test_x, dat_train_y, dat_test_y = train_test_split(
+    dat_x, dat_y, test_size = 0.1, random_state = 142)
+
+## convert y's to Series (to match data types between patsy and non-patsy data prep:)
+dat_train_y = dat_train_y[target]
+dat_test_y = dat_test_y[target]
+```
+
+
+## Python Modeling Discussion (cont'd)
+
+
+```python
+## Instantiate random forest estimator:
+mod_gb = GradientBoostingRegressor(
+  n_estimators = 100, random_state = 42,
+  loss = 'ls', learning_rate = 0.1,
+  max_depth = 20, 
+  min_samples_split = 70,min_samples_leaf = 30
+)
+# specify parameters and distributions to sample from:
+param_distributions = { 
+    "n_estimators" : stats.randint(50, 201),
+    "learning_rate" : [0.2, 0.1, 0.05],
+    "max_depth" : stats.randint(4, 21),
+    "min_samples_leaf" : stats.randint(30, 61)
+}
+mod_randsearch = RandomizedSearchCV(
+    estimator = mod_gb,
+    param_distributions = param_distributions,
+    n_iter = 40,
+    scoring = "r2",
+    cv = 4,
+    random_state = 7, n_jobs = -1
+)
+mod_randsearch.fit(dat_train_x, dat_train_y)
+
+## get best model (estimator): 
+mod_gb = mod_randsearch.best_estimator_
+```
+
+
+
+## Links
+
+* https://mlr.mlr-org.com/: MLR Homepage
+* https://arxiv.org/abs/1609.06146: MLR tutorial
+* https://www.inovex.de/blog/machine-learning-interpretability: Blog post on ML interpretability using the `mlr` package
+
+
 
 <!-- ## References {.columns-2 .tiny} -->
