@@ -23,6 +23,9 @@
 old/*
 */old/*
 
+## no um-specific stuff:
+week-09-and-10-final-project/presentation/img/logo-um-154x127.png
+week-09-and-10-final-project/presentation/styles-um.css
 
 # Created by https://www.gitignore.io/api/jupyternotebook
 
