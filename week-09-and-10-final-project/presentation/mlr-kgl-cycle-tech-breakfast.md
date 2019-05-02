@@ -1,8 +1,8 @@
 ---
 title: "R's `mlr` package <br> as common modeling interface"
-subtitle: "And maybe some Python discussions <br >On Kaggle bike sharing and weather data"
+subtitle: "And maybe some R/Python discussions <br> On Kaggle bike sharing and weather data"
 author: "Ingo Nader"
-date: "Apr/May 2019"
+date: "2 May 2019"
 #output: html_document
 output: 
   ioslides_presentation:
@@ -109,11 +109,11 @@ MathJax.Hub.Config({
 ## Background and Overview 
 
 * Based on work for edX-Course [Python for Data Science](https://courses.edx.org/courses/course-v1:UCSanDiegoX+DSE200x+2T2017/course/)
-* investigates **to what extent** and 
+* Course project: investigates **to what extent** and 
 **how weather and time of day** influence **bike rentals** 
 in a public bike sharing system in Montreal.
 
-* Analysis in Python for course (data prep, some ML models, interpretation)
+* Analysis in Python for edX course (data prep, some ML models, interpretation)
 * Redone using some new cool stuff in the R ecosystem:
   * `mlr` package as a common interface for machine learning in R
   * `iml` package for model interpretation ([Pointed out by Andreas/Slack](https://www.inovex.de/blog/machine-learning-interpretability/))
@@ -283,10 +283,10 @@ moving average using a window of $14$ days.
   * `train()` $\rightarrow$ trained model: `predict()` , `performance()`, etc.
 * **Resampling** strategy descriptions
   * `resample()` $\rightarrow$ trained model instances with performance metrics
-* **Parameter tuners** $\rightarrow$ trained and tuned model
-* **Benchmark experiments** $\rightarrow$ multiple trained models and their instances 
-* **Wrappers** for Data preprocessing, Imputation, Over- and undersampling, Feature selection,  
-  Bagging, Parameter Tuning
+* **Parameter tuners**: `tuneParams()` $\rightarrow$ trained and tuned model
+* **Benchmark experiments** 
+  * `benchmark()` $\rightarrow$ multiple trained models and their instances 
+* **Wrappers** for Data preprocessing, Imputation, Over- and undersampling, Feature selection, Bagging, Parameter Tuning (return a **learner**)
 * **Plots**
 
 
@@ -732,18 +732,15 @@ bmr_train <- benchmark(
   measures = list(rmse, mae, rsq,
                   timetrain, timepredict)
 )
-```
-
-```r
 bmr_train
 ```
-
 ```
-##        task.id        learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
-## 1 trip_cnt_mod regr.randomForest       306.4047      178.1144     0.7836792           0.6719167           0.012166667
-## 2 trip_cnt_mod       regr.ranger       305.2945      176.6672     0.7847848           0.4576667           0.034166667
-## 3 trip_cnt_mod          regr.gbm       311.6069      200.2793     0.7755389           0.1928333           0.006166667
-## 4 trip_cnt_mod      regr.xgboost       306.5771      181.4005     0.7813123           0.4819167           0.005750000
+       task.id         learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
+1 trip_cnt_mod  regr.randomForest       185.6066      97.34310     0.9158034            39.06592             0.1747500
+2 trip_cnt_mod        regr.ranger       182.8889      95.97002     0.9182493            27.85592             1.3381667
+3 trip_cnt_mod           regr.gbm       183.7731      95.91192     0.9174738           105.31608             0.6764167
+4 trip_cnt_mod regr.gbm.ntreeplus       171.5927      87.12461     0.9280451           729.68542             4.3349167
+5 trip_cnt_mod       regr.xgboost       169.8597      96.49248     0.9294890            24.11000             1.1610833
 ```
 
 
@@ -754,44 +751,67 @@ bmr_train
 ```r
 bmr_train
 ```
-
 ```
-##        task.id        learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
-## 1 trip_cnt_mod regr.randomForest       306.4047      178.1144     0.7836792           0.6719167           0.012166667
-## 2 trip_cnt_mod       regr.ranger       305.2945      176.6672     0.7847848           0.4576667           0.034166667
-## 3 trip_cnt_mod          regr.gbm       311.6069      200.2793     0.7755389           0.1928333           0.006166667
-## 4 trip_cnt_mod      regr.xgboost       306.5771      181.4005     0.7813123           0.4819167           0.005750000
+       task.id         learner.id rmse.test.rmse mae.test.mean rsq.test.mean timetrain.test.mean timepredict.test.mean
+1 trip_cnt_mod  regr.randomForest       185.6066      97.34310     0.9158034            39.06592             0.1747500
+2 trip_cnt_mod        regr.ranger       182.8889      95.97002     0.9182493            27.85592             1.3381667
+3 trip_cnt_mod           regr.gbm       183.7731      95.91192     0.9174738           105.31608             0.6764167
+4 trip_cnt_mod regr.gbm.ntreeplus       171.5927      87.12461     0.9280451           729.68542             4.3349167
+5 trip_cnt_mod       regr.xgboost       169.8597      96.49248     0.9294890            24.11000             1.1610833
 ```
 
 <div></div><!-- ------------------------------- needed as is before cols - -->
-<div style="float: left; width: 48%;"><!-- ---- start of first column ---- -->
-R and Python results:
+<div style="float: left; width: 28%;"><!-- ---- start of first column ---- -->
+<br>
 
-<p style="margin-top: -4%">
-|Model                                       |   $r^2_{test}$| $MAE_{test}$|
-|:----------------------------               |--------------:|------------:|
-|Gradient Boosting (Python/sklearn)          |        $0.941$|       $85.4$|
-|Gradient Boosting  (R/XGBoost)              |        $0.931$|       $93.4$|
-|Random Forest (R/randomForest)              |        $0.919$|       $95.8$|
-|Random Forest (R/ranger)                    |        $0.918$|       $97.0$|
-|Gradient Boosting  (R/gbm)                  |        $0.927$|      $101.8$|
-|Random Forest (Python/sklearn)              |        $0.894$|      $111.2$|
-|Gradient Boosting (Python/XGBoost)          |        $0.865$|      $155.3$|
-</p>
+```r
+plotBMRBoxplots(bmr_train, 
+                measure = mae, 
+                style = "violin") +
+  aes(fill = learner.id) + 
+  geom_point(alpha = .5)
+```
 
 </div><!-- ------------------------------------ end of first column ------ -->
 <div style="float: left; width: 4%"><br></div><!-- spacing column -------- -->
-<div style="float: left; width: 48%;"><!-- ---- start of second column --- --> 
-
-```r
-plotBMRBoxplots(bmr_train, measure = mae, style = "violin") +
-  aes(fill = learner.id) + geom_point(alpha = .5)
-```
+<div style="float: left; width: 68%;"><!-- ---- start of second column --- --> 
 <img src="img/plot-bmr-boxplot-mae.jpg" width="100%" style="display: block; margin: auto auto auto 0;" />
 </div><!-- ------------------------------------ end of second column ----- -->
 <div style="clear: both"></div><!-- end cols for text over both cols below -->
 
+## R and Python Results
 
+<div></div><!-- ------------------------------- needed as is before cols - -->
+<div style="float: left; width: 63%;"><!-- ---- start of first column ---- -->
+<p style="margin-top: -4%">
+|Model                                       | $MAE_{test}$|   $r^2_{test}$| tuning time      |
+|:----------------------------               |------------:|--------------:|-----------------:|
+|Gradient Boosting  (R/gbm) (ntree++)        |       $81.1$|        $0.936$|   $\sim 260$ min |
+|Gradient Boosting (Python/sklearn)          |       $85.4$|        $0.941$|              (?) |
+|Gradient Boosting  (R/XGBoost)              |       $85.8$|        $0.942$|    $\sim 14$ min |
+|Gradient Boosting  (R/gbm) (re-tuned)       |       $89.7$|        $0.927$|    $\sim 36$ min |
+|Random Forest (R/ranger)                    |       $90.0$|        $0.928$|    $\sim 11$ min |
+|Random Forest (R/randomForest)              |       $91.9$|        $0.924$|    $\sim 33$ min |
+|Gradient Boosting  (R/gbm) (LR low)         |      $101.8$|        $0.927$|     $\sim 8$ min |
+|Random Forest (Python/sklearn)              |      $111.2$|        $0.894$|    $\sim 20$ min |
+|Gradient Boosting (Python/XGBoost)          |      $155.3$|        $0.865$|      (no tuning) |
+</p>
+</div><!-- ------------------------------------ end of first column ------ -->
+<div style="float: left; width: 4%"><br></div><!-- spacing column -------- -->
+<div style="float: left; width: 43%;"><!-- ---- start of second column --- --> 
+</div><!-- ------------------------------------ end of second column ----- -->
+<div style="clear: both"></div><!-- end cols for text over both cols below -->
+
+<div style="font-size: 18px; margin-top: 1%">
+Notes:
+
+* All models used 40 iterations of random search with 4-fold CV for tuning 
+  (except *Gradient Boosting (Python/XGBoost)*, where no parameter tuning was performed)
+* R models **were refitted** on complete training data with parameters from tuning and scored on the same test data set, except *Gradient Boosting  (R/gbm) (re-tuned)*
+* Python models **used best model** from tuning and were refitted on the same data set
+* R and Python train/test splits were not identical (different test sets for R and Python)
+
+</div>
 
 ## Python Modeling Discussion
 
