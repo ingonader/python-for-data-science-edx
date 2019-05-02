@@ -221,6 +221,10 @@ tune_results_rf <- tuneParams(
 toc()
 ## time: tuning rf: 2275.833 sec elapsed with 3-fold CV (about 38 mins)
 ## time: tuning rf: 2861.12 sec elapsed with 4-fold CV (about 48 mins) with lots of other apps open
+## time: tuning rf: 1979.765 sec elapsed with 4-fold CV (about 33 mins)
+## time: tuning rf: ? sec elapsed with 4-fold CV
+
+
 
 getParamSet("regr.randomForest")
 tune_results_rf
@@ -240,6 +244,8 @@ tune_results_ranger <- tuneParams(
 toc()
 ## time: tuning ranger: 508.617 sec elapsed with 3-fold CV (about 9 mins)
 ## time: tuning ranger: 960.068 sec elapsed with 4-fold CV (about 16 mins) with lots of other apps open
+## time: tuning ranger: 646.674 sec elapsed with 4-fold CV (about 11 mins)
+## time: tuning ranger: 674.228 sec elapsed with 4-fold CV
 tune_results_ranger
 
 ## gradient boosting via gbm
@@ -248,17 +254,37 @@ tune_results_gbm <- tuneParams(
   "regr.gbm", 
   task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
   par.set = makeParamSet(
-    makeNumericParam("shrinkage", lower = 0.001, upper = .2),
-    makeIntegerParam("interaction.depth", lower = 1, upper = 25),
-    makeIntegerParam("n.minobsinnode", lower = 10, upper = 100),
-    makeIntegerParam("n.trees", lower = 500, upper = 10000)
+    makeDiscreteParam("distribution", c("laplace")),
+    makeNumericParam("shrinkage", lower = 0.01, upper = .2),
+    makeIntegerParam("interaction.depth", lower = 5, upper = 25),
+    makeIntegerParam("n.minobsinnode", lower = 10, upper = 35),
+    makeIntegerParam("n.trees", lower = 2000, upper = 10000)
   )
 )
 toc()
 ## time: tuning gbm: 309.933 sec elapsed with 3-fold CV (about 5 mins)
 ## time: tuning gbm: 587.238 sec elapsed with 4-fold CV (about 10 mins) with lots of other apps open
+## time: tuning gbm: 15736.575 sec elapsed with 4-fold CV (about 262 mins = 4.3 hrs) with up to 10000 trees
+## time: tuning gbm: 15550.366 sec elapsed with 4-fold CV
 
-tune_results_gbm
+## gradient boosting via gbm (modified)
+tic("time: tuning gbm modified")
+tune_results_gbm_mod <- tuneParams(
+  "regr.gbm", 
+  task = task, resampling = rdesc, measures = tune_measures, control = ctrl,
+  par.set = makeParamSet(
+    makeDiscreteParam("distribution", c("laplace")),
+    makeNumericParam("shrinkage", lower = 0.1, upper = .6),
+    makeIntegerParam("interaction.depth", lower = 5, upper = 20),
+    makeIntegerParam("n.minobsinnode", lower = 10, upper = 35),
+    makeIntegerParam("n.trees", lower = 500, upper = 1500)
+  )
+)
+toc()
+## time: tuning gbm modified: 2175.284 sec elapsed with 4-fold CV (about 36 mins)
+
+
+tune_results_gbm_mod
 #getParamSet("regr.gbm")
 
 ## gradient boosting using xgboost:
@@ -269,12 +295,13 @@ tune_results_xgboost <- tuneParams(
   par.set = makeParamSet(
     makeIntegerParam("max_depth", lower = 1, upper = 9),
     makeIntegerParam("nrounds", lower = 100, upper = 1000)
-    
   )
 )
 toc()
 ## time: tuning xgboost: 666.536 sec elapsed with 3-fold CV (about 11 mins)
 ## time: tuning xgboost: 738.054 sec elapsed with 4-fold CV (about 12 mins) with lots of other apps open
+## time: tuning xgboost: 830.326 sec elapsed with 4-fold CV (about 14 mins)
+## time: tuning xgboost: 708.274 sec elapsed with 4-fold CV (about 12 mins)
 
 tune_results_xgboost
 #getParamSet("regr.xgboost")
@@ -335,9 +362,10 @@ parallelStartMulticore(cpus = n_cpus, level = "mlr.resample")
 set.seed(427121, "L'Ecuyer")
 
 lrns_tuned <- list(
-  makeLearner("regr.randomForest",  par.vals = tune_results_rf$x),
+  makeLearner("regr.randomForest", par.vals = tune_results_rf$x),
   makeLearner("regr.ranger", par.vals = tune_results_ranger$x),
-  makeLearner("regr.gbm", par.vals = tune_results_gbm$x),
+  makeLearner("regr.gbm", par.vals = tune_results_gbm_mod$x),
+  makeLearner("regr.gbm", id = "regr.gbm.ntreeplus", par.vals = tune_results_gbm$x),
   makeLearner("regr.xgboost", par.vals = tune_results_xgboost$x)
 )
 
@@ -362,6 +390,7 @@ bmr_train <- benchmark(
 toc()
 ## time: refit tuned models on training data: 890.584 sec elapsed (about 15 mins)
 ## time: refit tuned models on training data: 954.877 sec elapsed (about 16 mins)
+## time: refit tuned models on training data: 2594.893 sec elapsed (about 43 mins)
 
 bmr_train
 
@@ -385,6 +414,8 @@ save(list = obj, file = file.path(path_dat, "kgl-mlr-trials_v001a.Rdata"))
 ## ========================================================================= ##
 ## use tuning wrappers in benchmark itself
 ## ========================================================================= ##
+
+parallelStartMulticore(cpus = n_cpus, level = "mlr.resample")
 
 ## also makes it possible to combine with different preprocessing...
 
@@ -430,9 +461,11 @@ tuner_gbm <- mlr::makeTuneWrapper(
   learner = "regr.gbm",
   resampling = rdesc_tune, measures = tune_measures, control = ctrl,
   par.set = makeParamSet(
-    makeIntegerParam("interaction.depth", lower = 1, upper = 9),
-    makeIntegerParam("n.minobsinnode", lower = 10, upper = 50),
-    makeIntegerParam("n.trees", lower = 100, upper = 1000)
+    makeDiscreteParam("distribution", c("laplace")),
+    makeNumericParam("shrinkage", lower = 0.01, upper = .2),
+    makeIntegerParam("interaction.depth", lower = 5, upper = 25),
+    makeIntegerParam("n.minobsinnode", lower = 10, upper = 35),
+    makeIntegerParam("n.trees", lower = 2000, upper = 7000) ## 10000 above?
   )
 )
 
@@ -462,28 +495,28 @@ lrns_tunewrap <- list(
 rdesc_bm <- mlr::makeResampleDesc(predict = "both", 
                                method = "RepCV", reps = 3, folds = 4)
 
-#mlr::listMeasures(task)
-tic("time: tuning and fitting to training data using wrappers")
-bmr_tunewrap <- benchmark(
-  lrns_tunewrap, task, rdesc_bm,
-  # measures = list(rmse, mae, rsq)
-  measures = list(rmse, #rmse.train.mean,
-                  mae, #mae.train.mean,
-                  rsq, #rsq.train.mean)
-                  timetrain, timepredict)
-)
-toc()
-## time: tuning and fitting to training data using wrappers: 22206.947 sec elapsed (about 370 mins = 6.2 hrs)
-##       note: individual tuning + refitting with RepCV: 2275 + 508 + 309 + 666 + 890 = 4648 secs
-## time: tuning and fitting to training data using wrappers: 31991.86 sec elapsed (about 8.9 hrs)
-##       (but not finished yet ... cancelled by user)
-
-bmr_tunewrap
-
-
-## visualizing benchmark results:
-plotBMRBoxplots(bmr_tunewrap, measure = mae, style = "violin") +
-  aes(fill = learner.id) + geom_point(alpha = .5)
+# #mlr::listMeasures(task)
+# tic("time: tuning and fitting to training data using wrappers")
+# bmr_tunewrap <- benchmark(
+#   lrns_tunewrap, task, rdesc_bm,
+#   # measures = list(rmse, mae, rsq)
+#   measures = list(rmse, #rmse.train.mean,
+#                   mae, #mae.train.mean,
+#                   rsq, #rsq.train.mean)
+#                   timetrain, timepredict)
+# )
+# toc()
+# ## time: tuning and fitting to training data using wrappers: 22206.947 sec elapsed (about 370 mins = 6.2 hrs)
+# ##       note: individual tuning + refitting with RepCV: 2275 + 508 + 309 + 666 + 890 = 4648 secs
+# ## time: tuning and fitting to training data using wrappers: 31991.86 sec elapsed (about 8.9 hrs)
+# ##       (but not finished yet ... cancelled by user)
+# 
+# bmr_tunewrap
+#
+#
+# ## visualizing benchmark results:
+# plotBMRBoxplots(bmr_tunewrap, measure = mae, style = "violin") +
+#   aes(fill = learner.id) + geom_point(alpha = .5)
 
 
 ## ========================================================================= ##
@@ -514,6 +547,10 @@ bmr_full
 
 parallelStop()
 
+
+## [[here]]
+## [[todo]]
+## score best model on test data, without refitting? (for python comparision)
 
 
 ## ========================================================================= ##
